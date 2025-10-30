@@ -16,7 +16,9 @@ export const prisma = globalForPrisma.prisma ?? new PrismaClient({
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
 
-// Graceful shutdown
-process.on('beforeExit', async () => {
-  await prisma.$disconnect()
-})
+// Graceful shutdown (only in Node.js runtime, not Edge)
+if (typeof process !== 'undefined' && typeof process.on === 'function') {
+  process.on('beforeExit', async () => {
+    await prisma.$disconnect()
+  })
+}

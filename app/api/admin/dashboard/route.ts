@@ -36,37 +36,98 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-      // Get total hackathons count
-      const totalHackathons = await prisma.hackathon.count()
+      // 🔒 MULTI-TENANT: Get admin's organization
+      const adminUser = await prisma.user.findUnique({
+        where: { id: payload.userId },
+        include: {
+          organizations: {
+            include: {
+              organization: true
+            }
+          }
+        }
+      })
 
-      // Get active hackathons count
+      if (!adminUser || adminUser.organizations.length === 0) {
+        return NextResponse.json({ error: 'لا توجد مؤسسة مرتبطة بهذا الحساب' }, { status: 400 })
+      }
+
+      const organizationId = adminUser.organizations[0].organization.id
+
+      // 🔒 Get hackathons for THIS organization only
+      const totalHackathons = await prisma.hackathon.count({
+        where: { organizationId }
+      })
+
       const activeHackathons = await prisma.hackathon.count({
-        where: { status: 'open' as any }
+        where: { 
+          organizationId,
+          status: 'open' as any 
+        }
       })
 
-      // Get participants statistics
-      const totalParticipants = await prisma.participant.count()
+      // 🔒 Get participants for THIS organization's hackathons only
+      const totalParticipants = await prisma.participant.count({
+        where: {
+          hackathon: {
+            organizationId
+          }
+        }
+      })
+      
       const pendingParticipants = await prisma.participant.count({
-        where: { status: 'pending' as any }
+        where: { 
+          status: 'pending' as any,
+          hackathon: {
+            organizationId
+          }
+        }
       })
+      
       const approvedParticipants = await prisma.participant.count({
-        where: { status: 'approved' as any }
+        where: { 
+          status: 'approved' as any,
+          hackathon: {
+            organizationId
+          }
+        }
       })
+      
       const rejectedParticipants = await prisma.participant.count({
-        where: { status: 'rejected' as any }
+        where: { 
+          status: 'rejected' as any,
+          hackathon: {
+            organizationId
+          }
+        }
       })
 
-      // Get users statistics
-      const totalUsers = await prisma.user.count()
+      // 🔒 Get users in THIS organization only
+      const totalUsers = await prisma.organizationUser.count({
+        where: { organizationId }
+      })
 
-      // Get total teams count
-      const totalTeams = await prisma.team.count()
+      // 🔒 Get teams for THIS organization's hackathons only
+      const totalTeams = await prisma.team.count({
+        where: {
+          hackathon: {
+            organizationId
+          }
+        }
+      })
 
-      // Get total judges count
-      const totalJudges = await prisma.judge.count()
+      // 🔒 Get judges for THIS organization's hackathons only
+      const totalJudges = await prisma.judge.count({
+        where: {
+          hackathon: {
+            organizationId
+          }
+        }
+      })
 
-      // Get recent hackathons (last 5)
+      // 🔒 Get recent hackathons for THIS organization only (last 5)
       const recentHackathons = await prisma.hackathon.findMany({
+        where: { organizationId },
         take: 5,
         orderBy: { createdAt: 'desc' },
         include: { _count: { select: { participants: true, teams: true } } }

@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react"
 import { useRouter } from "next/navigation"
 
-type Role = "admin" | "judge" | "participant" | "supervisor"
+type Role = "admin" | "judge" | "participant" | "supervisor" | "expert" | "master"
 
 interface User {
 	id: string

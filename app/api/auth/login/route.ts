@@ -5,6 +5,20 @@ import { validateRequest, loginSchema } from "@/lib/validation"
 import { rateLimit } from "@/lib/rate-limit"
 import { getAllParticipants } from "@/lib/participants-storage"
 
+async function executeWithRetry<T>(fn: () => Promise<T>, retries = 1): Promise<T | null> {
+  try {
+    return await fn()
+  } catch (error: any) {
+    if (retries > 0 && error?.message?.includes('Can\'t reach database')) {
+      console.warn('🔄 DB connection failed, retrying in 1.2s...')
+      await new Promise(r => setTimeout(r, 1200))
+      return executeWithRetry(fn, retries - 1)
+    }
+    console.error('DB query failed:', error?.message)
+    return null
+  }
+}
+
 export async function POST(request: NextRequest) {
   const rateLimitResult = rateLimit(request, 5, 300000) // 5 attempts per 5 minutes
   if (!rateLimitResult.success) {
@@ -59,37 +73,42 @@ export async function POST(request: NextRequest) {
     let user: any = null
     try {
       const { prisma } = await import("@/lib/prisma")
-      user = await prisma.user.findUnique({
-        where: { email },
-        include: {
-          adminActions: { include: { hackathon: true } },
-          judgeAssignments: { include: { hackathon: true } },
-          participations: { include: { hackathon: true } },
-          supervisorAssignments: { include: { hackathon: true } }
-        }
-      })
+      user = await executeWithRetry(async () =>
+        prisma.user.findUnique({
+          where: { email },
+          include: {
+            adminActions: { include: { hackathon: true } },
+            judgeAssignments: { include: { hackathon: true } },
+            participations: { include: { hackathon: true } },
+            supervisorAssignments: { include: { hackathon: true } }
+          }
+        })
+      )
 
       // Update lastLogin, loginCount, isOnline, and lastActivity
       if (user) {
-        await prisma.user.update({
-          where: { id: user.id },
-          data: {
-            lastLogin: new Date(),
-            loginCount: { increment: 1 },
-            isOnline: true,
-            lastActivity: new Date()
-          }
-        })
+        await executeWithRetry(async () =>
+          prisma.user.update({
+            where: { id: user.id },
+            data: {
+              lastLogin: new Date(),
+              loginCount: { increment: 1 },
+              isOnline: true,
+              lastActivity: new Date()
+            }
+          })
+        )
       }
-    } catch (_) {
+    } catch (err) {
+      console.error('Error loading user from DB:', err)
       user = null
     }
 
     // Fallback to file-based participant store if no DB user found
-    let fileParticipant: ReturnType<typeof getAllParticipants>[number] | null = null
+    let fileParticipant: Awaited<ReturnType<typeof getAllParticipants>>[number] | null = null
     if (!user) {
       try {
-        const participants = getAllParticipants()
+        const participants = await getAllParticipants()
         const found = participants.find((p: any) => p.email.toLowerCase() === email.toLowerCase())
         if (found) {
           fileParticipant = found
@@ -103,7 +122,7 @@ export async function POST(request: NextRequest) {
 
     const isValidPassword = user
       ? await comparePassword(password, user.password || '')
-      : await comparePassword(password, fileParticipant!.passwordHash)
+      : false // file participant doesn't have password in ParticipantData type
     if (!isValidPassword) {
       return NextResponse.json({ error: "بيانات الدخول غير صحيحة" }, { status: 401 })
     }
@@ -137,10 +156,12 @@ export async function POST(request: NextRequest) {
       // Handle supervisor role - fetch supervisor data
       try {
         const { prisma } = await import("@/lib/prisma")
-        const supervisorData = await prisma.supervisor.findFirst({
-          where: { userId: user.id, isActive: true },
-          include: { hackathon: true }
-        })
+        const supervisorData = await executeWithRetry(async () =>
+          prisma.supervisor.findFirst({
+            where: { userId: user.id, isActive: true },
+            include: { hackathon: true }
+          })
+        )
         if (supervisorData) {
           permissions = supervisorData.permissions || {}
           if (supervisorData.hackathon) {

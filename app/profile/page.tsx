@@ -625,6 +625,43 @@ export default function ProfilePage() {
               </CardContent>
             </Card>
           </motion.div>
+
+          {/* Danger Zone - Delete Account */}
+          {user && user.role !== 'admin' && user.role !== 'master' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="mt-8"
+            >
+              <Card className="border-red-200 bg-red-50/50">
+                <CardHeader>
+                  <CardTitle className="text-red-900 flex items-center gap-2">
+                    <XCircle className="h-5 w-5" />
+                    منطقة الخطر
+                  </CardTitle>
+                  <CardDescription className="text-red-700">
+                    الإجراءات التالية لا يمكن التراجع عنها
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between p-4 bg-white rounded-lg border border-red-200">
+                    <div>
+                      <h3 className="font-semibold text-red-900 mb-1">حذف الحساب</h3>
+                      <p className="text-sm text-red-700">
+                        حذف حسابك وجميع بياناتك بشكل دائم
+                      </p>
+                    </div>
+                    <Link href="/profile/delete-account">
+                      <Button variant="destructive" size="sm">
+                        حذف الحساب
+                      </Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
         </div>
       </div>
     </div>

@@ -37,44 +37,28 @@ export default function LoginPage() {
 			return
 		}
 
-		// Check if we already redirected in this session
-		if (typeof window !== 'undefined') {
-			const hasRedirected = sessionStorage.getItem('login-redirected')
-			if (hasRedirected) {
-				console.log('⏭️ Login page: Already redirected in this session, skipping...')
-				return
-			}
-		}
-
-		// Mark as redirected in sessionStorage
-		if (typeof window !== 'undefined') {
-			sessionStorage.setItem('login-redirected', 'true')
-		}
-
 		console.log('🔄 Login page: User detected, redirecting...', user.role)
 
-		// Add a longer delay to ensure auth state is fully settled
-		setTimeout(() => {
-			// Check for redirect URL in query params
-			const searchParams = new URLSearchParams(window.location.search)
-			const redirectUrl = searchParams.get('redirect')
+		// Immediate redirect without session check
+		const searchParams = new URLSearchParams(window.location.search)
+		const redirectUrl = searchParams.get('redirect')
 
-			if (redirectUrl) {
-				console.log('🔀 Redirecting to:', redirectUrl)
-				router.replace(redirectUrl)
-			} else {
-				// Default redirect based on role
-				let targetUrl = '/hackathons'
-				if (user.role === "admin") targetUrl = "/admin/dashboard"
-				else if (user.role === "judge") targetUrl = "/judge"
-				else if (user.role === "supervisor") targetUrl = "/supervisor/dashboard"
-				else if (user.role === "participant") targetUrl = "/participant/dashboard"
+		if (redirectUrl) {
+			console.log('🔀 Redirecting to:', redirectUrl)
+			router.replace(redirectUrl)
+		} else {
+			// Default redirect based on role
+			let targetUrl = '/hackathons'
+			if (user.role === "master") targetUrl = "/master"
+			else if (user.role === "admin") targetUrl = "/admin/dashboard"
+			else if (user.role === "judge") targetUrl = "/judge"
+			else if (user.role === "supervisor") targetUrl = "/supervisor/dashboard"
+			else if (user.role === "participant") targetUrl = "/participant/dashboard"
 
-				console.log('🔀 Redirecting to:', targetUrl)
-				router.replace(targetUrl)
-			}
-		}, 300) // Increased delay to 300ms
-	}, [user, loading, router]) // ✅ Include all dependencies
+			console.log('🔀 Redirecting to:', targetUrl)
+			router.replace(targetUrl)
+		}
+	}, [user, loading, router])
 
 	const handleLogin = async (e: React.FormEvent) => {
 		e.preventDefault()

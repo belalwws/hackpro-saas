@@ -1,33 +1,38 @@
-"use client"
+'use client'
 
-import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Users, Search, Filter, Check, X, Eye, Mail, Phone, MapPin, Calendar, Download } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useEffect, useState } from 'react'
+import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { useAuth } from '@/contexts/auth-context'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { useLanguage } from '@/contexts/language-context'
+import { motion } from 'framer-motion'
+import { 
+  Users, Search, Filter, Check, X, Eye, Mail, Phone, 
+  MapPin, Calendar, Download, Building2, BarChart3, Trophy,
+  Gavel, Settings, Bell, Menu, ArrowLeft
+} from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { useAuth } from '@/hooks/use-auth'
-import { useRouter } from 'next/navigation'
-import { ExcelExporter } from '@/lib/excel-export'
 
 interface Participant {
   id: string
   user: {
     name: string
     email: string
-    phone: string
-    city: string
-    nationality: string
+    phone?: string
+    city?: string
+    nationality?: string
   }
   hackathon: {
+    id: string
     title: string
   }
-  teamType: string
-  teamRole: string
+  teamType?: string
+  teamRole?: string
   status: string
   registeredAt: string
   team?: {
@@ -41,476 +46,373 @@ interface Hackathon {
   title: string
 }
 
-export default function ParticipantsManagement() {
+export default function ParticipantsPage() {
   const { user } = useAuth()
   const router = useRouter()
+  const { language } = useLanguage()
   const [participants, setParticipants] = useState<Participant[]>([])
   const [hackathons, setHackathons] = useState<Hackathon[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('ALL')
   const [hackathonFilter, setHackathonFilter] = useState('ALL')
-  const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null)
 
   useEffect(() => {
-    if (!user || user.role !== 'admin') {
+    if (user?.role !== 'admin') {
       router.push('/login')
       return
     }
-    fetchParticipants()
-    fetchHackathons()
-  }, [user, router])
+    fetchData()
+  }, [user])
 
-  const fetchParticipants = async () => {
+  const fetchData = async () => {
     try {
-      const response = await fetch('/api/admin/participants')
-      if (response.ok) {
-        const data = await response.json()
-        setParticipants(data)
+      const [participantsRes, hackathonsRes] = await Promise.all([
+        fetch('/api/admin/participants'),
+        fetch('/api/admin/hackathons')
+      ])
+
+      if (participantsRes.ok) {
+        const data = await participantsRes.json()
+        setParticipants(Array.isArray(data) ? data : [])
+      }
+
+      if (hackathonsRes.ok) {
+        const data = await hackathonsRes.json()
+        setHackathons(Array.isArray(data) ? data : [])
       }
     } catch (error) {
-      console.error('Error fetching participants:', error)
+      console.error('Error fetching data:', error)
     } finally {
       setLoading(false)
     }
   }
 
-  const fetchHackathons = async () => {
-    try {
-      const response = await fetch('/api/admin/hackathons')
-      if (response.ok) {
-        const data = await response.json()
-        setHackathons(data)
-      }
-    } catch (error) {
-      console.error('Error fetching hackathons:', error)
-    }
-  }
-
   const handleStatusChange = async (participantId: string, newStatus: string) => {
     try {
-      const response = await fetch(`/api/admin/participants/${participantId}/status`, {
-        method: 'PUT',
+      const response = await fetch(`/api/admin/participants/${participantId}`, {
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
       })
 
       if (response.ok) {
-        fetchParticipants() // Refresh the list
+        fetchData()
       }
     } catch (error) {
-      console.error('Error updating participant status:', error)
+      console.error('Error updating status:', error)
     }
   }
 
-  const getStatusBadge = (status: string) => {
-    const statusMap = {
-      'PENDING': { label: 'في الانتظار', variant: 'secondary' as const, color: 'bg-yellow-100 text-yellow-800' },
-      'APPROVED': { label: 'مقبول', variant: 'default' as const, color: 'bg-green-100 text-green-800' },
-      'REJECTED': { label: 'مرفوض', variant: 'destructive' as const, color: 'bg-red-100 text-red-800' }
-    }
-    return statusMap[status as keyof typeof statusMap] || { label: status, variant: 'secondary' as const, color: 'bg-gray-100 text-gray-800' }
-  }
-
-  const exportToExcel = async () => {
-    try {
-      await ExcelExporter.exportToExcel({
-        filename: 'المشاركين.xlsx',
-        sheetName: 'المشاركين',
-        columns: [
-          { key: 'userName', header: 'اسم المشارك', width: 20 },
-          { key: 'userEmail', header: 'البريد الإلكتروني', width: 25 },
-          { key: 'userPhone', header: 'رقم الهاتف', width: 15 },
-          { key: 'userCity', header: 'المدينة', width: 15 },
-          { key: 'userNationality', header: 'الجنسية', width: 15 },
-          { key: 'hackathonTitle', header: 'الهاكاثون', width: 20 },
-          { key: 'teamType', header: 'نوع المشاركة', width: 15 },
-          { key: 'teamRole', header: 'الدور في الفريق', width: 15 },
-          { key: 'teamName', header: 'اسم الفريق', width: 20 },
-          { key: 'status', header: 'الحالة', width: 12 },
-          { key: 'registeredAt', header: 'تاريخ التسجيل', width: 18, format: 'date' }
-        ],
-        data: filteredParticipants.map(participant => ({
-          userName: participant.user.name,
-          userEmail: participant.user.email,
-          userPhone: participant.user.phone,
-          userCity: participant.user.city,
-          userNationality: participant.user.nationality,
-          hackathonTitle: participant.hackathon.title,
-          teamType: participant.teamType === 'INDIVIDUAL' ? 'فردي' : 'فريق',
-          teamRole: participant.teamRole,
-          teamName: participant.team?.name || 'لم يتم التعيين',
-          status: getStatusBadge(participant.status).label,
-          registeredAt: participant.registeredAt
-        }))
-      })
-    } catch (error) {
-      console.error('Error exporting participants:', error)
-      alert('حدث خطأ في تصدير البيانات')
-    }
-  }
-
-  const filteredParticipants = participants.filter(participant => {
-    const matchesSearch = participant.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         participant.user.email.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = statusFilter === 'ALL' || participant.status === statusFilter
-    const matchesHackathon = hackathonFilter === 'ALL' || participant.hackathon.title === hackathonFilter
-    
+  const filteredParticipants = participants.filter(p => {
+    const matchesSearch = p.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         p.user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = statusFilter === 'ALL' || p.status === statusFilter
+    const matchesHackathon = hackathonFilter === 'ALL' || p.hackathon.id === hackathonFilter
     return matchesSearch && matchesStatus && matchesHackathon
   })
 
+  const stats = {
+    total: participants.length,
+    pending: participants.filter(p => p.status === 'pending').length,
+    approved: participants.filter(p => p.status === 'approved').length,
+    rejected: participants.filter(p => p.status === 'rejected').length
+  }
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#c3e956]/10 to-[#3ab666]/10 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#01645e] mx-auto mb-4"></div>
-          <p className="text-[#01645e] text-lg">جاري تحميل المشاركين...</p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center"
+        >
+          <div className="w-16 h-16 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            {language === 'ar' ? 'جاري التحميل...' : 'Loading...'}
+          </p>
+        </motion.div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#c3e956]/10 to-[#3ab666]/10 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex justify-between items-center mb-8"
-        >
-          <div>
-            <h1 className="text-4xl font-bold text-[#01645e] mb-2">إدارة المشاركين</h1>
-            <p className="text-[#8b7632] text-lg">مراجعة وإدارة طلبات المشاركة في الهاكاثونات</p>
-          </div>
-
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-900 dark:to-indigo-950">
+      {/* Top Navigation */}
+      <div className="sticky top-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
-            <Button
-              onClick={exportToExcel}
-              disabled={filteredParticipants.length === 0}
-              className="bg-gradient-to-r from-[#3ab666] to-[#c3e956] hover:from-[#2d8f52] hover:to-[#a8c247]"
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => router.push('/admin/dashboard')}
             >
-              <Download className="w-4 h-4 ml-2" />
-              تصدير Excel ({filteredParticipants.length})
+              <ArrowLeft className="h-5 w-5" />
             </Button>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-[#01645e]">{participants.length}</div>
-              <div className="text-sm text-[#8b7632]">إجمالي المشاركين</div>
+            <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              {language === 'ar' ? 'إدارة المشاركين' : 'Participants Management'}
+            </h1>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon">
+              <Bell className="h-5 w-5" />
+            </Button>
+            <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 rounded-lg px-3 py-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full flex items-center justify-center">
+                <Building2 className="h-4 w-4 text-white" />
+              </div>
+              <div className="hidden md:block text-sm">
+                <div className="font-semibold">{user?.name}</div>
+                <div className="text-xs text-gray-500">{language === 'ar' ? 'مدير' : 'Admin'}</div>
+              </div>
             </div>
           </div>
-        </motion.div>
+        </div>
+      </div>
 
-        {/* Stats Cards */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
-        >
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-[#8b7632]">في الانتظار</p>
-                  <p className="text-2xl font-bold text-yellow-600">
-                    {participants.filter(p => p.status === 'PENDING').length}
-                  </p>
-                </div>
-                <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-                  <Users className="w-6 h-6 text-yellow-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+      <div className="flex">
+        {/* Sidebar */}
+        <div className="hidden md:flex flex-col w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen">
+          <div className="p-4 space-y-2">
+            <Link href="/admin/dashboard">
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start gap-2"
+              >
+                <BarChart3 className="h-4 w-4" />
+                {language === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
+              </Button>
+            </Link>
+            <Link href="/admin/hackathons">
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start gap-2"
+              >
+                <Trophy className="h-4 w-4" />
+                {language === 'ar' ? 'الهاكاثونات' : 'Hackathons'}
+              </Button>
+            </Link>
+            <Button 
+              variant="ghost" 
+              className="w-full justify-start gap-2 bg-indigo-50 dark:bg-indigo-950 text-indigo-600"
+            >
+              <Users className="h-4 w-4" />
+              {language === 'ar' ? 'المشاركين' : 'Participants'}
+            </Button>
+            <Link href="/admin/judges">
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start gap-2"
+              >
+                <Gavel className="h-4 w-4" />
+                {language === 'ar' ? 'الحكام' : 'Judges'}
+              </Button>
+            </Link>
+            <Link href="/admin/settings">
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start gap-2"
+              >
+                <Settings className="h-4 w-4" />
+                {language === 'ar' ? 'الإعدادات' : 'Settings'}
+              </Button>
+            </Link>
+          </div>
+        </div>
 
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-[#8b7632]">مقبول</p>
-                  <p className="text-2xl font-bold text-green-600">
-                    {participants.filter(p => p.status === 'APPROVED').length}
-                  </p>
+        {/* Main Content */}
+        <div className="flex-1 p-6 overflow-auto">
+          <div className="max-w-7xl mx-auto">
+            {/* Stats Cards */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6"
+            >
+              <Card className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 border-blue-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-blue-600 dark:text-blue-400 mb-1">
+                      {language === 'ar' ? 'إجمالي' : 'Total'}
+                    </p>
+                    <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{stats.total}</p>
+                  </div>
+                  <Users className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                 </div>
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                  <Check className="w-6 h-6 text-green-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </Card>
 
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-[#8b7632]">مرفوض</p>
-                  <p className="text-2xl font-bold text-red-600">
-                    {participants.filter(p => p.status === 'REJECTED').length}
-                  </p>
+              <Card className="p-4 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-950 dark:to-yellow-900 border-yellow-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-yellow-600 dark:text-yellow-400 mb-1">
+                      {language === 'ar' ? 'معلق' : 'Pending'}
+                    </p>
+                    <p className="text-2xl font-bold text-yellow-900 dark:text-yellow-100">{stats.pending}</p>
+                  </div>
+                  <Calendar className="h-8 w-8 text-yellow-600 dark:text-yellow-400" />
                 </div>
-                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                  <X className="w-6 h-6 text-red-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </Card>
 
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-[#8b7632]">مشاركة فردية</p>
-                  <p className="text-2xl font-bold text-[#01645e]">
-                    {participants.filter(p => p.teamType === 'INDIVIDUAL').length}
-                  </p>
+              <Card className="p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 border-green-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-green-600 dark:text-green-400 mb-1">
+                      {language === 'ar' ? 'مقبول' : 'Approved'}
+                    </p>
+                    <p className="text-2xl font-bold text-green-900 dark:text-green-100">{stats.approved}</p>
+                  </div>
+                  <Check className="h-8 w-8 text-green-600 dark:text-green-400" />
                 </div>
-                <div className="w-12 h-12 bg-[#01645e]/10 rounded-full flex items-center justify-center">
-                  <Users className="w-6 h-6 text-[#01645e]" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+              </Card>
 
-        {/* Filters */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <Card className="mb-6">
-            <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="flex-1">
+              <Card className="p-4 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950 dark:to-red-900 border-red-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-red-600 dark:text-red-400 mb-1">
+                      {language === 'ar' ? 'مرفوض' : 'Rejected'}
+                    </p>
+                    <p className="text-2xl font-bold text-red-900 dark:text-red-100">{stats.rejected}</p>
+                  </div>
+                  <X className="h-8 w-8 text-red-600 dark:text-red-400" />
+                </div>
+              </Card>
+            </motion.div>
+
+            {/* Filters */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <Card className="p-6 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="relative">
-                    <Search className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <Input
-                      placeholder="البحث بالاسم أو البريد الإلكتروني..."
+                      placeholder={language === 'ar' ? 'بحث بالاسم أو الإيميل...' : 'Search by name or email...'}
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pr-10"
+                      className="pl-10"
                     />
                   </div>
-                </div>
-                
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-full md:w-48">
-                    <SelectValue placeholder="فلترة حسب الحالة" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ALL">جميع الحالات</SelectItem>
-                    <SelectItem value="PENDING">في الانتظار</SelectItem>
-                    <SelectItem value="APPROVED">مقبول</SelectItem>
-                    <SelectItem value="REJECTED">مرفوض</SelectItem>
-                  </SelectContent>
-                </Select>
-                
-                <Select value={hackathonFilter} onValueChange={setHackathonFilter}>
-                  <SelectTrigger className="w-full md:w-48">
-                    <SelectValue placeholder="فلترة حسب الهاكاثون" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ALL">جميع الهاكاثونات</SelectItem>
-                    {hackathons.map((hackathon) => (
-                      <SelectItem key={hackathon.id} value={hackathon.title}>
-                        {hackathon.title}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
 
-        {/* Participants Table */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <Card>
-            <CardHeader>
-              <CardTitle>قائمة المشاركين ({filteredParticipants.length})</CardTitle>
-              <CardDescription>
-                جميع المشاركين المسجلين في الهاكاثونات
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>المشارك</TableHead>
-                    <TableHead>الهاكاثون</TableHead>
-                    <TableHead>نوع المشاركة</TableHead>
-                    <TableHead>الحالة</TableHead>
-                    <TableHead>تاريخ التسجيل</TableHead>
-                    <TableHead>الإجراءات</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredParticipants.map((participant) => (
-                    <TableRow key={participant.id}>
-                      <TableCell>
-                        <div>
-                          <div className="font-medium">{participant.user.name}</div>
-                          <div className="text-sm text-gray-500">{participant.user.email}</div>
-                          <div className="text-xs text-gray-400">
-                            {participant.user.city} • {participant.user.nationality}
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="font-medium">{participant.hackathon.title}</div>
-                      </TableCell>
-                      <TableCell>
-                        <div>
-                          <div className="font-medium">
-                            {participant.teamType === 'INDIVIDUAL' ? 'فردي' : 'فريق'}
-                          </div>
-                          {participant.teamRole && (
-                            <div className="text-sm text-gray-500">{participant.teamRole}</div>
-                          )}
-                          {participant.team && (
-                            <div className="text-xs text-gray-400">
-                              {participant.team.name} (#{participant.team.teamNumber})
-                            </div>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge className={getStatusBadge(participant.status).color}>
-                          {getStatusBadge(participant.status).label}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        {new Date(participant.registeredAt).toLocaleDateString('ar-SA')}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex space-x-2 rtl:space-x-reverse">
-                          <Dialog>
-                            <DialogTrigger asChild>
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                onClick={() => setSelectedParticipant(participant)}
-                              >
-                                <Eye className="w-4 h-4" />
-                              </Button>
-                            </DialogTrigger>
-                            <DialogContent className="max-w-2xl">
-                              <DialogHeader>
-                                <DialogTitle>تفاصيل المشارك</DialogTitle>
-                                <DialogDescription>
-                                  معلومات تفصيلية عن المشارك
-                                </DialogDescription>
-                              </DialogHeader>
-                              
-                              {selectedParticipant && (
-                                <div className="space-y-4">
-                                  <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                      <h4 className="font-semibold text-[#01645e] mb-2">المعلومات الشخصية</h4>
-                                      <div className="space-y-2 text-sm">
-                                        <div className="flex items-center">
-                                          <Users className="w-4 h-4 ml-2 text-gray-400" />
-                                          {selectedParticipant.user.name}
-                                        </div>
-                                        <div className="flex items-center">
-                                          <Mail className="w-4 h-4 ml-2 text-gray-400" />
-                                          {selectedParticipant.user.email}
-                                        </div>
-                                        <div className="flex items-center">
-                                          <Phone className="w-4 h-4 ml-2 text-gray-400" />
-                                          {selectedParticipant.user.phone}
-                                        </div>
-                                        <div className="flex items-center">
-                                          <MapPin className="w-4 h-4 ml-2 text-gray-400" />
-                                          {selectedParticipant.user.city}, {selectedParticipant.user.nationality}
-                                        </div>
-                                      </div>
-                                    </div>
-                                    
-                                    <div>
-                                      <h4 className="font-semibold text-[#01645e] mb-2">معلومات المشاركة</h4>
-                                      <div className="space-y-2 text-sm">
-                                        <div>
-                                          <strong>الهاكاثون:</strong> {selectedParticipant.hackathon.title}
-                                        </div>
-                                        <div>
-                                          <strong>نوع المشاركة:</strong> {selectedParticipant.teamType === 'INDIVIDUAL' ? 'فردي' : 'فريق'}
-                                        </div>
-                                        {selectedParticipant.teamRole && (
-                                          <div>
-                                            <strong>الدور:</strong> {selectedParticipant.teamRole}
-                                          </div>
-                                        )}
-                                        <div className="flex items-center">
-                                          <Calendar className="w-4 h-4 ml-2 text-gray-400" />
-                                          {new Date(selectedParticipant.registeredAt).toLocaleDateString('ar-SA')}
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  
-                                  <div className="flex justify-end space-x-2 rtl:space-x-reverse pt-4">
-                                    {selectedParticipant.status === 'PENDING' && (
-                                      <>
-                                        <Button
-                                          onClick={() => handleStatusChange(selectedParticipant.id, 'APPROVED')}
-                                          className="bg-green-600 hover:bg-green-700"
-                                        >
-                                          <Check className="w-4 h-4 ml-2" />
-                                          قبول
-                                        </Button>
-                                        <Button
-                                          onClick={() => handleStatusChange(selectedParticipant.id, 'REJECTED')}
-                                          variant="destructive"
-                                        >
-                                          <X className="w-4 h-4 ml-2" />
-                                          رفض
-                                        </Button>
-                                      </>
-                                    )}
-                                  </div>
-                                </div>
-                              )}
-                            </DialogContent>
-                          </Dialog>
-                          
-                          {participant.status === 'pending' && (
-                            <>
-                              <Button
-                                onClick={() => handleStatusChange(participant.id, 'approved')}
-                                size="sm"
-                                className="bg-green-600 hover:bg-green-700"
-                              >
-                                <Check className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                onClick={() => handleStatusChange(participant.id, 'rejected')}
-                                size="sm"
-                                variant="destructive"
-                              >
-                                <X className="w-4 h-4" />
-                              </Button>
-                            </>
-                          )}
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              
-              {filteredParticipants.length === 0 && (
-                <div className="text-center py-8">
-                  <Users className="w-16 h-16 text-[#8b7632] mx-auto mb-4 opacity-50" />
-                  <p className="text-[#8b7632]">لا توجد مشاركين مطابقين للفلاتر المحددة</p>
+                  <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={language === 'ar' ? 'الحالة' : 'Status'} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ALL">{language === 'ar' ? 'الكل' : 'All'}</SelectItem>
+                      <SelectItem value="pending">{language === 'ar' ? 'معلق' : 'Pending'}</SelectItem>
+                      <SelectItem value="approved">{language === 'ar' ? 'مقبول' : 'Approved'}</SelectItem>
+                      <SelectItem value="rejected">{language === 'ar' ? 'مرفوض' : 'Rejected'}</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <Select value={hackathonFilter} onValueChange={setHackathonFilter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={language === 'ar' ? 'الهاكاثون' : 'Hackathon'} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ALL">{language === 'ar' ? 'الكل' : 'All Hackathons'}</SelectItem>
+                      {hackathons.map(h => (
+                        <SelectItem key={h.id} value={h.id}>{h.title}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-              )}
-            </CardContent>
-          </Card>
-        </motion.div>
+              </Card>
+            </motion.div>
+
+            {/* Participants Table */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <Card>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>{language === 'ar' ? 'الاسم' : 'Name'}</TableHead>
+                        <TableHead>{language === 'ar' ? 'الإيميل' : 'Email'}</TableHead>
+                        <TableHead>{language === 'ar' ? 'الهاكاثون' : 'Hackathon'}</TableHead>
+                        <TableHead>{language === 'ar' ? 'الحالة' : 'Status'}</TableHead>
+                        <TableHead>{language === 'ar' ? 'التاريخ' : 'Date'}</TableHead>
+                        <TableHead>{language === 'ar' ? 'الإجراءات' : 'Actions'}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredParticipants.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                            {language === 'ar' ? 'لا يوجد مشاركين' : 'No participants found'}
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        filteredParticipants.map(participant => (
+                          <TableRow key={participant.id}>
+                            <TableCell className="font-medium">{participant.user.name}</TableCell>
+                            <TableCell className="text-sm text-gray-600">{participant.user.email}</TableCell>
+                            <TableCell className="text-sm">{participant.hackathon.title}</TableCell>
+                            <TableCell>
+                              <Badge 
+                                className={
+                                  participant.status === 'approved' ? 'bg-green-100 text-green-700' :
+                                  participant.status === 'rejected' ? 'bg-red-100 text-red-700' :
+                                  'bg-yellow-100 text-yellow-700'
+                                }
+                              >
+                                {participant.status === 'approved' ? (language === 'ar' ? 'مقبول' : 'Approved') :
+                                 participant.status === 'rejected' ? (language === 'ar' ? 'مرفوض' : 'Rejected') :
+                                 (language === 'ar' ? 'معلق' : 'Pending')}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-sm text-gray-600">
+                              {new Date(participant.registeredAt).toLocaleDateString('ar-SA')}
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                {participant.status === 'pending' && (
+                                  <>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      className="text-green-600 hover:text-green-700"
+                                      onClick={() => handleStatusChange(participant.id, 'approved')}
+                                    >
+                                      <Check className="h-4 w-4" />
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      className="text-red-600 hover:text-red-700"
+                                      onClick={() => handleStatusChange(participant.id, 'rejected')}
+                                    >
+                                      <X className="h-4 w-4" />
+                                    </Button>
+                                  </>
+                                )}
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => {/* View details */}}
+                                >
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+              </Card>
+            </motion.div>
+          </div>
+        </div>
       </div>
     </div>
   )

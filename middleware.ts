@@ -4,7 +4,11 @@ import { verifyToken } from "@/lib/auth"
 
 // Define protected route prefixes and their required roles
 // IMPORTANT: Order matters! More specific routes MUST come BEFORE general routes
-const protectedRoutes: { prefix: string; roles: ("admin" | "judge" | "supervisor" | "participant")[] }[] = [
+const protectedRoutes: { prefix: string; roles: ("admin" | "judge" | "supervisor" | "participant" | "expert" | "master")[] }[] = [
+  // Master routes - HIGHEST PRIORITY
+  { prefix: "/master", roles: ["master"] },
+  { prefix: "/api/master", roles: ["master"] },
+  
   { prefix: "/api/teams", roles: ["judge", "supervisor"] },
   { prefix: "/api/submit-score", roles: ["judge"] },
   { prefix: "/api/results", roles: ["admin"] },
@@ -178,6 +182,27 @@ export async function middleware(request: NextRequest) {
 
   console.log('✅ [Middleware] Token verified for:', pathname, 'User role:', payload.role)
 
+  // Master role can access EVERYTHING - bypass all restrictions
+  if (payload.role === 'master') {
+    console.log('👑 [Middleware] Master access granted to:', pathname)
+    
+    // Add user info to headers for API routes
+    if (pathname.startsWith("/api/")) {
+      const requestHeaders = new Headers(request.headers)
+      requestHeaders.set("x-user-id", payload.userId)
+      requestHeaders.set("x-user-role", payload.role)
+      requestHeaders.set("x-user-email", payload.email)
+
+      return NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      })
+    }
+    
+    return NextResponse.next()
+  }
+
   // Check if user has required role
   if (!route.roles.includes(payload.role)) {
     console.log('❌ [Middleware] Insufficient permissions. User role:', payload.role, 'Required:', route.roles)
@@ -220,6 +245,7 @@ export const config = {
     "/judge/:path*",
     "/admin/:path*",
     "/supervisor/:path*",
+    "/master/:path*",
     "/certificates/:path*"
   ],
 }

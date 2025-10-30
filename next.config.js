@@ -8,7 +8,23 @@ const nextConfig = {
     ignoreBuildErrors: true, // Disable TypeScript checks for deployment
   },
   images: {
-    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'via.placeholder.com',
+      },
+    ],
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
   // Canvas and nodemailer configuration for production
   webpack: (config, { isServer }) => {
@@ -44,8 +60,14 @@ const nextConfig = {
   },
   // Optimize for production
   experimental: {
-    // optimizeCss: true, // Temporarily disabled for deployment
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    optimizePackageImports: [
+      'lucide-react',
+      '@radix-ui/react-icons',
+      'framer-motion',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-tabs',
+    ],
   },
   // Fix chunk loading issues
   output: 'standalone',
@@ -57,12 +79,34 @@ const nextConfig = {
       exclude: ['error', 'warn'],
     } : false,
   },
-  // Reduce build output
-  productionBrowserSourceMaps: false,
+  // Enable compression
+  compress: true,
   // Optimize page data
   generateBuildId: async () => {
-    // Use a consistent build ID to enable better caching
     return process.env.BUILD_ID || 'build-' + Date.now()
+  },
+  // Add cache headers for static assets
+  async headers() {
+    return [
+      {
+        source: '/fonts/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/images/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ]
   },
 }
 

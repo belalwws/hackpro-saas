@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "build:production": "prisma generate --schema ./schema.prisma && next build",
+    "build:production": "prisma generate && next build",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
@@ -12,8 +12,10 @@
     "test:build": "npm run type-check && npm run lint && npm run build",
     "create-admin": "node scripts/create-admin.js",
     "db:test": "node scripts/test-db-connection.js",
-    "db:migrate": "node scripts/migrate-production.js",
-    "postinstall": "prisma generate --schema ./schema.prisma"
+    "db:backup": "node scripts/backup-database.js",
+    "db:restore": "node scripts/restore-database.js",
+    "test:email": "node scripts/test-email.js",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -71,7 +73,7 @@
     "cmdk": "latest",
     "date-fns": "4.1.0",
     "embla-carousel-react": "latest",
-    "framer-motion": "latest",
+    "framer-motion": "^12.23.24",
     "input-otp": "^1.4.2",
     "jose": "latest",
     "js-cookie": "latest",

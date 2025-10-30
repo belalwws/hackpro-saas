@@ -1,12 +1,12 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { SiteHeader } from './site-header'
+import { ModernHeader } from './modern-header'
 
 export function ConditionalHeader() {
   const pathname = usePathname()
   
-  // Hide header on form pages
+  // Hide header on form pages only (show on landing page and all other pages)
   const hideHeaderPaths = [
     '/judge/apply/',
     '/feedback/',
@@ -20,6 +20,7 @@ export function ConditionalHeader() {
     return null
   }
   
-  return <SiteHeader />
+  // Use new modern header everywhere
+  return <ModernHeader />
 }
 

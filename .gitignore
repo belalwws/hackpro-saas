@@ -65,6 +65,19 @@ Thumbs.db
 # Data protection (keep snapshots and reports but not sensitive backups)
 /data/backups/*
 !/data/backups/.gitkeep
-# Keep snapshots and reports for debugging
-# /data/snapshots/*
-# /data/reports/*
+/data/snapshots/*
+!/data/snapshots/.gitkeep
+/data/reports/*
+!/data/reports/.gitkeep
+
+# Certificates
+/public/certificates/*
+!/public/certificates/.gitkeep
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~

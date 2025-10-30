@@ -1,13 +1,22 @@
-"use client"
+'use client'
 
-import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Plus, Calendar, Users, Trophy, Settings, Eye, Edit, Trash2, Pin, PinOff, Download } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useEffect, useState } from 'react'
+import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { useAuth } from '@/contexts/auth-context'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ExcelExporter } from '@/lib/excel-export'
+import { useLanguage } from '@/contexts/language-context'
+import { motion } from 'framer-motion'
+import { 
+  Trophy, Search, Plus, Eye, Edit, Trash2, Building2, BarChart3, 
+  Users, Gavel, Settings, Bell, ArrowLeft, Calendar, Pin, PinOff,
+  Clock, CheckCircle2, XCircle
+} from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 interface Hackathon {
   id: string
@@ -16,54 +25,39 @@ interface Hackathon {
   startDate: string
   endDate: string
   registrationDeadline: string
-  maxParticipants?: number
   status: 'draft' | 'open' | 'closed' | 'completed'
-  isPinned?: boolean
-  stats: {
-    total: number
-    pending: number
-    approved: number
-    rejected: number
+  isPinned: boolean
+  _count?: {
+    participants: number
+    teams: number
+    judges: number
   }
   createdAt: string
 }
 
-export default function AdminHackathonsPage() {
+export default function HackathonsPage() {
+  const { user } = useAuth()
+  const router = useRouter()
+  const { language } = useLanguage()
   const [hackathons, setHackathons] = useState<Hackathon[]>([])
   const [loading, setLoading] = useState(true)
-
-  // Form state
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    requirements: '',
-    startDate: '',
-    endDate: '',
-    isActive: true,
-    settings: {
-      maxTeamSize: 5,
-      allowIndividualParticipation: true,
-      autoTeaming: false,
-      evaluationCriteria: [
-        { name: "الجدوى", weight: 0.2 },
-        { name: "ابتكارية الفكرة", weight: 0.25 },
-        { name: "قابلية التطبيق", weight: 0.25 },
-        { name: "التأثير على المؤسسة", weight: 0.2 },
-        { name: "مهارات العرض", weight: 0.1 }
-      ]
-    }
-  })
+  const [searchTerm, setSearchTerm] = useState('')
+  const [statusFilter, setStatusFilter] = useState('ALL')
 
   useEffect(() => {
-    fetchHackathons()
-  }, [])
+    if (user?.role !== 'admin') {
+      router.push('/login')
+      return
+    }
+    fetchData()
+  }, [user])
 
-  const fetchHackathons = async () => {
+  const fetchData = async () => {
     try {
       const response = await fetch('/api/admin/hackathons')
       if (response.ok) {
         const data = await response.json()
-        setHackathons(data.hackathons || [])
+        setHackathons(Array.isArray(data) ? data : data.hackathons || [])
       }
     } catch (error) {
       console.error('Error fetching hackathons:', error)
@@ -72,348 +66,385 @@ export default function AdminHackathonsPage() {
     }
   }
 
-  const deleteHackathon = async (hackathonId: string, hackathonTitle: string) => {
-    const confirmMessage = `هل أنت متأكد من حذف الهاكاثون "${hackathonTitle}"؟\n\nسيتم حذف جميع البيانات المرتبطة به (المشاركين، الفرق، التقييمات، إلخ).\n\nهذا الإجراء لا يمكن التراجع عنه!`
-
-    if (!confirm(confirmMessage)) return
+  const handleDelete = async (id: string, title: string) => {
+    const confirmMsg = language === 'ar' ? `هل تريد حذف "${title}"؟` : `Delete "${title}"?`
+    if (!confirm(confirmMsg)) return
 
     try {
-      const response = await fetch(`/api/admin/hackathons/${hackathonId}`, {
+      const response = await fetch(`/api/admin/hackathons/${id}`, {
         method: 'DELETE'
       })
 
       if (response.ok) {
-        const result = await response.json()
-        alert(`تم حذف الهاكاثون بنجاح!\n\nتم حذف:\n- ${result.deletedData.participants} مشارك\n- ${result.deletedData.teams} فريق\n- ${result.deletedData.judges} محكم\n- ${result.deletedData.scores} تقييم`)
-        fetchHackathons() // Refresh the list
-      } else {
-        const error = await response.json()
-        alert(error.error || 'فشل في حذف الهاكاثون')
+        alert(language === 'ar' ? 'تم الحذف بنجاح' : 'Deleted successfully')
+        fetchData()
       }
     } catch (error) {
       console.error('Error deleting hackathon:', error)
-      alert('حدث خطأ في حذف الهاكاثون')
     }
   }
 
-  const togglePinQuick = async (hackathonId: string, newPinStatus: boolean) => {
-    const confirmMessage = newPinStatus
-      ? 'هل تريد تثبيت هذا الهاكاثون في الصفحة الرئيسية؟ (سيتم إلغاء تثبيت أي هاكاثون آخر)'
-      : 'هل تريد إلغاء تثبيت هذا الهاكاثون من الصفحة الرئيسية؟'
-
-    if (!confirm(confirmMessage)) return
-
+  const handleTogglePin = async (id: string, isPinned: boolean) => {
     try {
-      const response = await fetch(`/api/admin/hackathons/${hackathonId}/pin`, {
+      const response = await fetch(`/api/admin/hackathons/${id}/pin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isPinned: newPinStatus })
+        body: JSON.stringify({ isPinned: !isPinned })
       })
 
       if (response.ok) {
-        fetchHackathons() // Refresh the list
-        alert(newPinStatus ? 'تم تثبيت الهاكاثون في الصفحة الرئيسية' : 'تم إلغاء تثبيت الهاكاثون')
-      } else {
-        alert('فشل في تحديث حالة التثبيت')
+        fetchData()
       }
     } catch (error) {
-      console.error('Error updating pin status:', error)
-      alert('حدث خطأ في تحديث حالة التثبيت')
+      console.error('Error toggling pin:', error)
     }
   }
 
-  const getStatusBadge = (status: string) => {
-    const statusConfig = {
-      draft: { label: 'مسودة', color: 'bg-gray-500' },
-      open: { label: 'مفتوح', color: 'bg-green-500' },
-      closed: { label: 'مغلق', color: 'bg-red-500' },
-      completed: { label: 'مكتمل', color: 'bg-blue-500' }
-    }
+  const filteredHackathons = hackathons.filter(h => {
+    const matchesSearch = h.title.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = statusFilter === 'ALL' || h.status === statusFilter
+    return matchesSearch && matchesStatus
+  })
 
-    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.draft
-
-    return (
-      <Badge className={`${config.color} text-white`}>
-        {config.label}
-      </Badge>
-    )
+  const stats = {
+    total: hackathons.length,
+    open: hackathons.filter(h => h.status === 'open').length,
+    closed: hackathons.filter(h => h.status === 'closed').length,
+    draft: hackathons.filter(h => h.status === 'draft').length
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ar-SA', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })
+  const getStatusColor = (status: string) => {
+    switch(status) {
+      case 'open': return 'bg-green-100 text-green-700'
+      case 'closed': return 'bg-red-100 text-red-700'
+      case 'completed': return 'bg-blue-100 text-blue-700'
+      case 'draft': return 'bg-gray-100 text-gray-700'
+      default: return 'bg-gray-100 text-gray-700'
+    }
   }
 
-  const exportToExcel = async () => {
-    try {
-      await ExcelExporter.exportToExcel({
-        filename: 'الهاكاثونات.xlsx',
-        sheetName: 'الهاكاثونات',
-        columns: [
-          { key: 'title', header: 'عنوان الهاكاثون', width: 25 },
-          { key: 'description', header: 'الوصف', width: 35 },
-          { key: 'status', header: 'الحالة', width: 12 },
-          { key: 'startDate', header: 'تاريخ البداية', width: 15, format: 'date' },
-          { key: 'endDate', header: 'تاريخ النهاية', width: 15, format: 'date' },
-          { key: 'totalParticipants', header: 'إجمالي المشاركين', width: 15, format: 'number' },
-          { key: 'approvedParticipants', header: 'المشاركين المقبولين', width: 18, format: 'number' },
-          { key: 'pendingParticipants', header: 'في الانتظار', width: 15, format: 'number' },
-          { key: 'createdAt', header: 'تاريخ الإنشاء', width: 18, format: 'date' }
-        ],
-        data: hackathons.map(hackathon => ({
-          ...hackathon,
-          status: hackathon.status === 'open' ? 'مفتوح' :
-                  hackathon.status === 'closed' ? 'مغلق' :
-                  hackathon.status === 'completed' ? 'مكتمل' : hackathon.status,
-          totalParticipants: hackathon.stats.total,
-          approvedParticipants: hackathon.stats.approved,
-          pendingParticipants: hackathon.stats.pending
-        }))
-      })
-    } catch (error) {
-      console.error('Error exporting hackathons:', error)
-      alert('حدث خطأ في تصدير البيانات')
+  const getStatusLabel = (status: string) => {
+    if (language === 'ar') {
+      switch(status) {
+        case 'open': return 'مفتوح'
+        case 'closed': return 'مغلق'
+        case 'completed': return 'مكتمل'
+        case 'draft': return 'مسودة'
+        default: return status
+      }
     }
+    return status.charAt(0).toUpperCase() + status.slice(1)
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#c3e956]/10 to-[#3ab666]/10 p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-center h-64">
-            <div className="text-center">
-              <div className="w-16 h-16 border-4 border-[#01645e]/20 border-t-[#01645e] rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-[#01645e] font-semibold">جاري تحميل الهاكاثونات...</p>
-            </div>
-          </div>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center"
+        >
+          <div className="w-16 h-16 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            {language === 'ar' ? 'جاري التحميل...' : 'Loading...'}
+          </p>
+        </motion.div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#c3e956]/10 to-[#3ab666]/10 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex justify-between items-center mb-8"
-        >
-          <div>
-            <h1 className="text-4xl font-bold text-[#01645e] mb-2">إدارة الهاكاثونات</h1>
-            <p className="text-[#8b7632] text-lg">إنشاء وإدارة الهاكاثونات والمسابقات</p>
-          </div>
-
-          <div className="flex gap-3">
-            <Button
-              onClick={exportToExcel}
-              disabled={hackathons.length === 0}
-              variant="outline"
-              className="border-[#3ab666] text-[#3ab666] hover:bg-[#3ab666] hover:text-white"
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-900 dark:to-indigo-950">
+      {/* Top Navigation */}
+      <div className="sticky top-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => router.push('/admin/dashboard')}
             >
-              <Download className="w-4 h-4 ml-2" />
-              تصدير Excel ({hackathons.length})
+              <ArrowLeft className="h-5 w-5" />
             </Button>
-            <Link href="/admin/hackathons/create">
-              <Button className="bg-gradient-to-r from-[#01645e] to-[#3ab666] hover:from-[#014a46] hover:to-[#2d8f52] text-white">
-                <Plus className="w-5 h-5 ml-2" />
-                إنشاء هاكاثون جديد
+            <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              {language === 'ar' ? 'إدارة الهاكاثونات' : 'Hackathons Management'}
+            </h1>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon">
+              <Bell className="h-5 w-5" />
+            </Button>
+            <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 rounded-lg px-3 py-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full flex items-center justify-center">
+                <Building2 className="h-4 w-4 text-white" />
+              </div>
+              <div className="hidden md:block text-sm">
+                <div className="font-semibold">{user?.name}</div>
+                <div className="text-xs text-gray-500">{language === 'ar' ? 'مدير' : 'Admin'}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex">
+        {/* Sidebar */}
+        <div className="hidden md:flex flex-col w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen">
+          <div className="p-4 space-y-2">
+            <Link href="/admin/dashboard">
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start gap-2"
+              >
+                <BarChart3 className="h-4 w-4" />
+                {language === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
+              </Button>
+            </Link>
+            <Button 
+              variant="ghost" 
+              className="w-full justify-start gap-2 bg-indigo-50 dark:bg-indigo-950 text-indigo-600"
+            >
+              <Trophy className="h-4 w-4" />
+              {language === 'ar' ? 'الهاكاثونات' : 'Hackathons'}
+            </Button>
+            <Link href="/admin/participants">
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start gap-2"
+              >
+                <Users className="h-4 w-4" />
+                {language === 'ar' ? 'المشاركين' : 'Participants'}
+              </Button>
+            </Link>
+            <Link href="/admin/judges">
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start gap-2"
+              >
+                <Gavel className="h-4 w-4" />
+                {language === 'ar' ? 'الحكام' : 'Judges'}
+              </Button>
+            </Link>
+            <Link href="/admin/settings">
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start gap-2"
+              >
+                <Settings className="h-4 w-4" />
+                {language === 'ar' ? 'الإعدادات' : 'Settings'}
               </Button>
             </Link>
           </div>
-        </motion.div>
-
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          {[
-            {
-              title: 'إجمالي الهاكاثونات',
-              value: hackathons.length,
-              icon: Trophy,
-              color: 'from-[#01645e] to-[#3ab666]'
-            },
-            {
-              title: 'الهاكاثونات المفتوحة',
-              value: hackathons.filter(h => h.status === 'open').length,
-              icon: Calendar,
-              color: 'from-[#3ab666] to-[#c3e956]'
-            },
-            {
-              title: 'إجمالي المشاركين',
-              value: hackathons.reduce((sum, h) => sum + h.stats.total, 0),
-              icon: Users,
-              color: 'from-[#c3e956] to-[#8b7632]'
-            },
-            {
-              title: 'في انتظار المراجعة',
-              value: hackathons.reduce((sum, h) => sum + h.stats.pending, 0),
-              icon: Settings,
-              color: 'from-[#8b7632] to-[#01645e]'
-            }
-          ].map((stat, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Card className="relative overflow-hidden">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-[#8b7632] mb-1">{stat.title}</p>
-                      <p className="text-3xl font-bold text-[#01645e]">{stat.value}</p>
-                    </div>
-                    <div className={`p-3 rounded-full bg-gradient-to-r ${stat.color}`}>
-                      <stat.icon className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
         </div>
 
-        {/* Hackathons List */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl text-[#01645e]">قائمة الهاكاثونات</CardTitle>
-              <CardDescription>جميع الهاكاثونات المنشأة في النظام</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {hackathons.length === 0 ? (
-                <div className="text-center py-12">
-                  <Trophy className="w-16 h-16 text-[#8b7632] mx-auto mb-4 opacity-50" />
-                  <h3 className="text-xl font-semibold text-[#01645e] mb-2">لا توجد هاكاثونات</h3>
-                  <p className="text-[#8b7632] mb-6">ابدأ بإنشاء أول هاكاثون</p>
-                  <Link href="/admin/hackathons/create">
-                    <Button className="bg-gradient-to-r from-[#01645e] to-[#3ab666]">
-                      <Plus className="w-5 h-5 ml-2" />
-                      إنشاء هاكاثون جديد
-                    </Button>
-                  </Link>
+        {/* Main Content */}
+        <div className="flex-1 p-6 overflow-auto">
+          <div className="max-w-7xl mx-auto">
+            {/* Stats Cards */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6"
+            >
+              <Card className="p-4 bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-950 dark:to-indigo-900 border-indigo-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-indigo-600 dark:text-indigo-400 mb-1">
+                      {language === 'ar' ? 'إجمالي' : 'Total'}
+                    </p>
+                    <p className="text-2xl font-bold text-indigo-900 dark:text-indigo-100">{stats.total}</p>
+                  </div>
+                  <Trophy className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
                 </div>
-              ) : (
-                <div className="space-y-4">
-                  {hackathons.map((hackathon) => (
-                    <motion.div
-                      key={hackathon.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="border rounded-lg p-6 hover:shadow-md transition-shadow"
-                    >
-                      <div className="flex justify-between items-start mb-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h3 className="text-xl font-bold text-[#01645e]">{hackathon.title}</h3>
-                            {getStatusBadge(hackathon.status)}
-                            {hackathon.isPinned && (
-                              <span className="inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
-                                <Pin className="w-3 h-3" />
-                                مثبت في الرئيسية
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-[#8b7632] mb-3">{hackathon.description}</p>
+              </Card>
 
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                            <div>
-                              <span className="font-semibold text-[#01645e]">تاريخ البداية:</span>
-                              <br />
-                              {formatDate(hackathon.startDate)}
-                            </div>
-                            <div>
-                              <span className="font-semibold text-[#01645e]">تاريخ النهاية:</span>
-                              <br />
-                              {formatDate(hackathon.endDate)}
-                            </div>
-                            <div>
-                              <span className="font-semibold text-[#01645e]">انتهاء التسجيل:</span>
-                              <br />
-                              {formatDate(hackathon.registrationDeadline)}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex gap-2 mr-4">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className={`${hackathon.isPinned
-                              ? 'text-red-600 hover:text-red-700 border-red-600 hover:border-red-700 bg-red-50 hover:bg-red-100'
-                              : 'text-yellow-600 hover:text-yellow-700 border-yellow-600 hover:border-yellow-700 bg-yellow-50 hover:bg-yellow-100'
-                            }`}
-                            onClick={() => togglePinQuick(hackathon.id, !hackathon.isPinned)}
-                            title={hackathon.isPinned ? 'إلغاء التثبيت من الصفحة الرئيسية' : 'تثبيت في الصفحة الرئيسية'}
-                          >
-                            {hackathon.isPinned ? (
-                              <>
-                                <PinOff className="w-4 h-4 ml-1" />
-                                إلغاء
-                              </>
-                            ) : (
-                              <>
-                                <Pin className="w-4 h-4 ml-1" />
-                                تثبيت
-                              </>
-                            )}
-                          </Button>
-                          <Link href={`/admin/hackathons/${hackathon.id}`}>
-                            <Button variant="outline" size="sm">
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                          </Link>
-                          <Link href={`/admin/hackathons/${hackathon.id}/edit`}>
-                            <Button variant="outline" size="sm">
-                              <Edit className="w-4 h-4" />
-                            </Button>
-                          </Link>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-red-600 hover:text-red-700 border-red-600 hover:border-red-700"
-                            onClick={() => deleteHackathon(hackathon.id, hackathon.title)}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
-
-                      {/* Statistics */}
-                      <div className="flex gap-6 text-sm bg-gray-50 p-3 rounded-lg">
-                        <div className="text-center">
-                          <div className="font-bold text-[#01645e]">{hackathon.stats.total}</div>
-                          <div className="text-[#8b7632]">إجمالي المشاركين</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="font-bold text-yellow-600">{hackathon.stats.pending}</div>
-                          <div className="text-[#8b7632]">في الانتظار</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="font-bold text-green-600">{hackathon.stats.approved}</div>
-                          <div className="text-[#8b7632]">مقبول</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="font-bold text-red-600">{hackathon.stats.rejected}</div>
-                          <div className="text-[#8b7632]">مرفوض</div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
+              <Card className="p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 border-green-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-green-600 dark:text-green-400 mb-1">
+                      {language === 'ar' ? 'مفتوح' : 'Open'}
+                    </p>
+                    <p className="text-2xl font-bold text-green-900 dark:text-green-100">{stats.open}</p>
+                  </div>
+                  <CheckCircle2 className="h-8 w-8 text-green-600 dark:text-green-400" />
                 </div>
-              )}
-            </CardContent>
-          </Card>
-        </motion.div>
+              </Card>
+
+              <Card className="p-4 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950 dark:to-red-900 border-red-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-red-600 dark:text-red-400 mb-1">
+                      {language === 'ar' ? 'مغلق' : 'Closed'}
+                    </p>
+                    <p className="text-2xl font-bold text-red-900 dark:text-red-100">{stats.closed}</p>
+                  </div>
+                  <XCircle className="h-8 w-8 text-red-600 dark:text-red-400" />
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-900 border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                      {language === 'ar' ? 'مسودة' : 'Draft'}
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{stats.draft}</p>
+                  </div>
+                  <Clock className="h-8 w-8 text-gray-600 dark:text-gray-400" />
+                </div>
+              </Card>
+            </motion.div>
+
+            {/* Filters & Actions */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <Card className="p-6 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      placeholder={language === 'ar' ? 'بحث...' : 'Search...'}
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+
+                  <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={language === 'ar' ? 'الحالة' : 'Status'} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ALL">{language === 'ar' ? 'الكل' : 'All'}</SelectItem>
+                      <SelectItem value="open">{language === 'ar' ? 'مفتوح' : 'Open'}</SelectItem>
+                      <SelectItem value="closed">{language === 'ar' ? 'مغلق' : 'Closed'}</SelectItem>
+                      <SelectItem value="completed">{language === 'ar' ? 'مكتمل' : 'Completed'}</SelectItem>
+                      <SelectItem value="draft">{language === 'ar' ? 'مسودة' : 'Draft'}</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <Button 
+                    className="bg-indigo-600 hover:bg-indigo-700"
+                    onClick={() => router.push('/admin/hackathons/create')}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    {language === 'ar' ? 'إضافة هاكاثون' : 'Add Hackathon'}
+                  </Button>
+                </div>
+              </Card>
+            </motion.div>
+
+            {/* Hackathons Table */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <Card>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>{language === 'ar' ? 'العنوان' : 'Title'}</TableHead>
+                        <TableHead>{language === 'ar' ? 'الحالة' : 'Status'}</TableHead>
+                        <TableHead>{language === 'ar' ? 'التاريخ' : 'Date'}</TableHead>
+                        <TableHead>{language === 'ar' ? 'المشاركين' : 'Participants'}</TableHead>
+                        <TableHead>{language === 'ar' ? 'الفرق' : 'Teams'}</TableHead>
+                        <TableHead>{language === 'ar' ? 'الإجراءات' : 'Actions'}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredHackathons.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                            {language === 'ar' ? 'لا توجد هاكاثونات' : 'No hackathons found'}
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        filteredHackathons.map(hackathon => (
+                          <TableRow key={hackathon.id}>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                {hackathon.isPinned && (
+                                  <Pin className="h-4 w-4 text-yellow-600" />
+                                )}
+                                <div>
+                                  <div className="font-medium">{hackathon.title}</div>
+                                  <div className="text-sm text-gray-500 truncate max-w-xs">
+                                    {hackathon.description}
+                                  </div>
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className={getStatusColor(hackathon.status)}>
+                                {getStatusLabel(hackathon.status)}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <div className="flex items-center gap-1 text-gray-600">
+                                <Calendar className="h-3 w-3" />
+                                {new Date(hackathon.startDate).toLocaleDateString('ar-SA')}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-1">
+                                <Users className="h-4 w-4 text-gray-400" />
+                                <span>{hackathon._count?.participants || 0}</span>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <span>{hackathon._count?.teams || 0}</span>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => handleTogglePin(hackathon.id, hackathon.isPinned)}
+                                >
+                                  {hackathon.isPinned ? 
+                                    <PinOff className="h-4 w-4" /> : 
+                                    <Pin className="h-4 w-4" />
+                                  }
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => router.push(`/admin/hackathons/${hackathon.id}`)}
+                                >
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => router.push(`/admin/hackathons/${hackathon.id}/edit`)}
+                                >
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => handleDelete(hackathon.id, hackathon.title)}
+                                >
+                                  <Trash2 className="h-4 w-4 text-red-600" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+              </Card>
+            </motion.div>
+          </div>
+        </div>
       </div>
     </div>
   )

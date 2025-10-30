@@ -19,11 +19,11 @@ async function getPrisma() {
 // GET /api/admin/users - Get all users
 export async function GET(request: NextRequest) {
   try {
-    const token = request.cookies.get('auth-token')?.value
+    const token = request.cookies.get('auth-token')?.value || request.cookies.get('token')?.value
     if (!token) return NextResponse.json({ error: 'غير مصرح' }, { status: 401 })
 
     const payload = await verifyToken(token)
-    if (!payload || payload.role !== 'admin') {
+    if (!payload || (payload.role !== 'admin' && payload.role !== 'master')) {
       return NextResponse.json({ error: 'غير مصرح' }, { status: 401 })
     }
 
@@ -41,7 +41,14 @@ export async function GET(request: NextRequest) {
         city: true,
         nationality: true,
         role: true,
-        createdAt: true
+        createdAt: true,
+        _count: {
+          select: {
+            participations: true,
+            judgements: true,
+            teamMemberships: true
+          }
+        }
       },
       orderBy: {
         createdAt: 'desc'
@@ -57,7 +64,8 @@ export async function GET(request: NextRequest) {
       city: user.city,
       nationality: user.nationality,
       role: user.role,
-      createdAt: user.createdAt.toISOString()
+      createdAt: user.createdAt.toISOString(),
+      _count: user._count
     }))
 
     console.log('📊 API: Returning users:', transformedUsers.length)

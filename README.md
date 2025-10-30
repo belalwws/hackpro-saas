@@ -1,54 +1,41 @@
-# 🚀 HackPro - Professional Hackathon Management SaaS Platform# 🚀 منصة هاكاثون الابتكار التقني
+# 🚀 HackPro - Professional Hackathon Management Platform
 
+<div align="center">
 
+![Next.js](https://img.shields.io/badge/Next.js-15.5-black?style=for-the-badge&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
+![Prisma](https://img.shields.io/badge/Prisma-Latest-2D3748?style=for-the-badge&logo=prisma)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-4169E1?style=for-the-badge&logo=postgresql)
+![Tailwind](https://img.shields.io/badge/Tailwind-3.4-38BDF8?style=for-the-badge&logo=tailwind-css)
 
-<div align="center"><div align="center">
+**منصة SaaS متكاملة لإدارة وتنظيم الهاكاثونات التقنية**
 
-
-
-**The Ultimate Multi-Tenant Hackathon Management Platform**![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
-
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
-
-[![Next.js](https://img.shields.io/badge/Next.js-15.5-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)![Prisma](https://img.shields.io/badge/Prisma-Latest-2D3748?style=for-the-badge&logo=prisma)
-
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791?style=for-the-badge&logo=postgresql)
-
-[![Prisma](https://img.shields.io/badge/Prisma-6.15-2D3748?style=for-the-badge&logo=prisma)](https://www.prisma.io/)![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38B2AC?style=for-the-badge&logo=tailwind-css)
-
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-4169E1?style=for-the-badge&logo=postgresql)](https://neon.tech/)
-
-منصة متكاملة لإدارة وتنظيم الهاكاثونات التقنية
-
-🌐 [Live Demo](https://hackpro.cloud) • 📖 [Documentation](./DOCUMENTATION.md) • 🚀 [Get Started](#-getting-started)
-
-[🌐 Live Demo](https://clownfish-app-px9sc.ondigitalocean.app) | [📖 Documentation](./PROJECT_OVERVIEW.md) | [🔧 Technical Details](./TECHNICAL_SUMMARY.md)
-
-</div>
+[🌐 Live Demo](https://clownfish-app-px9sc.ondigitalocean.app) | [📖 Deployment Guide](./DEPLOYMENT_GUIDE.md) | [✨ Features Checklist](./FEATURES_CHECKLIST.md) | [🚀 Quick Start](./QUICK_START.md)
 
 </div>
 
 ---
 
+## 🎯 نظرة عامة
+
+**HackPro** هي منصة SaaS متقدمة لإدارة الهاكاثونات التقنية بشكل احترافي. تم بناؤها باستخدام أحدث التقنيات مع دعم كامل لـ:
+
+✨ **Multi-Tenancy** - دعم منظمات متعددة  
+🌍 **Multi-Language** - العربية والإنجليزية  
+🎨 **Dark Mode** - وضع داكن/فاتح  
+📱 **Responsive** - متجاوب بالكامل  
+⚡ **Performance** - محسّن للأداء  
+🔒 **Secure** - آمن ومحمي
+
 ---
 
-## 🎯 About
-
-## ✨ المميزات
-
-**HackPro** is a comprehensive SaaS platform for managing hackathons at scale. Built with **multi-tenancy** from the ground up, it enables organizations to:
+## ✨ المميزات الرئيسية
 
 ### 🎯 إدارة شاملة للهاكاثونات
-
-✅ Create & manage unlimited hackathons  - ✅ إنشاء وإدارة هاكاثونات متعددة
-
-✅ Handle thousands of participants efficiently  - ✅ نظام تسجيل مرن للمشاركين
-
-✅ Advanced judging with customizable criteria  - ✅ إدارة الفرق والمشاريع
-
-✅ Automated certificate generation  - ✅ صفحات هبوط مخصصة لكل هاكاثون
-
-✅ Real-time analytics & reporting  
+- ✅ إنشاء وإدارة هاكاثونات متعددة
+- ✅ نظام تسجيل مرن للمشاركين
+- ✅ إدارة الفرق والمشاريع
+- ✅ صفحات هبوط مخصصة لكل هاكاثون  
 
 ✅ Custom branding & landing pages  ### 👥 نظام أدوار متقدم
 

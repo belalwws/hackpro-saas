@@ -3,7 +3,19 @@
  * Handles temporary storage and management of participant data
  */
 
-import { prisma } from '@/lib/prisma'
+// Lazy-load Prisma to avoid top-level initialization errors when the DB is sleeping
+// (Neon free tier may auto-pause). Each function will import prisma dynamically
+// and handle initialization errors gracefully.
+
+async function getPrisma() {
+  try {
+    const mod = await import('@/lib/prisma')
+    return mod.prisma
+  } catch (error) {
+    console.error('Prisma import error in participants-storage:', error)
+    return null as any
+  }
+}
 
 export interface ParticipantData {
   id?: string
@@ -35,43 +47,78 @@ export interface StorageStats {
  */
 export async function getAllParticipants(): Promise<ParticipantData[]> {
   try {
-    const participants = await prisma.participant.findMany({
-      include: {
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            phone: true,
-            university: true,
-            major: true,
-            skills: true,
-            experience: true,
-            preferredRole: true
-          }
-        }
-      },
-      orderBy: { registeredAt: 'desc' }
-    })
+    const prisma = await getPrisma()
+    if (!prisma) return []
 
-    return participants.map(participant => ({
-      id: participant.id,
-      name: participant.user.name,
-      email: participant.user.email,
-      phone: participant.user.phone || '',
-      university: participant.user.university || '',
-      major: participant.user.major || '',
-      skills: participant.user.skills || '',
-      experience: participant.user.experience || '',
-      preferredRole: participant.user.preferredRole || '',
-      motivation: participant.motivation || '',
-      hackathonId: participant.hackathonId,
-      status: participant.status as 'pending' | 'approved' | 'rejected',
-      registeredAt: participant.registeredAt,
-      additionalInfo: participant.additionalInfo
-    }))
+    // Single retry to wake the DB if it's paused
+    try {
+      const participants = await prisma.participant.findMany({
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true,
+              university: true,
+              major: true,
+              skills: true,
+              experience: true,
+              preferredRole: true
+            }
+          }
+        },
+        orderBy: { registeredAt: 'desc' }
+      })
+
+      return participants.map((participant: any) => ({
+        id: participant.id,
+        name: participant.user?.name || '',
+        email: participant.user?.email || '',
+        phone: participant.user?.phone || '',
+        university: participant.user?.university || '',
+        major: participant.user?.major || '',
+        skills: participant.user?.skills || '',
+        experience: participant.user?.experience || '',
+        preferredRole: participant.user?.preferredRole || '',
+        motivation: participant.motivation || '',
+        hackathonId: participant.hackathonId,
+        status: participant.status as 'pending' | 'approved' | 'rejected',
+        registeredAt: participant.registeredAt,
+        additionalInfo: participant.additionalInfo
+      }))
+    } catch (err) {
+      console.warn('Participants query failed, retrying once to wake DB:', err)
+      // wait a moment and retry once
+      await new Promise(r => setTimeout(r, 1200))
+      try {
+        const participants = await prisma.participant.findMany({
+          include: { user: { select: { id: true, name: true, email: true } } },
+          orderBy: { registeredAt: 'desc' }
+        })
+        return participants.map((p: any) => ({
+          id: p.id,
+          name: p.user?.name || '',
+          email: p.user?.email || '',
+          phone: '',
+          university: '',
+          major: '',
+          skills: '',
+          experience: '',
+          preferredRole: '',
+          motivation: '',
+          hackathonId: p.hackathonId,
+          status: p.status as 'pending' | 'approved' | 'rejected',
+          registeredAt: p.registeredAt,
+          additionalInfo: p.additionalInfo
+        }))
+      } catch (err2) {
+        console.error('Retry failed for participants query:', err2)
+        return []
+      }
+    }
   } catch (error) {
-    console.error('Error fetching all participants:', error)
+    console.error('Error in getAllParticipants:', error)
     return []
   }
 }
@@ -81,44 +128,74 @@ export async function getAllParticipants(): Promise<ParticipantData[]> {
  */
 export async function getParticipants(hackathonId: string): Promise<ParticipantData[]> {
   try {
-    const participants = await prisma.participant.findMany({
-      where: { hackathonId },
-      include: {
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            phone: true,
-            university: true,
-            major: true,
-            skills: true,
-            experience: true,
-            preferredRole: true
-          }
-        }
-      },
-      orderBy: { registeredAt: 'desc' }
-    })
+    const prisma = await getPrisma()
+    if (!prisma) return []
 
-    return participants.map(participant => ({
-      id: participant.id,
-      name: participant.user.name,
-      email: participant.user.email,
-      phone: participant.user.phone || '',
-      university: participant.user.university || '',
-      major: participant.user.major || '',
-      skills: participant.user.skills || '',
-      experience: participant.user.experience || '',
-      preferredRole: participant.user.preferredRole || '',
-      motivation: participant.motivation || '',
-      hackathonId: participant.hackathonId,
-      status: participant.status as 'pending' | 'approved' | 'rejected',
-      registeredAt: participant.registeredAt,
-      additionalInfo: participant.additionalInfo
-    }))
+    try {
+      const participants = await prisma.participant.findMany({
+        where: { hackathonId },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true,
+              university: true,
+              major: true,
+              skills: true,
+              experience: true,
+              preferredRole: true
+            }
+          }
+        },
+        orderBy: { registeredAt: 'desc' }
+      })
+
+      return participants.map((participant: any) => ({
+        id: participant.id,
+        name: participant.user?.name || '',
+        email: participant.user?.email || '',
+        phone: participant.user?.phone || '',
+        university: participant.user?.university || '',
+        major: participant.user?.major || '',
+        skills: participant.user?.skills || '',
+        experience: participant.user?.experience || '',
+        preferredRole: participant.user?.preferredRole || '',
+        motivation: participant.motivation || '',
+        hackathonId: participant.hackathonId,
+        status: participant.status as 'pending' | 'approved' | 'rejected',
+        registeredAt: participant.registeredAt,
+        additionalInfo: participant.additionalInfo
+      }))
+    } catch (err) {
+      console.warn('Participants query failed for hackathon, retrying once to wake DB:', err)
+      await new Promise(r => setTimeout(r, 1200))
+      try {
+        const participants = await prisma.participant.findMany({ where: { hackathonId }, include: { user: { select: { id: true, name: true, email: true } } }, orderBy: { registeredAt: 'desc' } })
+        return participants.map((p: any) => ({
+          id: p.id,
+          name: p.user?.name || '',
+          email: p.user?.email || '',
+          phone: '',
+          university: '',
+          major: '',
+          skills: '',
+          experience: '',
+          preferredRole: '',
+          motivation: '',
+          hackathonId: p.hackathonId,
+          status: p.status as 'pending' | 'approved' | 'rejected',
+          registeredAt: p.registeredAt,
+          additionalInfo: p.additionalInfo
+        }))
+      } catch (err2) {
+        console.error('Retry failed for participants query (hackathon):', err2)
+        return []
+      }
+    }
   } catch (error) {
-    console.error('Error fetching participants:', error)
+    console.error('Error in getParticipants:', error)
     return []
   }
 }
@@ -128,21 +205,41 @@ export async function getParticipants(hackathonId: string): Promise<ParticipantD
  */
 export async function getParticipantStats(hackathonId?: string): Promise<StorageStats> {
   try {
-    const where = hackathonId ? { hackathonId } : {}
-    
-    const [total, pending, approved, rejected] = await Promise.all([
-      prisma.participant.count({ where }),
-      prisma.participant.count({ where: { ...where, status: 'pending' } }),
-      prisma.participant.count({ where: { ...where, status: 'approved' } }),
-      prisma.participant.count({ where: { ...where, status: 'rejected' } })
-    ])
+    const prisma = await getPrisma()
+    if (!prisma) return { total: 0, pending: 0, approved: 0, rejected: 0, lastUpdated: new Date() }
 
-    return {
-      total,
-      pending,
-      approved,
-      rejected,
-      lastUpdated: new Date()
+    const where = hackathonId ? { hackathonId } : {}
+
+    try {
+      const [total, pending, approved, rejected] = await Promise.all([
+        prisma.participant.count({ where }),
+        prisma.participant.count({ where: { ...where, status: 'pending' } }),
+        prisma.participant.count({ where: { ...where, status: 'approved' } }),
+        prisma.participant.count({ where: { ...where, status: 'rejected' } })
+      ])
+
+      return {
+        total,
+        pending,
+        approved,
+        rejected,
+        lastUpdated: new Date()
+      }
+    } catch (err) {
+      console.warn('Participant stats query failed, returning zeros and retrying once:', err)
+      await new Promise(r => setTimeout(r, 900))
+      try {
+        const [total, pending, approved, rejected] = await Promise.all([
+          prisma.participant.count({ where }),
+          prisma.participant.count({ where: { ...where, status: 'pending' } }),
+          prisma.participant.count({ where: { ...where, status: 'approved' } }),
+          prisma.participant.count({ where: { ...where, status: 'rejected' } })
+        ])
+        return { total, pending, approved, rejected, lastUpdated: new Date() }
+      } catch (err2) {
+        console.error('Retry failed for participant stats:', err2)
+        return { total: 0, pending: 0, approved: 0, rejected: 0, lastUpdated: new Date() }
+      }
     }
   } catch (error) {
     console.error('Error fetching participant stats:', error)
@@ -191,6 +288,9 @@ export async function storeParticipantData(data: ParticipantData): Promise<boole
  */
 export async function updateParticipantStatus(participantId: string, status: 'pending' | 'approved' | 'rejected'): Promise<boolean> {
   try {
+    const prisma = await getPrisma()
+    if (!prisma) return false
+    
     await prisma.participant.update({
       where: { id: participantId },
       data: { status }
