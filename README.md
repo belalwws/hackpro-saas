@@ -311,43 +311,75 @@ model Organization {
 
   users      OrganizationUser[]
 
-}## 📁 هيكل المشروع
+}
 
+// Every hackathon belongs to an organization
 
+model Hackathon {
 
-// Every hackathon belongs to an organization```
+  id             String @id
 
-model Hackathon {Hk-main/
+  organizationId String  // Tenant isolation
 
-  id             String @id├── app/                    # Next.js App Router
+  title          String
 
-  organizationId String  // Tenant isolation│   ├── api/               # API Routes
+  // ...
 
-  title          String│   ├── admin/             # Admin Dashboard
+  organization Organization @relation(...)
 
-  // ...│   ├── supervisor/        # Supervisor Dashboard
+}
 
-  │   ├── judge/             # Judge Dashboard
+```
 
-  organization Organization @relation(...)│   ├── participant/       # Participant Dashboard
+**Usage Limits** per plan:
 
-}│   └── expert/            # Expert Dashboard
+```typescript
 
-```├── components/            # React Components
+free:         1 hackathon,  50 participants
 
-│   ├── ui/               # shadcn/ui Components
+professional: 10 hackathons, unlimited participants
 
-**Usage Limits** per plan:│   └── ...
+enterprise:   unlimited everything
 
-```typescript├── lib/                   # Utility Libraries
+```
 
-free:         1 hackathon,  50 participants│   ├── prisma.ts         # Prisma Client
+---
 
-professional: 10 hackathons, unlimited participants│   ├── auth.ts           # Authentication
+## 📁 هيكل المشروع
 
-enterprise:   unlimited everything│   ├── cloudinary.ts     # File Upload
+```
 
-```│   └── mailer.ts         # Email Service
+hackpro-saas/
+
+├── app/                    # Next.js App Router
+
+│   ├── api/                # API Routes
+
+│   ├── admin/              # Admin Dashboard
+
+│   ├── supervisor/         # Supervisor Dashboard
+
+│   ├── judge/              # Judge Dashboard
+
+│   ├── participant/        # Participant Dashboard
+
+│   └── expert/             # Expert Dashboard
+
+├── components/             # React Components
+
+│   ├── ui/                 # shadcn/ui Components
+
+│   └── ...
+
+├── lib/                    # Utility Libraries
+
+│   ├── prisma.ts           # Prisma Client
+
+│   ├── auth.ts             # Authentication
+
+│   ├── cloudinary.ts       # File Upload
+
+│   └── mailer.ts           # Email Service
 
 ├── prisma/               # Database Schema
 

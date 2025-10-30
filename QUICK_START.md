@@ -11,7 +11,7 @@
 
 ```bash
 # Clone المشروع (إذا لم يكن عندك)
-git clone https://github.com/your-username/hackpro-saas.git
+git clone https://github.com/belalwws/hackpro-saas.git
 cd hackpro-saas
 
 # تثبيت الحزم
