@@ -35,312 +35,200 @@
 - ✅ إنشاء وإدارة هاكاثونات متعددة
 - ✅ نظام تسجيل مرن للمشاركين
 - ✅ إدارة الفرق والمشاريع
-- ✅ صفحات هبوط مخصصة لكل هاكاثون  
+- ✅ صفحات هبوط مخصصة لكل هاكاثون
+- ✅ Custom branding & landing pages
 
-✅ Custom branding & landing pages  ### 👥 نظام أدوار متقدم
-
+### 👥 نظام أدوار متقدم
 - **Admin** - إدارة كاملة للمنصة
-
----- **Supervisor** - إشراف ومتابعة
-
+- **Supervisor** - إشراف ومتابعة
 - **Judge** - تقييم المشاريع
-
-## ✨ Key Features- **Expert** - تقديم الاستشارات
-
+- **Expert** - تقديم الاستشارات
 - **Participant** - المشاركة والتنافس
 
 ### 🏢 Multi-Tenancy & Organizations
+- Isolated data per organization
+- Custom branding (colors, logos, domains)
+- Flexible pricing plans (Free → Enterprise)
+- Usage tracking & limit enforcement
 
-- Isolated data per organization### 📊 نظام تقييم احترافي
-
-- Custom branding (colors, logos, domains)- ✅ معايير تقييم قابلة للتخصيص
-
-- Flexible pricing plans (Free → Enterprise)- ✅ توزيع المحكمين على الفرق
-
-- Usage tracking & limit enforcement- ✅ إدخال الدرجات في الوقت الفعلي
-
+### 📊 نظام تقييم احترافي
+- ✅ معايير تقييم قابلة للتخصيص
+- ✅ توزيع المحكمين على الفرق
+- ✅ إدخال الدرجات في الوقت الفعلي
 - ✅ حساب النتائج تلقائياً
+- ✅ لقطات للنتائج (snapshots)
 
-### 👥 User Management- ✅ لقطات للنتائج (snapshots)
-
-- Role-based access (Admin, Judge, Expert, Supervisor, Participant)
-
-- Team collaboration with permissions### 📧 نظام إيميلات متطور
-
-- SSO ready (Google/Microsoft)- ✅ قوالب إيميلات قابلة للتخصيص
-
-- 2FA support- ✅ متغيرات ديناميكية
-
+### 📧 نظام إيميلات متطور
+- ✅ قوالب إيميلات قابلة للتخصيص
+- ✅ متغيرات ديناميكية
 - ✅ إرفاق ملفات من Cloudinary
+- ✅ إرسال جماعي مع rate limiting
+- ✅ محرر نصوص غني (TipTap)
 
-### 🎯 Hackathon Management- ✅ إرسال جماعي مع rate limiting
-
-- Dynamic registration forms- ✅ محرر نصوص غني (TipTap)
-
-- Team formation & management
-
-- Project submissions (Cloudinary)### 🎓 توليد الشهادات
-
-- Live leaderboards- ✅ تصميم شهادات مخصص
-
-- Automated certificates- ✅ توليد تلقائي بأسماء المشاركين
-
+### 🎓 توليد الشهادات
+- ✅ تصميم شهادات مخصص
+- ✅ توليد تلقائي بأسماء المشاركين
 - ✅ إرسال عبر البريد الإلكتروني
+- ✅ تحميل مباشر
 
-### ⚖️ Judging System- ✅ تحميل مباشر
-
-- Custom evaluation criteria
-
-- Star ratings (1-5)### 📱 واجهة مستخدم حديثة
-
-- Real-time score aggregation- ✅ تصميم متجاوب (Responsive)
-
-- Judge dashboard- ✅ دعم اللغة العربية (RTL)
-
+### 📱 واجهة مستخدم حديثة
+- ✅ تصميم متجاوب (Responsive)
+- ✅ دعم اللغة العربية (RTL)
 - ✅ مكونات UI من shadcn/ui
-
-### 📊 Analytics- ✅ رسوميات 3D (Three.js)
-
-- Comprehensive dashboards- ✅ تأثيرات حركية (Framer Motion)
-
-- Participant statistics
-
-- Performance metrics---
-
-- Excel/CSV exports
+- ✅ رسوميات 3D (Three.js)
+- ✅ تأثيرات حركية (Framer Motion)
 
 ## 🛠️ التقنيات المستخدمة
 
+| Category | Technology |
+|----------|------------|
+| **Framework** | Next.js 15.5 (App Router) |
+| **Language** | TypeScript 5.0 |
+| **Database** | PostgreSQL (Neon) |
+| **ORM** | Prisma 6.15 |
+| **Auth** | Jose (JWT) |
+| **Styling** | Tailwind CSS 3.4 |
+| **UI** | Radix UI + shadcn/ui |
+| **Email** | Nodemailer + SendGrid |
+| **Storage** | Cloudinary |
+| **PDF** | Canvas |
+
+### Frontend Stack
+```
+Next.js 15 (App Router)
+React 19
+TypeScript 5
+Tailwind CSS 3
+shadcn/ui
+Framer Motion
+Three.js
+```
+
+### Backend Stack
+```
+Next.js API Routes
+Prisma ORM
+PostgreSQL (Neon)
+JWT Authentication
+Nodemailer
+Cloudinary
+```
+
+### Tools & Libraries
+```
+React Hook Form + Zod
+date-fns
+xlsx (Excel export)
+canvas (Certificate generation)
+bcryptjs (Password hashing)
+```
+
 ---
 
-### Frontend
-
-## 🛠 Tech Stack```
-
-Next.js 15 (App Router)
-
-| Category | Technology |React 19
-
-|----------|------------|TypeScript 5
-
-| **Framework** | Next.js 15.5 (App Router) |Tailwind CSS 3
-
-| **Language** | TypeScript 5.0 |shadcn/ui
-
-| **Database** | PostgreSQL (Neon) |Framer Motion
-
-| **ORM** | Prisma 6.15 |Three.js
-
-| **Auth** | Jose (JWT) |```
-
-| **Styling** | Tailwind CSS 3.4 |
-
-| **UI** | Radix UI + shadcn/ui |### Backend
-
-| **Email** | Nodemailer + SendGrid |```
-
-| **Storage** | Cloudinary |Next.js API Routes
-
-| **PDF** | Canvas |Prisma ORM
-
-PostgreSQL (Neon)
-
----JWT Authentication
-
-Nodemailer
-
-## 🚀 Getting StartedCloudinary
-
-```
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+### Tools & Libraries
-
-- PostgreSQL (or Neon account)```
-
-- Cloudinary accountReact Hook Form + Zod
-
-- SMTP credentialsdate-fns
-
-xlsx (Excel export)
-
-### Installationcanvas (Certificate generation)
-
-bcryptjs (Password hashing)
-
-```bash```
-
-# 1. Clone repository
-
-git clone https://github.com/belalwws/hackpro-saas.git---
-
-cd hackpro-saas
-
-## 🚀 البدء السريع
-
-# 2. Install dependencies
-
-npm install### المتطلبات
-
 - Node.js 18+
+- PostgreSQL (or Neon account)
+- Cloudinary account
+- SMTP credentials
 
-# 3. Configure environment- npm أو yarn
-
-cp .env.example .env- PostgreSQL database (أو Neon account)
-
-# Edit .env with your credentials- Cloudinary account
-
-- Gmail account (للإيميلات)
-
-# 4. Setup database
-
-npx prisma generate### التثبيت
-
-npx prisma db push
+### Installation
 
 ```bash
 
-# 5. Run development server# 1. استنساخ المشروع
-
-npm run dev
-
-# 1. استنساخ المشروع
-
+# 1. Clone repository
 git clone https://github.com/belalwws/hackpro-saas.git
-
 cd hackpro-saas
 
-# 6. Open browser
+# 2. Install dependencies
+npm install
 
-# http://localhost:3000# 2. تثبيت المكتبات
+# 3. Configure environment
+cp .env.example .env
+# Edit .env with your credentials
 
-```npm install
-
-
-
-### Default Admin# 3. إعداد ملف .env
-
-- Email: `admin@hackathon.gov.sa`cp .env.example .env
-
-- Password: `admin123`# قم بتعديل المتغيرات البيئية
-
-
-
-⚠️ Change in production!# 4. إعداد قاعدة البيانات
-
+# 4. Setup database
 npx prisma generate
+npx prisma db push
 
----npx prisma db push
-
-
-
-## 📁 Project Structure# 5. تشغيل السيرفر
-
+# 5. Run development server
 npm run dev
 
-``````
-
-hackpro-saas/
-
-├── app/                    # Next.js App Routerافتح المتصفح على [http://localhost:3000](http://localhost:3000)
-
-│   ├── api/                # API Routes
-
-│   │   ├── organization/   # Multi-tenancy---
-
-│   │   ├── hackathons/     # Hackathon management
-
-│   │   └── ...## ⚙️ المتغيرات البيئية
-
-│   ├── admin/              # Admin dashboard
-
-│   ├── saas/               # Landing pageأنشئ ملف `.env` في المجلد الرئيسي:
-
-│   └── ...
-
-├── components/             # React components```env
-
-│   ├── ui/                 # shadcn/ui# Database
-
-│   └── ...DATABASE_URL="postgresql://user:password@host:5432/database"
-
-├── lib/                    # Utilities
-
-│   ├── multi-tenancy.ts    # MT utilities# Authentication
-
-│   ├── auth.ts             # AuthenticationJWT_SECRET="your-super-secret-jwt-key"
-
-│   └── ...NEXTAUTH_URL="http://localhost:3000"
-
-├── hooks/                  # Custom hooksNEXTAUTH_SECRET="your-nextauth-secret"
-
-├── prisma/                 # Database schema
-
-└── ...# Email (Gmail)
-
-```GMAIL_USER="your-email@gmail.com"
-
-GMAIL_PASS="your-app-password"
-
----MAIL_FROM="Platform Name <your-email@gmail.com>"
-
-
-
-## 🏗 Multi-Tenancy Architecture# Cloudinary
-
-CLOUDINARY_CLOUD_NAME="your-cloud-name"
-
-```typescriptCLOUDINARY_API_KEY="your-api-key"
-
-// Organization modelCLOUDINARY_API_SECRET="your-api-secret"
-
-model Organization {
-
-  id        String @id# Application
-
-  name      StringNODE_ENV="development"
-
-  slug      String @uniqueNEXT_PUBLIC_APP_URL="http://localhost:3000"
-
-  plan      Plan   @default(free)```
-
-  
-
-  hackathons Hackathon[]---
-
-  users      OrganizationUser[]
-
-}
-
-// Every hackathon belongs to an organization
-
-model Hackathon {
-
-  id             String @id
-
-  organizationId String  // Tenant isolation
-
-  title          String
-
-  // ...
-
-  organization Organization @relation(...)
-
-}
-
+# 6. Open browser
+# http://localhost:3000
 ```
 
-**Usage Limits** per plan:
+### Default Admin
+- Email: `admin@hackathon.gov.sa`
+- Password: `admin123`
 
-```typescript
+⚠️ **Change in production!**
 
-free:         1 hackathon,  50 participants
+---
 
-professional: 10 hackathons, unlimited participants
+## 🚀 البدء السريع
 
-enterprise:   unlimited everything
+### المتطلبات
+- Node.js 18+
+- npm أو yarn
+- PostgreSQL database (أو Neon account)
+- Cloudinary account
+- Gmail account (للإيميلات)
 
+### التثبيت
+
+```bash
+# 1. استنساخ المشروع
+git clone https://github.com/belalwws/hackpro-saas.git
+cd hackpro-saas
+
+# 2. تثبيت المكتبات
+npm install
+
+# 3. إعداد ملف .env
+cp .env.example .env
+# قم بتعديل المتغيرات البيئية
+
+# 4. إعداد قاعدة البيانات
+npx prisma generate
+npx prisma db push
+
+# 5. تشغيل السيرفر
+npm run dev
+```
+
+افتح المتصفح على [http://localhost:3000](http://localhost:3000)
+
+---
+
+## ⚙️ المتغيرات البيئية
+
+أنشئ ملف `.env` في المجلد الرئيسي:
+
+```env
+# Database
+DATABASE_URL="postgresql://user:password@host:5432/database"
+
+# Authentication
+JWT_SECRET="your-super-secret-jwt-key"
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-nextauth-secret"
+
+# Email (Gmail)
+GMAIL_USER="your-email@gmail.com"
+GMAIL_PASS="your-app-password"
+MAIL_FROM="Platform Name <your-email@gmail.com>"
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME="your-cloud-name"
+CLOUDINARY_API_KEY="your-api-key"
+CLOUDINARY_API_SECRET="your-api-secret"
+
+# Application
+NODE_ENV="development"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
 ---
