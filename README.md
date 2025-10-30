@@ -203,9 +203,13 @@ npx prisma db push
 
 # 5. Run development server# 1. استنساخ المشروع
 
-npm run devgit clone https://github.com/your-username/Hk-main.git
+npm run dev
 
-cd Hk-main
+# 1. استنساخ المشروع
+
+git clone https://github.com/belalwws/hackpro-saas.git
+
+cd hackpro-saas
 
 # 6. Open browser
 
@@ -536,9 +540,9 @@ GitHub: [@belalwws](https://github.com/belalwws)### متغيرات البيئة 
 
 ## 📊 الإحصائيات
 
-![GitHub repo size](https://img.shields.io/github/repo-size/your-username/Hk-main?style=flat-square)
-![GitHub last commit](https://img.shields.io/github/last-commit/your-username/Hk-main?style=flat-square)
-![GitHub issues](https://img.shields.io/github/issues/your-username/Hk-main?style=flat-square)
+![GitHub repo size](https://img.shields.io/github/repo-size/belalwws/hackpro-saas?style=flat-square)
+![GitHub last commit](https://img.shields.io/github/last-commit/belalwws/hackpro-saas?style=flat-square)
+![GitHub issues](https://img.shields.io/github/issues/belalwws/hackpro-saas?style=flat-square)
 
 ---
 
@@ -550,7 +554,7 @@ GitHub: [@belalwws](https://github.com/belalwws)### متغيرات البيئة 
 
 ## 📞 التواصل
 
-لأي استفسارات أو مشاكل، يرجى فتح [Issue](https://github.com/your-username/Hk-main/issues)
+لأي استفسارات أو مشاكل، يرجى فتح [Issue](https://github.com/belalwws/hackpro-saas/issues)
 
 ---
 
