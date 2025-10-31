@@ -81,6 +81,8 @@ const nextConfig = {
   },
   // Enable compression
   compress: true,
+  // Generate dynamic pages for static generation
+  staticPageGenerationTimeout: 300,
   // Optimize page data
   generateBuildId: async () => {
     return process.env.BUILD_ID || 'build-' + Date.now()

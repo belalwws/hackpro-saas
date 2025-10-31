@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -9,7 +9,11 @@ import { Upload, Download, CheckCircle2, XCircle, AlertCircle, FileSpreadsheet }
 import { motion } from 'framer-motion'
 import { useModal } from '@/hooks/use-modal'
 
-export default function ImportExcelPage() {
+// Force dynamic rendering to prevent prerendering issues with useSearchParams
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+function ImportExcelContent() {
   const [hackathons, setHackathons] = useState<any[]>([])
   const [selectedHackathon, setSelectedHackathon] = useState<string>('')
   const [file, setFile] = useState<File | null>(null)
@@ -271,6 +275,21 @@ export default function ImportExcelPage() {
       {/* Modals */}
       <ModalComponents />
     </div>
+  )
+}
+
+export default function ImportExcelPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-[#c3e956]/10 to-[#3ab666]/10 p-6 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-[#01645e]/20 border-t-[#01645e] rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-[#01645e]">جاري التحميل...</p>
+        </div>
+      </div>
+    }>
+      <ImportExcelContent />
+    </Suspense>
   )
 }
 
