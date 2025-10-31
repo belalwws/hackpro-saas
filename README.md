@@ -1,4 +1,4 @@
-# 🚀 HackPro - Professional Hackathon Management Platform
+﻿# 🚀 HackPro - Professional Hackathon Management Platform
 
 <div align="center">
 
@@ -307,10 +307,13 @@ node scripts/restore-database.js
 
 ## 📚 الوثائق
 
-- [� دليل النشر](./DEPLOYMENT_GUIDE.md)
+- [📖 دليل النشر](./DEPLOYMENT_GUIDE.md)
 - [🚀 دليل النشر على Digital Ocean](./DIGITALOCEAN_DEPLOYMENT.md)
+- [🔧 دليل حل مشاكل Digital Ocean](./DIGITALOCEAN_FIX_GUIDE.md)
+- [✅ قائمة التحقق للنشر](./DEPLOYMENT_CHECKLIST.md)
 - [✨ قائمة المميزات](./FEATURES_CHECKLIST.md)
-- [� البدء السريع](./QUICK_START.md)
+- [⚡ البدء السريع](./QUICK_START.md)
+- [📝 ملخص التنظيف والإصلاحات](./CLEANUP_AND_FIX_SUMMARY.md)
 
 ---
 
