@@ -5,13 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Upload, Download, CheckCircle2, XCircle, AlertCircle, FileSpreadsheet } from 'lucide-react'
+import { Upload, Download, CheckCircle2, XCircle, AlertCircle, FileSpreadsheet, Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useModal } from '@/hooks/use-modal'
-
-// Force dynamic rendering to prevent prerendering issues with useSearchParams
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
 
 function ImportExcelContent() {
   const [hackathons, setHackathons] = useState<any[]>([])
