@@ -1,21 +1,30 @@
 # ✅ حل مشكلة DigitalOcean Build Failure
 
-## 🔴 المشكلة:
+## 🔴 المشكلة الأولى (محلولة):
 
 ```
 ⨯ useSearchParams() should be wrapped in a suspense boundary 
   at page "/admin/import-excel"
-Export encountered an error on /admin/import-excel/page
 ```
 
-### السبب:
-Next.js 15+ يتطلب أن تكون جميع hooks المتعلقة بـ navigation و search params مغطاة بـ Suspense boundary أثناء الـ static generation.
+**الحل:** تغليف المحتوى بـ Suspense ✅
 
 ---
 
-## ✅ الحل المطبق:
+## 🔴 المشكلة الثانية (محلولة):
 
-### 1. تحديث `app/admin/import-excel/page.tsx`:
+```
+Error: Invalid revalidate value "function(){throw Error(...)}" 
+on "/admin/import-excel", must be a non-negative number or false
+```
+
+### السبب:
+لا يمكن استخدام `export const dynamic` و `export const revalidate` مباشرة في ملف `'use client'`.
+هذه الـ exports يجب أن تكون في Server Component فقط.
+
+### ✅ الحل المطبق:
+
+**إنشاء ملف layout.tsx كـ Server Component:**
 
 ```tsx
 // إضافة:

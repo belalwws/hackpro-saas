@@ -11,6 +11,9 @@ import { MagneticCursor } from "@/components/magnetic-cursor"
 import { CookieConsent } from "@/components/cookie-consent"
 import { GoogleAnalytics } from "@/lib/analytics"
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export const metadata: Metadata = {
   title: "هاكاثون الابتكار التقني",
   description: "منصة متكاملة لإدارة وتنظيم الهاكاثونات التقنية",
