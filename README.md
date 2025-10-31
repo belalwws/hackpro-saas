@@ -269,165 +269,88 @@ hackpro-saas/
 
 │   └── mailer.ts           # Email Service
 
-├── prisma/               # Database Schema
-
----├── scripts/              # Utility Scripts
-
-├── public/               # Static Files
-
-## 📡 API Overview└── schema.prisma         # Prisma Schema
-
+├── prisma/                 # Database Schema
+├── scripts/                # Utility Scripts
+├── public/                 # Static Files
+└── schema.prisma           # Prisma Schema
 ```
 
-### Authentication
+---
 
-```bash---
+## 🎯 الاستخدام
 
-Cookie: auth-token=<JWT>
-
-```## 🎯 الاستخدام
-
-
-
-### Endpoints### إنشاء حساب مدير
+### إنشاء حساب مدير
 
 ```bash
-
-# Organizations```bash
-
-GET    /api/organization/currentnpm run create-admin
-
-POST   /api/organization/switch```
-
-GET    /api/organization/usage
+npm run create-admin
+```
 
 ### اختبار الاتصال بقاعدة البيانات
 
-# Hackathons
-
-GET    /api/hackathons```bash
-
-POST   /api/hackathonsnpm run db:test
-
-GET    /api/hackathons/:id```
-
-
-
-# Participants### نسخ احتياطي لقاعدة البيانات
-
-POST   /api/participants
-
-GET    /api/participants/:id```bash
-
-node scripts/backup-database.js
-
-# Judges```
-
-POST   /api/judges/invite
-
-POST   /api/scores### استعادة قاعدة البيانات
-
+```bash
+npm run db:test
 ```
+
+### نسخ احتياطي لقاعدة البيانات
 
 ```bash
-
----node scripts/restore-database.js
-
+node scripts/backup-database.js
 ```
 
-## 🌐 Deployment
+### استعادة قاعدة البيانات
+
+```bash
+node scripts/restore-database.js
+```
 
 ---
 
-### Recommended
+## 📚 الوثائق
 
-- **Hosting**: Vercel / DigitalOcean## 📚 الوثائق
+- [� دليل النشر](./DEPLOYMENT_GUIDE.md)
+- [🚀 دليل النشر على Digital Ocean](./DIGITALOCEAN_DEPLOYMENT.md)
+- [✨ قائمة المميزات](./FEATURES_CHECKLIST.md)
+- [� البدء السريع](./QUICK_START.md)
 
-- **Database**: Neon (Serverless Postgres)
+---
 
-- **Storage**: Cloudinary- [📋 نظرة عامة على المشروع](./PROJECT_OVERVIEW.md)
-
-- **Email**: SendGrid- [🔧 الملخص التقني](./TECHNICAL_SUMMARY.md)
-
-- [🗄️ Database Schema](./schema.prisma)
-
-### Vercel (One-Click)
-
-1. Push to GitHub---
-
-2. Import in Vercel
-
-3. Set env variables## 🔐 الأمان
-
-4. Deploy 🎉
+## 🔐 الأمان
 
 - ✅ JWT-based authentication
-
----- ✅ Role-based access control (RBAC)
-
+- ✅ Role-based access control (RBAC)
 - ✅ Password hashing (bcryptjs)
-
-## 🤝 Contributing- ✅ Secure httpOnly cookies
-
+- ✅ Secure httpOnly cookies
 - ✅ Rate limiting
-
-1. Fork the repo- ✅ Input validation (Zod)
-
-2. Create branch (`feature/amazing`)- ✅ SQL injection protection (Prisma)
-
-3. Commit changes
-
-4. Push & open PR---
-
-
-
----## 🚀 النشر
-
-
-
-## 📝 License### Digital Ocean
-
-
-
-MIT License - see [LICENSE](LICENSE)المشروع مُعد للنشر على Digital Ocean App Platform:
-
-
-
----1. Push الكود على GitHub
-
-2. ربط المشروع بـ Digital Ocean
-
-## 👨‍💻 Author3. إعداد المتغيرات البيئية
-
-4. Auto-deploy عند كل push
-
-**Belal**  
-
-GitHub: [@belalwws](https://github.com/belalwws)### متغيرات البيئة المطلوبة
-
-
-
----تأكد من إضافة جميع المتغيرات في Digital Ocean Dashboard:
-
-- `DATABASE_URL`
-
-<div align="center">- `JWT_SECRET`
-
-- `NEXTAUTH_URL`
-
-**Made with ❤️ for the hackathon community**- `NEXTAUTH_SECRET`
-
-- `GMAIL_USER`
-
-⭐ Star us on GitHub!- `GMAIL_PASS`
-
-- `CLOUDINARY_*`
-
-[Report Bug](https://github.com/belalwws/hackpro-saas/issues) • [Request Feature](https://github.com/belalwws/hackpro-saas/issues)
+- ✅ Input validation (Zod)
+- ✅ SQL injection protection (Prisma)
 
 ---
 
-</div>
+## 🚀 النشر
+
+### Digital Ocean
+
+المشروع مُعد للنشر على Digital Ocean App Platform:
+
+1. Push الكود على GitHub
+2. ربط المشروع بـ Digital Ocean
+3. إعداد المتغيرات البيئية
+4. Auto-deploy عند كل push
+
+### متغيرات البيئة المطلوبة
+
+تأكد من إضافة جميع المتغيرات في Digital Ocean Dashboard:
+- `DATABASE_URL`
+- `JWT_SECRET`
+- `NEXTAUTH_URL`
+- `NEXTAUTH_SECRET`
+- `GMAIL_USER`
+- `GMAIL_PASS`
+- `CLOUDINARY_*`
+
+راجع [دليل النشر على Digital Ocean](./DIGITALOCEAN_DEPLOYMENT.md) للتفاصيل الكاملة.
+
+---
 
 ## 🤝 المساهمة
 
