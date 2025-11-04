@@ -3,14 +3,13 @@ import { prisma } from '@/lib/prisma'
 import { verifyToken } from '@/lib/auth'
 
 /**
- * GET /api/organization/current
+ * GET /api/organization/list
  * 
- * Returns the current organization for the authenticated user
- * Also returns user's role and permissions in the organization
+ * Returns all organizations the user belongs to
  */
 export async function GET(request: NextRequest) {
   try {
-    // Get token from cookie or header
+    // Get token
     let token = request.cookies.get('auth-token')?.value
     
     if (!token) {
@@ -36,47 +35,55 @@ export async function GET(request: NextRequest) {
 
     const userId = payload.userId
 
-    // Get user's organization (first active one)
-    const orgUser = await prisma.organizationUser.findFirst({
+    // Get all organizations the user belongs to
+    const orgUsers = await prisma.organizationUser.findMany({
       where: {
         userId,
         organization: {
-          status: 'active'
+          status: {
+            in: ['active', 'trial']
+          }
         }
       },
       include: {
-        organization: true
+        organization: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            logo: true,
+            plan: true,
+            status: true,
+            primaryColor: true,
+            secondaryColor: true,
+            accentColor: true,
+            createdAt: true
+          }
+        }
       },
       orderBy: {
         joinedAt: 'asc'
       }
     })
 
-    if (!orgUser) {
-      return NextResponse.json(
-        { error: 'لا توجد منظمة مرتبطة بهذا الحساب' },
-        { status: 404 }
-      )
-    }
-
-    // Check permissions
-    const isOwner = orgUser.isOwner || orgUser.role === 'owner'
-    const canManageBilling = isOwner || orgUser.role === 'admin'
+    const organizations = orgUsers.map(ou => ({
+      ...ou.organization,
+      role: ou.role,
+      isOwner: ou.isOwner,
+      joinedAt: ou.joinedAt
+    }))
 
     return NextResponse.json({
       success: true,
-      organization: orgUser.organization,
-      role: orgUser.role,
-      isOwner,
-      canManageBilling,
-      permissions: orgUser.permissions
+      organizations
     })
 
   } catch (error) {
-    console.error('Error fetching organization:', error)
+    console.error('Error fetching organizations:', error)
     return NextResponse.json(
-      { error: 'حدث خطأ في تحميل بيانات المنظمة' },
+      { error: 'حدث خطأ في تحميل قائمة المنظمات' },
       { status: 500 }
     )
   }
 }
+

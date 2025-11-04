@@ -228,6 +228,11 @@ export async function middleware(request: NextRequest) {
     requestHeaders.set("x-user-id", payload.userId)
     requestHeaders.set("x-user-role", payload.role)
     requestHeaders.set("x-user-email", payload.email)
+    
+    // Add organizationId if available in payload
+    if (payload.organizationId) {
+      requestHeaders.set("x-organization-id", payload.organizationId)
+    }
 
     return NextResponse.next({
       request: {

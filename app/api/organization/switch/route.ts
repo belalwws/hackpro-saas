@@ -1,64 +1,92 @@
-/**
- * Switch Organization API
- * Allows users to switch between organizations they belong to
- */
-
 import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
 import { verifyToken } from '@/lib/auth'
-import { userBelongsToOrg } from '@/lib/multi-tenancy'
 
+/**
+ * POST /api/organization/switch
+ * 
+ * Switch to a different organization
+ * User must be a member of the target organization
+ */
 export async function POST(request: NextRequest) {
   try {
-    // Get token from cookies
-    const token = request.cookies.get('auth-token')?.value
+    // Get token
+    let token = request.cookies.get('auth-token')?.value
+    
+    if (!token) {
+      const authHeader = request.headers.get('authorization')
+      token = authHeader?.replace('Bearer ', '')
+    }
 
     if (!token) {
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { error: 'غير مصرح بالوصول' },
         { status: 401 }
       )
     }
 
     // Verify token
     const payload = await verifyToken(token)
-    if (!payload || !payload.userId) {
+    if (!payload) {
       return NextResponse.json(
-        { error: 'Invalid token' },
+        { error: 'رمز المصادقة غير صالح' },
         { status: 401 }
       )
     }
 
-    // Get organization ID from request
-    const { organizationId } = await request.json()
+    const userId = payload.userId
+
+    // Get request body
+    const body = await request.json()
+    const { organizationId } = body
 
     if (!organizationId) {
       return NextResponse.json(
-        { error: 'Organization ID required' },
+        { error: 'معرف المنظمة مطلوب' },
         { status: 400 }
       )
     }
 
-    // Check if user belongs to organization
-    const hasAccess = await userBelongsToOrg(payload.userId, organizationId)
+    // Check if user is member of the target organization
+    const orgUser = await prisma.organizationUser.findUnique({
+      where: {
+        userId_organizationId: {
+          userId,
+          organizationId
+        }
+      },
+      include: {
+        organization: true
+      }
+    })
 
-    if (!hasAccess) {
+    if (!orgUser) {
       return NextResponse.json(
-        { error: 'You do not have access to this organization' },
+        { error: 'ليس لديك صلاحية للوصول إلى هذه المنظمة' },
         { status: 403 }
       )
     }
 
-    // In a more complex implementation, you would store the current organization
-    // in the session or a separate cookie. For now, we just validate access.
-    
+    if (orgUser.organization.status !== 'active') {
+      return NextResponse.json(
+        { error: 'هذه المنظمة غير نشطة' },
+        { status: 403 }
+      )
+    }
+
+    // Success - organization can be switched
+    // Note: We're not storing the "current" org in DB or cookie
+    // The frontend will manage this state
     return NextResponse.json({
       success: true,
-      message: 'Organization switched successfully'
+      message: 'تم تبديل المنظمة بنجاح',
+      organization: orgUser.organization
     })
+
   } catch (error) {
     console.error('Error switching organization:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'حدث خطأ في تبديل المنظمة' },
       { status: 500 }
     )
   }

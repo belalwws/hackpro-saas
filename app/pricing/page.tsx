@@ -1,363 +1,487 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { useState } from 'react'
-import { useLanguage } from '@/contexts/language-context'
-import { AnimatedSection } from '@/components/animated-section'
-import { HoverCard } from '@/components/hover-card'
-import { RippleButton } from '@/components/ripple-button'
-import { BackgroundAnimations } from '@/components/background-animations'
+import { useRouter } from 'next/navigation'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { 
-  Check,
+import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui/label'
+import {
+  CheckCircle2,
   X,
-  Zap,
-  Building2,
+  Sparkles,
   Rocket,
   Crown,
-  ArrowRight
+  Building2,
+  Zap,
+  Shield,
+  Users,
+  Mail,
+  HardDrive,
+  BarChart3,
+  Headphones,
+  Code,
+  Globe,
+  Clock,
+  Star,
+  ArrowLeft,
+  CreditCard
 } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+const plans = [
+  {
+    id: 'free',
+    name: 'البداية',
+    nameEn: 'Starter',
+    description: 'مثالي للفرق الصغيرة والتجريب',
+    monthlyPrice: 0,
+    yearlyPrice: 0,
+    icon: Sparkles,
+    color: 'from-gray-500 to-gray-600',
+    popular: false,
+    features: {
+      hackathons: '1 هاكاثون نشط',
+      participants: '50 مشارك',
+      users: '10 أعضاء فريق',
+      storage: '1GB تخزين',
+      emails: '100 إيميل/شهر',
+      analytics: 'إحصائيات أساسية',
+      support: 'دعم المجتمع',
+      customization: false,
+      api: false,
+      whitelabel: false,
+      priority: false
+    }
+  },
+  {
+    id: 'professional',
+    name: 'الاحترافي',
+    nameEn: 'Professional',
+    description: 'للمنظمات المتوسطة والمتقدمة',
+    monthlyPrice: 299,
+    yearlyPrice: 2990,
+    savings: 598,
+    icon: Crown,
+    color: 'from-blue-600 to-purple-600',
+    popular: true,
+    features: {
+      hackathons: '10 هاكاثونات نشطة',
+      participants: 'مشاركين غير محدودين',
+      users: 'فريق غير محدود',
+      storage: '50GB تخزين',
+      emails: '5,000 إيميل/شهر',
+      analytics: 'تحليلات متقدمة',
+      support: 'دعم أولوية',
+      customization: 'صفحات هبوط مخصصة',
+      api: 'API كامل',
+      whitelabel: true,
+      priority: true,
+      training: 'تدريب أونلاين'
+    }
+  },
+  {
+    id: 'enterprise',
+    name: 'المؤسسات',
+    nameEn: 'Enterprise',
+    description: 'حلول مخصصة للمؤسسات الكبرى',
+    monthlyPrice: null,
+    yearlyPrice: null,
+    icon: Building2,
+    color: 'from-purple-600 to-pink-600',
+    popular: false,
+    features: {
+      hackathons: 'غير محدود',
+      participants: 'غير محدود',
+      users: 'غير محدود',
+      storage: 'غير محدود',
+      emails: 'غير محدود',
+      analytics: 'تحليلات مخصصة',
+      support: 'دعم 24/7',
+      customization: 'تخصيص كامل',
+      api: 'API مخصص',
+      whitelabel: true,
+      priority: true,
+      training: 'تدريب شامل',
+      dedicated: 'مدير حساب مخصص',
+      sla: 'SLA مضمون',
+      onboarding: 'إعداد كامل'
+    }
+  }
+]
+
+const comparisonFeatures = [
+  { name: 'الهاكاثونات النشطة', icon: Zap, key: 'hackathons' },
+  { name: 'عدد المشاركين', icon: Users, key: 'participants' },
+  { name: 'أعضاء الفريق', icon: Users, key: 'users' },
+  { name: 'مساحة التخزين', icon: HardDrive, key: 'storage' },
+  { name: 'الإيميلات', icon: Mail, key: 'emails' },
+  { name: 'التحليلات', icon: BarChart3, key: 'analytics' },
+  { name: 'الدعم الفني', icon: Headphones, key: 'support' },
+  { name: 'التخصيص', icon: Code, key: 'customization' },
+  { name: 'API Access', icon: Code, key: 'api' },
+  { name: 'White Label', icon: Globe, key: 'whitelabel' },
+  { name: 'أولوية الدعم', icon: Clock, key: 'priority' }
+]
 
 export default function PricingPage() {
-  const { language } = useLanguage()
-  const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly')
+  const router = useRouter()
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly')
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
 
-  const plans = [
-    {
-      name: language === 'ar' ? 'البداية' : 'Starter',
-      description: language === 'ar' ? 'للمسابقات الصغيرة' : 'For small hackathons',
-      icon: <Zap className="h-8 w-8" />,
-      monthlyPrice: 0,
-      yearlyPrice: 0,
-      color: 'blue',
-      popular: false,
-      features: [
-        { name: language === 'ar' ? '1 منظمة' : '1 Organization', included: true },
-        { name: language === 'ar' ? 'حتى 50 مشارك' : 'Up to 50 participants', included: true },
-        { name: language === 'ar' ? '3 حكام' : '3 Judges', included: true },
-        { name: language === 'ar' ? 'تقارير أساسية' : 'Basic reports', included: true },
-        { name: language === 'ar' ? 'دعم عبر البريد' : 'Email support', included: true },
-        { name: language === 'ar' ? 'شهادات رقمية' : 'Digital certificates', included: false },
-        { name: language === 'ar' ? 'تخصيص العلامة التجارية' : 'Brand customization', included: false },
-        { name: language === 'ar' ? 'دعم ذو أولوية' : 'Priority support', included: false }
-      ]
-    },
-    {
-      name: language === 'ar' ? 'الاحترافي' : 'Professional',
-      description: language === 'ar' ? 'للمنظمات المتنامية' : 'For growing organizations',
-      icon: <Building2 className="h-8 w-8" />,
-      monthlyPrice: 99,
-      yearlyPrice: 990,
-      color: 'indigo',
-      popular: true,
-      features: [
-        { name: language === 'ar' ? '3 منظمات' : '3 Organizations', included: true },
-        { name: language === 'ar' ? 'حتى 500 مشارك' : 'Up to 500 participants', included: true },
-        { name: language === 'ar' ? '20 حكم' : '20 Judges', included: true },
-        { name: language === 'ar' ? 'تقارير متقدمة' : 'Advanced reports', included: true },
-        { name: language === 'ar' ? 'دعم عبر البريد' : 'Email support', included: true },
-        { name: language === 'ar' ? 'شهادات رقمية' : 'Digital certificates', included: true },
-        { name: language === 'ar' ? 'تخصيص العلامة التجارية' : 'Brand customization', included: true },
-        { name: language === 'ar' ? 'دعم ذو أولوية' : 'Priority support', included: false }
-      ]
-    },
-    {
-      name: language === 'ar' ? 'المؤسسات' : 'Enterprise',
-      description: language === 'ar' ? 'للمنظمات الكبيرة' : 'For large organizations',
-      icon: <Rocket className="h-8 w-8" />,
-      monthlyPrice: 299,
-      yearlyPrice: 2990,
-      color: 'purple',
-      popular: false,
-      features: [
-        { name: language === 'ar' ? 'منظمات غير محدودة' : 'Unlimited organizations', included: true },
-        { name: language === 'ar' ? 'مشاركين غير محدودين' : 'Unlimited participants', included: true },
-        { name: language === 'ar' ? 'حكام غير محدودين' : 'Unlimited judges', included: true },
-        { name: language === 'ar' ? 'تقارير مخصصة' : 'Custom reports', included: true },
-        { name: language === 'ar' ? 'دعم 24/7' : '24/7 Support', included: true },
-        { name: language === 'ar' ? 'شهادات رقمية' : 'Digital certificates', included: true },
-        { name: language === 'ar' ? 'تخصيص كامل' : 'Full customization', included: true },
-        { name: language === 'ar' ? 'مدير حساب مخصص' : 'Dedicated account manager', included: true }
-      ]
-    },
-    {
-      name: language === 'ar' ? 'مخصص' : 'Custom',
-      description: language === 'ar' ? 'حلول مخصصة' : 'Custom solutions',
-      icon: <Crown className="h-8 w-8" />,
-      monthlyPrice: null,
-      yearlyPrice: null,
-      color: 'amber',
-      popular: false,
-      features: [
-        { name: language === 'ar' ? 'كل ميزات المؤسسات' : 'All Enterprise features', included: true },
-        { name: language === 'ar' ? 'تطوير مخصص' : 'Custom development', included: true },
-        { name: language === 'ar' ? 'استضافة خاصة' : 'Private hosting', included: true },
-        { name: language === 'ar' ? 'اتفاقية SLA' : 'SLA agreement', included: true },
-        { name: language === 'ar' ? 'تدريب متخصص' : 'Specialized training', included: true },
-        { name: language === 'ar' ? 'دمج مع أنظمتك' : 'Integration with your systems', included: true },
-        { name: language === 'ar' ? 'استشارات مجانية' : 'Free consultations', included: true },
-        { name: language === 'ar' ? 'أولوية قصوى' : 'Highest priority', included: true }
-      ]
-    }
-  ]
+  const getPrice = (plan: typeof plans[0]) => {
+    if (plan.monthlyPrice === null) return null
+    return billingCycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice
+  }
 
-  const faqs = [
-    {
-      question: language === 'ar' ? 'هل يمكنني تغيير الخطة لاحقاً؟' : 'Can I change my plan later?',
-      answer: language === 'ar' 
-        ? 'نعم، يمكنك ترقية أو تخفيض خطتك في أي وقت. سيتم احتساب الفرق بشكل تناسبي.'
-        : 'Yes, you can upgrade or downgrade your plan at any time. The difference will be prorated.'
-    },
-    {
-      question: language === 'ar' ? 'هل هناك رسوم إضافية؟' : 'Are there any additional fees?',
-      answer: language === 'ar'
-        ? 'لا، جميع الميزات المدرجة في خطتك متضمنة في السعر. لا توجد رسوم خفية.'
-        : 'No, all features listed in your plan are included in the price. No hidden fees.'
-    },
-    {
-      question: language === 'ar' ? 'ماذا يحدث إذا تجاوزت الحد؟' : 'What happens if I exceed the limit?',
-      answer: language === 'ar'
-        ? 'سنتواصل معك لترقية خطتك. لن يتم إيقاف خدمتك فجأة.'
-        : 'We will contact you to upgrade your plan. Your service will not be stopped suddenly.'
-    },
-    {
-      question: language === 'ar' ? 'هل يمكنني الإلغاء في أي وقت؟' : 'Can I cancel at any time?',
-      answer: language === 'ar'
-        ? 'نعم، يمكنك إلغاء اشتراكك في أي وقت. لن يتم تحصيل رسوم للفترة القادمة.'
-        : 'Yes, you can cancel your subscription at any time. You will not be charged for the next period.'
-    }
-  ]
+  const handleSelectPlan = (planId: string) => {
+    setSelectedPlan(planId)
+    // Navigate to checkout with plan info
+    router.push(`/checkout?plan=${planId}&billing=${billingCycle}`)
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-900 dark:to-indigo-950 transition-colors">
-      <BackgroundAnimations />
-      
-      {/* Hero Section */}
-      <section className="relative overflow-hidden pt-32 pb-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <AnimatedSection direction="fade">
-            <div className="text-center max-w-4xl mx-auto">
-              <motion.div
-                className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-full mb-6"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-              >
-                <Zap className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
-                <span className="text-sm font-medium text-indigo-600 dark:text-indigo-400">
-                  {language === 'ar' ? 'أسعار شفافة' : 'Transparent Pricing'}
-                </span>
-              </motion.div>
-              
-              <motion.h1 
-                className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-              >
-                {language === 'ar' ? 'خطط تناسب احتياجاتك' : 'Plans That Fit Your Needs'}
-              </motion.h1>
-              
-              <motion.p 
-                className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
-                {language === 'ar' 
-                  ? 'اختر الخطة المناسبة لك وابدأ في تنظيم مسابقاتك اليوم'
-                  : 'Choose the right plan for you and start organizing your hackathons today'}
-              </motion.p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 py-20 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <Badge className="mb-4 px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg shadow-lg">
+            <CreditCard className="w-5 h-5 ml-2" />
+            الأسعار والباقات
+          </Badge>
+          
+          <h1 className="text-5xl sm:text-6xl font-display font-black text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-blue-900 to-purple-900 dark:from-slate-100 dark:via-blue-100 dark:to-purple-100 mb-4">
+            خطط مرنة تناسب احتياجاتك
+          </h1>
+          
+          <p className="text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto mb-8">
+            ابدأ مجاناً وقم بالترقية عندما تنمو. جميع الخطط تشمل دعماً فنياً مجانياً
+          </p>
 
-              {/* Billing Toggle */}
-              <motion.div
-                className="inline-flex items-center gap-4 p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.4 }}
+          {/* Billing Toggle */}
+          <div className="flex items-center justify-center gap-4 p-2 bg-slate-200 dark:bg-slate-800 rounded-full inline-flex">
+            <Label
+              htmlFor="billing-toggle"
+              className={cn(
+                "px-6 py-2 rounded-full cursor-pointer transition-all font-semibold",
+                billingCycle === 'monthly' 
+                  ? "bg-white dark:bg-slate-700 shadow-lg text-slate-900 dark:text-slate-100" 
+                  : "text-slate-600 dark:text-slate-400"
+              )}
+              onClick={() => setBillingCycle('monthly')}
+            >
+              شهري
+            </Label>
+            
+            <div className="relative">
+              <Label
+                htmlFor="billing-toggle"
+                className={cn(
+                  "px-6 py-2 rounded-full cursor-pointer transition-all font-semibold",
+                  billingCycle === 'yearly' 
+                    ? "bg-white dark:bg-slate-700 shadow-lg text-slate-900 dark:text-slate-100" 
+                    : "text-slate-600 dark:text-slate-400"
+                )}
+                onClick={() => setBillingCycle('yearly')}
               >
-                <button
-                  onClick={() => setBillingPeriod('monthly')}
-                  className={`px-6 py-3 rounded-full font-medium transition-all ${
-                    billingPeriod === 'monthly'
-                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg'
-                      : 'text-gray-600 dark:text-gray-400'
-                  }`}
-                >
-                  {language === 'ar' ? 'شهري' : 'Monthly'}
-                </button>
-                <button
-                  onClick={() => setBillingPeriod('yearly')}
-                  className={`px-6 py-3 rounded-full font-medium transition-all relative ${
-                    billingPeriod === 'yearly'
-                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg'
-                      : 'text-gray-600 dark:text-gray-400'
-                  }`}
-                >
-                  {language === 'ar' ? 'سنوي' : 'Yearly'}
-                  <Badge className="absolute -top-2 -right-2 bg-green-500 text-white">
-                    {language === 'ar' ? 'وفر 17%' : 'Save 17%'}
-                  </Badge>
-                </button>
-              </motion.div>
+                سنوي
+              </Label>
+              <Badge className="absolute -top-3 -left-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs px-2 py-0.5">
+                وفر 17%
+              </Badge>
             </div>
-          </AnimatedSection>
-        </div>
-      </section>
+          </div>
+        </motion.div>
 
-      {/* Pricing Cards */}
-      <section className="py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-            {plans.map((plan, index) => (
-              <AnimatedSection key={index} delay={index * 0.1} direction="up">
-                <HoverCard intensity={plan.popular ? 25 : 15}>
-                  <div className={`relative bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border-2 h-full flex flex-col ${
-                    plan.popular 
-                      ? 'border-indigo-500 dark:border-indigo-400' 
-                      : 'border-gray-200 dark:border-gray-700'
-                  }`}>
-                    {plan.popular && (
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                        <Badge className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-1">
-                          {language === 'ar' ? 'الأكثر شعبية' : 'Most Popular'}
-                        </Badge>
-                      </div>
-                    )}
-
-                    <div className={`inline-flex p-4 rounded-2xl bg-gradient-to-br from-${plan.color}-500 to-${plan.color}-600 text-white mb-6 w-fit`}>
-                      {plan.icon}
+        {/* Pricing Cards */}
+        <div className="grid lg:grid-cols-3 gap-8 mb-20 max-w-6xl mx-auto">
+          {plans.map((plan, index) => {
+            const Icon = plan.icon
+            const price = getPrice(plan)
+            
+            return (
+              <motion.div
+                key={plan.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ scale: plan.popular ? 1.05 : 1.02, y: plan.popular ? -8 : -5 }}
+                className={cn(
+                  "relative",
+                  plan.popular && "lg:-mt-4 lg:mb-4"
+                )}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-5 left-0 right-0 flex justify-center z-10">
+                    <Badge className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-2xl text-base">
+                      <Star className="w-5 h-5 ml-2 fill-white" />
+                      الأكثر شعبية
+                    </Badge>
+                  </div>
+                )}
+                
+                <Card className={cn(
+                  "h-full border-2 transition-all duration-300 overflow-hidden",
+                  plan.popular 
+                    ? "border-blue-500 shadow-2xl shadow-blue-500/30 dark:border-blue-400" 
+                    : "border-slate-200 dark:border-slate-800 hover:border-blue-300 hover:shadow-xl"
+                )}>
+                  {plan.popular && (
+                    <div className="h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"></div>
+                  )}
+                  
+                  <CardContent className="p-8">
+                    {/* Icon */}
+                    <div className={cn(
+                      "w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-xl bg-gradient-to-br",
+                      plan.color
+                    )}>
+                      <Icon className="w-8 h-8 text-white" />
                     </div>
 
-                    <h3 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">
+                    {/* Plan Name */}
+                    <h3 className="text-3xl font-black text-slate-900 dark:text-slate-100 mb-2">
                       {plan.name}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-6">
+                    <p className="text-slate-600 dark:text-slate-400 mb-6">
                       {plan.description}
                     </p>
 
+                    {/* Price */}
                     <div className="mb-8">
-                      {plan.monthlyPrice !== null ? (
+                      {price !== null ? (
                         <>
-                          <div className="flex items-baseline gap-2">
-                            <span className="text-5xl font-bold text-gray-900 dark:text-white">
-                              ${billingPeriod === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice}
+                          <div className="flex items-baseline gap-2 mb-2">
+                            <span className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                              ${price}
                             </span>
-                            <span className="text-gray-600 dark:text-gray-400">
-                              {billingPeriod === 'monthly' 
-                                ? (language === 'ar' ? '/شهر' : '/month')
-                                : (language === 'ar' ? '/سنة' : '/year')}
+                            <span className="text-slate-600 dark:text-slate-400">
+                              /{billingCycle === 'monthly' ? 'شهر' : 'سنة'}
                             </span>
                           </div>
-                          {billingPeriod === 'yearly' && plan.monthlyPrice > 0 && (
-                            <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
-                              {language === 'ar' 
-                                ? `${Math.round(plan.yearlyPrice / 12)}$ شهرياً`
-                                : `$${Math.round(plan.yearlyPrice / 12)}/month`}
+                          {billingCycle === 'yearly' && plan.savings && (
+                            <p className="text-sm text-green-600 font-semibold">
+                              وفر ${plan.savings} سنوياً
                             </p>
                           )}
                         </>
                       ) : (
-                        <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                          {language === 'ar' ? 'اتصل بنا' : 'Contact Us'}
+                        <div className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
+                          حسب الطلب
                         </div>
                       )}
                     </div>
 
-                    <div className="space-y-4 mb-8 flex-grow">
-                      {plan.features.map((feature, i) => (
-                        <div key={i} className="flex items-start gap-3">
-                          {feature.included ? (
-                            <Check className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                          ) : (
-                            <X className="h-5 w-5 text-gray-300 dark:text-gray-600 flex-shrink-0 mt-0.5" />
-                          )}
-                          <span className={`text-sm ${
-                            feature.included 
-                              ? 'text-gray-700 dark:text-gray-300' 
-                              : 'text-gray-400 dark:text-gray-600'
-                          }`}>
-                            {feature.name}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
+                    {/* Features */}
+                    <ul className="space-y-4 mb-8">
+                      {Object.entries(plan.features).map(([key, value]) => {
+                        if (typeof value === 'boolean') {
+                          return (
+                            <li key={key} className="flex items-center gap-3">
+                              {value ? (
+                                <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0" />
+                              ) : (
+                                <X className="w-5 h-5 text-slate-300 dark:text-slate-700 shrink-0" />
+                              )}
+                              <span className={cn(
+                                "text-sm",
+                                value ? "text-slate-700 dark:text-slate-300" : "text-slate-400 dark:text-slate-600 line-through"
+                              )}>
+                                {key === 'whitelabel' ? 'White Label' : 
+                                 key === 'priority' ? 'دعم بأولوية' :
+                                 key === 'customization' ? 'تخصيص الواجهة' :
+                                 key === 'api' ? 'API Access' : key}
+                              </span>
+                            </li>
+                          )
+                        }
+                        return (
+                          <li key={key} className="flex items-center gap-3">
+                            <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0" />
+                            <span className="text-slate-700 dark:text-slate-300 text-sm font-medium">
+                              {value}
+                            </span>
+                          </li>
+                        )
+                      })}
+                    </ul>
 
-                    <RippleButton
-                      className={`w-full ${
+                    {/* CTA Button */}
+                    <Button
+                      className={cn(
+                        "w-full py-7 text-lg font-bold rounded-xl transition-all duration-300",
                         plan.popular
-                          ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white'
-                          : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-900 dark:text-white'
-                      }`}
+                          ? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl"
+                          : "bg-slate-900 hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600"
+                      )}
+                      onClick={() => handleSelectPlan(plan.id)}
                     >
-                      {plan.monthlyPrice !== null 
-                        ? (language === 'ar' ? 'ابدأ الآن' : 'Get Started')
-                        : (language === 'ar' ? 'تواصل معنا' : 'Contact Sales')}
-                      <ArrowRight className={`h-5 w-5 ${language === 'ar' ? 'mr-2' : 'ml-2'}`} />
-                    </RippleButton>
-                  </div>
-                </HoverCard>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
+                      {price !== null ? 'اشترك الآن' : 'تواصل معنا'}
+                      {price !== null && (
+                        <Rocket className="w-5 h-5 mr-2" />
+                      )}
+                    </Button>
 
-      {/* FAQs */}
-      <section className="py-24 bg-white dark:bg-gray-900 transition-colors">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedSection>
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
-                {language === 'ar' ? 'أسئلة شائعة' : 'Frequently Asked Questions'}
-              </h2>
+                    {price === 0 && (
+                      <p className="text-center text-sm text-slate-600 dark:text-slate-400 mt-3">
+                        لا تحتاج بطاقة ائتمان
+                      </p>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )
+          })}
+        </div>
+
+        {/* Comparison Table */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-20"
+        >
+          <h2 className="text-4xl font-black text-center text-slate-900 dark:text-slate-100 mb-12">
+            مقارنة شاملة للخطط
+          </h2>
+
+          <Card className="overflow-hidden border-2">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-slate-50 dark:bg-slate-900">
+                    <th className="text-right p-6 font-bold text-slate-900 dark:text-slate-100">
+                      الميزة
+                    </th>
+                    {plans.map(plan => (
+                      <th key={plan.id} className="p-6 text-center">
+                        <div className="font-bold text-slate-900 dark:text-slate-100">
+                          {plan.name}
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {comparisonFeatures.map((feature, index) => {
+                    const Icon = feature.icon
+                    return (
+                      <tr 
+                        key={feature.key}
+                        className={cn(
+                          "border-t border-slate-200 dark:border-slate-800",
+                          index % 2 === 0 && "bg-slate-50/50 dark:bg-slate-900/50"
+                        )}
+                      >
+                        <td className="p-6">
+                          <div className="flex items-center gap-3">
+                            <Icon className="w-5 h-5 text-blue-600" />
+                            <span className="font-semibold text-slate-900 dark:text-slate-100">
+                              {feature.name}
+                            </span>
+                          </div>
+                        </td>
+                        {plans.map(plan => {
+                          const value = plan.features[feature.key as keyof typeof plan.features]
+                          return (
+                            <td key={plan.id} className="p-6 text-center">
+                              {typeof value === 'boolean' ? (
+                                value ? (
+                                  <CheckCircle2 className="w-6 h-6 text-green-600 mx-auto" />
+                                ) : (
+                                  <X className="w-6 h-6 text-slate-300 dark:text-slate-700 mx-auto" />
+                                )
+                              ) : (
+                                <span className="text-slate-700 dark:text-slate-300 font-medium">
+                                  {value || '-'}
+                                </span>
+                              )}
+                            </td>
+                          )
+                        })}
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
             </div>
-          </AnimatedSection>
+          </Card>
+        </motion.div>
 
-          <div className="max-w-3xl mx-auto space-y-6">
-            {faqs.map((faq, index) => (
-              <AnimatedSection key={index} delay={index * 0.1}>
-                <HoverCard>
-                  <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-700">
-                    <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
-                      {faq.question}
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      {faq.answer}
-                    </p>
-                  </div>
-                </HoverCard>
-              </AnimatedSection>
+        {/* FAQ Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-4xl font-black text-center text-slate-900 dark:text-slate-100 mb-12">
+            أسئلة شائعة
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            {[
+              {
+                q: 'هل يمكنني تغيير خطتي لاحقاً؟',
+                a: 'نعم، يمكنك الترقية أو التخفيض في أي وقت. سيتم تطبيق التغييرات على الفور.'
+              },
+              {
+                q: 'ما هي وسائل الدفع المقبولة؟',
+                a: 'نقبل جميع البطاقات الائتمانية الرئيسية (Visa, Mastercard, Amex) والدفع الإلكتروني.'
+              },
+              {
+                q: 'هل يوجد عقد طويل الأجل؟',
+                a: 'لا، جميع خططنا بدون عقود ملزمة. يمكنك الإلغاء في أي وقت.'
+              },
+              {
+                q: 'هل يمكنني الحصول على فاتورة؟',
+                a: 'نعم، يتم إصدار فواتير تلقائية لكل دفعة ويمكنك تحميلها من لوحة التحكم.'
+              }
+            ].map((faq, index) => (
+              <Card key={index} className="border-2">
+                <CardHeader>
+                  <CardTitle className="text-lg">{faq.q}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-600 dark:text-slate-400">{faq.a}</p>
+                </CardContent>
+              </Card>
             ))}
           </div>
-        </div>
-      </section>
+        </motion.div>
 
-      {/* CTA Section */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-700 dark:to-purple-700"></div>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <AnimatedSection>
-            <div className="text-center max-w-3xl mx-auto text-white">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                {language === 'ar' ? 'لا تزال لديك أسئلة؟' : 'Still Have Questions?'}
-              </h2>
-              <p className="text-xl mb-8 opacity-90">
-                {language === 'ar'
-                  ? 'تواصل مع فريقنا للحصول على استشارة مجانية'
-                  : 'Contact our team for a free consultation'}
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-20 text-center"
+        >
+          <Card className="border-2 border-blue-200 dark:border-blue-800 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950">
+            <CardContent className="p-12">
+              <h3 className="text-3xl font-black text-slate-900 dark:text-slate-100 mb-4">
+                هل لديك أسئلة؟
+              </h3>
+              <p className="text-lg text-slate-600 dark:text-slate-400 mb-6">
+                فريقنا جاهز لمساعدتك في اختيار الخطة المناسبة
               </p>
-              <motion.a
-                href="/contact"
-                className="inline-block px-8 py-4 bg-white text-indigo-600 rounded-full font-semibold text-lg hover:shadow-2xl transition-all hover:scale-105"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              <Button
+                size="lg"
+                onClick={() => router.push('/contact')}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8 py-6 text-lg"
               >
-                {language === 'ar' ? 'تواصل معنا' : 'Contact Us'}
-              </motion.a>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
+                تحدث مع فريق المبيعات
+                <Mail className="w-5 h-5 mr-2" />
+              </Button>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
     </div>
   )
 }

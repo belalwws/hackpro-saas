@@ -1,102 +1,111 @@
-/**
- * Usage API - Get current usage metrics for organization
- */
-
 import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
 import { verifyToken } from '@/lib/auth'
-import { getUserOrganization, getUsage, checkLimit, PLAN_LIMITS } from '@/lib/multi-tenancy'
+import { getUsage } from '@/lib/multi-tenancy'
+import { startOfMonth } from 'date-fns'
 
+/**
+ * GET /api/organization/usage
+ * 
+ * Returns current usage metrics for the organization
+ */
 export async function GET(request: NextRequest) {
   try {
-    // Get token from cookies
-    const token = request.cookies.get('auth-token')?.value
+    // Get token
+    let token = request.cookies.get('auth-token')?.value
+    
+    if (!token) {
+      const authHeader = request.headers.get('authorization')
+      token = authHeader?.replace('Bearer ', '')
+    }
 
     if (!token) {
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { error: 'غير مصرح بالوصول' },
         { status: 401 }
       )
     }
 
     // Verify token
     const payload = await verifyToken(token)
-    if (!payload || !payload.userId) {
+    if (!payload) {
       return NextResponse.json(
-        { error: 'Invalid token' },
+        { error: 'رمز المصادقة غير صالح' },
         { status: 401 }
       )
     }
 
-    // Get user's organization
-    const organization = await getUserOrganization(payload.userId)
+    const userId = payload.userId
 
-    if (!organization) {
+    // Get user's organization
+    const orgUser = await prisma.organizationUser.findFirst({
+      where: {
+        userId,
+        organization: {
+          status: 'active'
+        }
+      },
+      include: {
+        organization: true
+      }
+    })
+
+    if (!orgUser) {
       return NextResponse.json(
-        { error: 'No organization found' },
+        { error: 'لا توجد منظمة مرتبطة بهذا الحساب' },
         { status: 404 }
       )
     }
 
-    // Get current usage
-    const usage = await getUsage(organization.id)
+    const organizationId = orgUser.organization.id
 
-    // Get limits for each resource
-    const [
-      hackathonsLimit,
-      usersLimit,
-      participantsLimit,
-      emailsLimit,
-      storageLimit,
-      apiCallsLimit
-    ] = await Promise.all([
-      checkLimit(organization.id, 'hackathons'),
-      checkLimit(organization.id, 'users'),
-      checkLimit(organization.id, 'participants'),
-      checkLimit(organization.id, 'emails'),
-      checkLimit(organization.id, 'storage'),
-      checkLimit(organization.id, 'apiCalls')
+    // Get current usage from multi-tenancy helper
+    const usage = await getUsage(organizationId)
+
+    // Get real-time counts for accuracy
+    const [hackathonsCount, usersCount, participantsCount] = await Promise.all([
+      prisma.hackathon.count({
+        where: { organizationId }
+      }),
+      prisma.organizationUser.count({
+        where: { organizationId }
+      }),
+      prisma.participant.count({
+        where: {
+          hackathon: {
+            organizationId
+          }
+        }
+      })
     ])
 
+    // Combine metrics
+    const currentUsage = {
+      hackathonsUsed: hackathonsCount,
+      usersUsed: usersCount,
+      participantsUsed: participantsCount,
+      emailsSent: usage.emailsSent,
+      storageUsed: Number(usage.storageUsed),
+      apiCallsMade: usage.apiCallsMade,
+      period: startOfMonth(new Date())
+    }
+
     return NextResponse.json({
-      usage: {
-        hackathons: {
-          used: hackathonsLimit.current,
-          limit: hackathonsLimit.limit,
-          percentage: hackathonsLimit.percentage
-        },
-        users: {
-          used: usersLimit.current,
-          limit: usersLimit.limit,
-          percentage: usersLimit.percentage
-        },
-        participants: {
-          used: participantsLimit.current,
-          limit: participantsLimit.limit,
-          percentage: participantsLimit.percentage
-        },
-        emails: {
-          used: emailsLimit.current,
-          limit: emailsLimit.limit,
-          percentage: emailsLimit.percentage
-        },
-        storage: {
-          used: storageLimit.current,
-          limit: storageLimit.limit,
-          percentage: storageLimit.percentage
-        },
-        apiCalls: {
-          used: apiCallsLimit.current,
-          limit: apiCallsLimit.limit,
-          percentage: apiCallsLimit.percentage
-        }
-      },
-      plan: organization.plan,
-      planLimits: PLAN_LIMITS[organization.plan]
+      success: true,
+      usage: currentUsage,
+      limits: {
+        hackathons: orgUser.organization.maxHackathons,
+        users: orgUser.organization.maxUsers,
+        participants: orgUser.organization.maxParticipants,
+        emails: orgUser.organization.maxEmailsPerMonth,
+        storage: Number(orgUser.organization.maxStorage)
+      }
     })
+
   } catch (error) {
     console.error('Error fetching usage:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'حدث خطأ في تحميل بيانات الاستخدام' },
       { status: 500 }
     )
   }
