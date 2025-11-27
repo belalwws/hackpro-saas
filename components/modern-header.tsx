@@ -152,46 +152,6 @@ export function ModernHeader() {
               {language === 'ar' ? 'تواصل معنا' : 'Contact'}
             </Button>
 
-            {user && (
-              <>
-                <Button
-                  variant="ghost"
-                  className={`text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 ${
-                    pathname?.includes('/hackathons') ? 'bg-indigo-50 text-indigo-600' : ''
-                  }`}
-                  onClick={() => router.push('/hackathons')}
-                >
-                  <Award className="h-4 w-4 ml-2" />
-                  الهاكاثونات
-                </Button>
-
-                {(user.role === 'admin' || user.role === 'supervisor') && (
-                  <Button
-                    variant="ghost"
-                    className={`text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 ${
-                      pathname?.includes('/admin/forms') ? 'bg-indigo-50 text-indigo-600' : ''
-                    }`}
-                    onClick={() => router.push('/admin/forms')}
-                  >
-                    <FileText className="h-4 w-4 ml-2" />
-                    النماذج
-                  </Button>
-                )}
-
-                {user.role === 'admin' && (
-                  <Button
-                    variant="ghost"
-                    className={`text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 ${
-                      pathname?.includes('/results') ? 'bg-indigo-50 text-indigo-600' : ''
-                    }`}
-                    onClick={() => router.push('/results')}
-                  >
-                    <BarChart3 className="h-4 w-4 ml-2" />
-                    النتائج
-                  </Button>
-                )}
-              </>
-            )}
           </div>
 
           {/* Right Side - Theme Toggle, Language Switcher & Auth Buttons / User Menu */}
@@ -362,17 +322,6 @@ export function ModernHeader() {
                       لوحة التحكم
                     </Button>
 
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-                      onClick={() => {
-                        router.push('/hackathons')
-                        setMobileMenuOpen(false)
-                      }}
-                    >
-                      <Award className="h-4 w-4 ml-2" />
-                      الهاكاثونات
-                    </Button>
 
                     <Button
                       variant="ghost"

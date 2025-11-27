@@ -59,6 +59,30 @@
   .text-balance {
     text-wrap: balance;
   }
+  
+  .overflow-wrap-anywhere {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    word-wrap: break-word;
+  }
+  
+  .break-words {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+  
+  /* Fix Arabic text spacing */
+  .text-arabic {
+    letter-spacing: 0 !important;
+    word-spacing: normal !important;
+    line-height: 1.7;
+  }
+  
+  [dir="rtl"] .text-arabic {
+    letter-spacing: 0 !important;
+    word-spacing: 0.1em !important;
+  }
 }
 
 @layer base {
@@ -145,6 +169,12 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    letter-spacing: 0;
+  }
+  
+  body[dir="rtl"] {
+    letter-spacing: 0;
+    word-spacing: normal;
   }
   html {
     overflow-x: hidden;
@@ -153,6 +183,21 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Cairo', sans-serif;
     font-weight: 700;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    letter-spacing: 0;
+    line-height: 1.4;
+  }
+  
+  [dir="rtl"] h1, 
+  [dir="rtl"] h2, 
+  [dir="rtl"] h3, 
+  [dir="rtl"] h4, 
+  [dir="rtl"] h5, 
+  [dir="rtl"] h6 {
+    letter-spacing: 0 !important;
+    word-spacing: normal !important;
+    line-height: 1.5;
   }
   
   .font-arabic {
@@ -162,6 +207,132 @@
   .font-display {
     font-family: 'Cairo', sans-serif;
     font-weight: 800;
+    letter-spacing: 0;
+  }
+  
+  [dir="rtl"] .font-display {
+    letter-spacing: 0 !important;
+    word-spacing: normal !important;
+  }
+  
+  /* Arabic text support */
+  [dir="rtl"] {
+    word-break: normal;
+    overflow-wrap: anywhere;
+    hyphens: none;
+    letter-spacing: 0;
+    word-spacing: normal;
+    line-height: 1.7;
+  }
+  
+  [dir="rtl"] p,
+  [dir="rtl"] span,
+  [dir="rtl"] div,
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3,
+  [dir="rtl"] h4,
+  [dir="rtl"] h5,
+  [dir="rtl"] h6 {
+    word-break: normal;
+    overflow-wrap: anywhere;
+    word-wrap: break-word;
+    hyphens: none;
+    letter-spacing: 0;
+    word-spacing: normal;
+  }
+  
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3,
+  [dir="rtl"] h4,
+  [dir="rtl"] h5,
+  [dir="rtl"] h6 {
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+  
+  [dir="rtl"] p {
+    line-height: 1.8;
+    letter-spacing: 0;
+    word-spacing: 0.1em;
+  }
+  
+  /* Fix overlapping text in Arabic */
+  [dir="rtl"] * {
+    letter-spacing: 0 !important;
+  }
+  
+  [dir="rtl"] .font-display,
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3 {
+    letter-spacing: 0 !important;
+    word-spacing: normal !important;
+  }
+  
+  /* Ensure proper spacing for Arabic text in all elements */
+  [dir="rtl"] button,
+  [dir="rtl"] a,
+  [dir="rtl"] label,
+  [dir="rtl"] .badge,
+  [dir="rtl"] .card {
+    letter-spacing: 0 !important;
+    word-spacing: normal !important;
+  }
+  
+  /* Fix text in badges and buttons */
+  [dir="rtl"] .badge,
+  [dir="rtl"] button {
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
+    letter-spacing: 0 !important;
+  }
+  
+  /* Ensure proper spacing for all text elements */
+  [dir="rtl"] .text-arabic,
+  [dir="rtl"] .text-arabic * {
+    letter-spacing: 0 !important;
+    word-spacing: 0.1em !important;
+    line-height: 1.7 !important;
+  }
+  
+  /* Fix overlapping in headings */
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3,
+  [dir="rtl"] h4,
+  [dir="rtl"] h5,
+  [dir="rtl"] h6 {
+    letter-spacing: 0 !important;
+    word-spacing: normal !important;
+    line-height: 1.5 !important;
+  }
+  
+  /* Fix paragraphs */
+  [dir="rtl"] p {
+    letter-spacing: 0 !important;
+    word-spacing: 0.1em !important;
+    line-height: 1.8 !important;
+  }
+  
+  /* Blog post content styling */
+  [dir="rtl"] .prose p,
+  [dir="rtl"] .prose li,
+  [dir="rtl"] .prose blockquote {
+    letter-spacing: 0 !important;
+    word-spacing: 0.1em !important;
+    line-height: 1.9 !important;
+  }
+  
+  [dir="rtl"] .prose h1,
+  [dir="rtl"] .prose h2,
+  [dir="rtl"] .prose h3,
+  [dir="rtl"] .prose h4 {
+    letter-spacing: 0 !important;
+    word-spacing: normal !important;
+    line-height: 1.6 !important;
   }
 }
 

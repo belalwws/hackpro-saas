@@ -285,6 +285,29 @@ const DEFAULT_TEMPLATES = {
 
 مع أطيب التحيات,
 فريق الهاكاثون`
+  },
+  otp_verification: {
+    subject: 'كود التحقق - إنشاء حساب جديد في HackPro',
+    body: `مرحباً {{participantName}},
+
+شكراً لك على التسجيل في HackPro SaaS!
+
+كود التحقق الخاص بك هو:
+
+<h2 style="font-size: 32px; text-align: center; color: #6366f1; letter-spacing: 8px; margin: 20px 0;">{{otpCode}}</h2>
+
+<p>هذا الكود صالح لمدة <strong>{{expiresIn}}</strong> فقط.</p>
+
+<p>إذا لم تطلب هذا الكود، يرجى تجاهل هذا الإيميل.</p>
+
+<div style="margin-top: 30px; padding: 20px; background: #f3f4f6; border-radius: 8px;">
+  <p style="margin: 0;"><strong>معلومات التسجيل:</strong></p>
+  <p style="margin: 5px 0;">المؤسسة: {{organizationName}}</p>
+  <p style="margin: 5px 0;">البريد الإلكتروني: {{participantEmail}}</p>
+</div>
+
+مع أطيب التحيات,
+فريق HackPro SaaS`
   }
 }
 
@@ -304,6 +327,7 @@ export interface EmailTemplates {
   welcome: EmailTemplate
   certificate_ready: EmailTemplate
   upload_link: EmailTemplate
+  otp_verification: EmailTemplate
 }
 
 /**

@@ -83,23 +83,52 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'معرّف المؤسسة مستخدم بالفعل. جرّب معرّفاً آخر' }, { status: 400 })
     }
 
+    // Generate subdomain from organization slug
+    const baseDomain = process.env.NEXT_PUBLIC_BASE_DOMAIN || 'hackpro.com'
+    const subdomain = `${organizationSlug}.${baseDomain}`
+    
+    // Check if subdomain already exists in CustomDomain
+    console.log('🔍 Checking if subdomain exists:', subdomain)
+    const existingDomain = await prismaClient.customDomain.findUnique({
+      where: { domain: subdomain }
+    })
+
+    if (existingDomain) {
+      console.log('❌ Subdomain already exists:', subdomain)
+      return NextResponse.json({ error: 'الدومين الفرعي مستخدم بالفعل. جرّب معرّفاً آخر' }, { status: 400 })
+    }
+
+    // Also check if subdomain exists in Organization.domain field
+    const existingOrgDomain = await prismaClient.organization.findFirst({
+      where: { domain: subdomain }
+    })
+
+    if (existingOrgDomain) {
+      console.log('❌ Organization domain already exists:', subdomain)
+      return NextResponse.json({ error: 'الدومين الفرعي مستخدم بالفعل. جرّب معرّفاً آخر' }, { status: 400 })
+    }
+
     // Hash password
     console.log('🔐 Hashing password...')
     const hashedPassword = await bcrypt.hash(password, 12)
 
-    // Create Organization + User + OrganizationUser in a transaction
-    console.log('🏢 Creating organization and admin user...')
+    // Generate verification code for custom domain
+    const verificationCode = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+
+    // Create Organization + User + OrganizationUser + CustomDomain in a transaction
+    console.log('🏢 Creating organization, admin user, and subdomain...')
     const result = await prismaClient.$transaction(async (tx: any) => {
-      // 1. Create Organization
+      // 1. Create Organization with subdomain
       const newOrg = await tx.organization.create({
         data: {
           name: organizationName,
           slug: organizationSlug,
+          domain: subdomain, // Set subdomain in organization
           plan: 'free',
           status: 'active'
         }
       })
-      console.log('✅ Organization created:', newOrg.name, 'ID:', newOrg.id)
+      console.log('✅ Organization created:', newOrg.name, 'ID:', newOrg.id, 'Domain:', subdomain)
 
       // 2. Create User with role='admin'
       const newUser = await tx.user.create({
@@ -122,7 +151,20 @@ export async function POST(request: NextRequest) {
       })
       console.log('✅ User linked to organization as owner')
 
-      return { user: newUser, organization: newOrg, organizationUser }
+      // 4. Create CustomDomain entry (auto-verified for subdomains)
+      const customDomain = await tx.customDomain.create({
+        data: {
+          organizationId: newOrg.id,
+          domain: subdomain,
+          verified: true, // Auto-verified for subdomains
+          verificationCode: verificationCode,
+          sslStatus: 'pending',
+          verifiedAt: new Date()
+        }
+      })
+      console.log('✅ Custom domain created:', subdomain, 'ID:', customDomain.id)
+
+      return { user: newUser, organization: newOrg, organizationUser, customDomain }
     })
 
     const { user, organization } = result
@@ -192,7 +234,8 @@ export async function POST(request: NextRequest) {
       organization: {
         id: organization.id,
         name: organization.name,
-        slug: organization.slug
+        slug: organization.slug,
+        domain: subdomain
       },
       emailSent,
       autoLogin: true

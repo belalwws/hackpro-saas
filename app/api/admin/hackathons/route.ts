@@ -131,6 +131,24 @@ export async function POST(request: NextRequest) {
     const prismaClient = await getPrisma()
     if (!prismaClient) return NextResponse.json({ error: 'تعذر تهيئة قاعدة البيانات' }, { status: 500 })
 
+    // 🔒 MULTI-TENANT: Get admin's organization
+    const adminUser = await prismaClient.user.findUnique({
+      where: { id: adminId },
+      include: {
+        organizations: {
+          include: {
+            organization: true
+          }
+        }
+      }
+    })
+
+    if (!adminUser || adminUser.organizations.length === 0) {
+      return NextResponse.json({ error: 'لا توجد مؤسسة مرتبطة بهذا الحساب' }, { status: 400 })
+    }
+
+    const organizationId = adminUser.organizations[0].organization.id
+
     const hackathon = await prismaClient.hackathon.create({
       data: {
         title,
@@ -148,6 +166,7 @@ export async function POST(request: NextRequest) {
           third: 'الجائزة الثالثة'
         },
         createdBy: adminId || 'admin',
+        organizationId: organizationId,
         settings: settings || {
           maxTeamSize: 5,
           allowIndividualParticipation: true,

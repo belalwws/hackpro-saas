@@ -1713,6 +1713,12 @@ export default function HackathonManagementPage() {
                         <div>
                           <h5 className="font-medium text-[#01645e] mb-2 text-sm">الإعدادات المتقدمة</h5>
                           <div className="flex flex-wrap gap-2">
+                            <Link href={`/admin/hackathons/${hackathon.id}/homepage-builder`}>
+                              <Button variant="outline" className="border-indigo-500 text-indigo-600 hover:bg-indigo-50">
+                                <Palette className="w-4 h-4 ml-2" />
+                                منشئ الصفحة الرئيسية
+                              </Button>
+                            </Link>
                             <Link href={`/admin/hackathons/${hackathon.id}/judge-settings`}>
                               <Button variant="outline" className="border-[#8b7632] text-[#8b7632] hover:bg-[#8b7632] hover:text-white">
                                 <Settings className="w-4 h-4 ml-2" />

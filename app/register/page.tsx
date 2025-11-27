@@ -2,13 +2,14 @@
 
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Building2, Mail, Lock, User, Globe, ArrowRight, Sparkles, Check } from 'lucide-react'
+import { Building2, Mail, Lock, User, Globe, ArrowRight, Sparkles, Check, Eye, EyeOff } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -23,25 +24,97 @@ export default function RegisterPage() {
     organizationName: '',
     organizationSlug: ''
   })
+  const [slugStatus, setSlugStatus] = useState<{
+    checking: boolean
+    available: boolean | null
+    message: string
+  }>({
+    checking: false,
+    available: null,
+    message: ''
+  })
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   // Auto-generate slug from organization name
   const handleOrganizationNameChange = (value: string) => {
+    const slug = value
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '') // Remove special chars
+      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/-+/g, '-') // Remove consecutive hyphens
+      .trim()
+    
     setFormData({
       ...formData,
       organizationName: value,
-      organizationSlug: value
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '') // Remove special chars
-        .replace(/\s+/g, '-') // Replace spaces with hyphens
-        .replace(/-+/g, '-') // Remove consecutive hyphens
-        .trim()
+      organizationSlug: slug
     })
+
+    // Check availability if slug is valid
+    if (slug && slug.length >= 3) {
+      checkSlugAvailability(slug)
+    } else {
+      setSlugStatus({ checking: false, available: null, message: '' })
+    }
+  }
+
+  // Check slug availability
+  const checkSlugAvailability = async (slug: string) => {
+    setSlugStatus({ checking: true, available: null, message: 'جاري التحقق...' })
+    
+    try {
+      const response = await fetch(`/api/auth/check-subdomain?slug=${encodeURIComponent(slug)}`)
+      const data = await response.json()
+
+      if (data.available) {
+        setSlugStatus({
+          checking: false,
+          available: true,
+          message: `✓ الدومين الفرعي متاح: ${data.subdomain}`
+        })
+      } else {
+        setSlugStatus({
+          checking: false,
+          available: false,
+          message: `✗ ${data.reason || 'الدومين الفرعي غير متاح'}`
+        })
+      }
+    } catch (error) {
+      console.error('Error checking slug:', error)
+      setSlugStatus({
+        checking: false,
+        available: null,
+        message: 'خطأ في التحقق من الدومين'
+      })
+    }
+  }
+
+  // Handle manual slug change
+  const handleSlugChange = (value: string) => {
+    const slug = value
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, '') // Remove invalid chars
+      .replace(/-+/g, '-') // Remove consecutive hyphens
+      .trim()
+    
+    setFormData({
+      ...formData,
+      organizationSlug: slug
+    })
+
+    if (slug && slug.length >= 3) {
+      checkSlugAvailability(slug)
+    } else {
+      setSlugStatus({ checking: false, available: null, message: '' })
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setErrorMessage(null)
+    setSuccessMessage(null)
 
     // Validation
     if (formData.password !== formData.confirmPassword) {
@@ -56,8 +129,15 @@ export default function RegisterPage() {
       return
     }
 
+    if (slugStatus.available === false) {
+      setErrorMessage('معرّف المؤسسة غير متاح. يرجى اختيار معرّف آخر')
+      setLoading(false)
+      return
+    }
+
     try {
-      const response = await fetch('/api/auth/register', {
+      // Send OTP instead of registering directly
+      const response = await fetch('/api/auth/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -71,26 +151,25 @@ export default function RegisterPage() {
 
       if (response.ok) {
         const data = await response.json()
-        console.log('✅ Registration successful:', data)
+        console.log('✅ OTP sent successfully:', data)
         
-        // Show success message
-        const message = data.emailSent 
-          ? `تم إنشاء حسابك بنجاح! تم إرسال إيميل ترحيبي إلى ${formData.email}`
-          : 'تم إنشاء حسابك بنجاح! سيتم تحويلك إلى لوحة التحكم...'
+        // Store registration data in sessionStorage
+        sessionStorage.setItem('pendingRegistration', JSON.stringify({
+          email: formData.email,
+          name: formData.name,
+          organizationName: formData.organizationName,
+          organizationSlug: formData.organizationSlug
+        }))
         
-        setSuccessMessage(message)
-        
-        // Redirect to admin dashboard after 2 seconds
-        setTimeout(() => {
-          router.push('/admin/dashboard')
-        }, 2000)
+        // Redirect to OTP verification page
+        router.push(`/register/verify-otp?email=${encodeURIComponent(formData.email)}`)
       } else {
         const error = await response.json()
-        setErrorMessage(error.error || 'حدث خطأ في التسجيل')
+        setErrorMessage(error.error || 'حدث خطأ في إرسال كود التحقق')
       }
     } catch (error) {
-      console.error('Registration error:', error)
-      setErrorMessage('حدث خطأ في التسجيل')
+      console.error('Send OTP error:', error)
+      setErrorMessage('حدث خطأ في إرسال كود التحقق')
     } finally {
       setLoading(false)
     }
@@ -221,13 +300,25 @@ export default function RegisterPage() {
                       <Lock className="absolute right-3 top-3 h-5 w-5 text-gray-400" />
                       <Input
                         id="password"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         value={formData.password}
                         onChange={(e) => setFormData({...formData, password: e.target.value})}
                         placeholder="********"
-                        className="pr-11 h-12 border-gray-300 focus:border-violet-500 focus:ring-violet-500"
+                        className="pr-24 h-12 border-gray-300 focus:border-violet-500 focus:ring-violet-500"
                         required
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                        aria-label={showPassword ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-5 w-5" />
+                        ) : (
+                          <Eye className="h-5 w-5" />
+                        )}
+                      </button>
                     </div>
                   </div>
 
@@ -237,13 +328,25 @@ export default function RegisterPage() {
                       <Lock className="absolute right-3 top-3 h-5 w-5 text-gray-400" />
                       <Input
                         id="confirmPassword"
-                        type="password"
+                        type={showConfirmPassword ? "text" : "password"}
                         value={formData.confirmPassword}
                         onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
                         placeholder="********"
-                        className="pr-11 h-12 border-gray-300 focus:border-violet-500 focus:ring-violet-500"
+                        className="pr-24 h-12 border-gray-300 focus:border-violet-500 focus:ring-violet-500"
                         required
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                        aria-label={showConfirmPassword ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
+                      >
+                        {showConfirmPassword ? (
+                          <EyeOff className="h-5 w-5" />
+                        ) : (
+                          <Eye className="h-5 w-5" />
+                        )}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -280,15 +383,49 @@ export default function RegisterPage() {
                           id="organizationSlug"
                           type="text"
                           value={formData.organizationSlug}
-                          onChange={(e) => setFormData({...formData, organizationSlug: e.target.value})}
+                          onChange={(e) => handleSlugChange(e.target.value)}
                           placeholder="ministry-of-communications"
-                          className="pr-11 h-12 border-gray-300 focus:border-violet-500 focus:ring-violet-500"
+                          className={cn(
+                            "pr-11 h-12 border-gray-300 focus:border-violet-500 focus:ring-violet-500",
+                            slugStatus.available === false && "border-red-500 focus:border-red-500 focus:ring-red-500",
+                            slugStatus.available === true && "border-green-500 focus:border-green-500 focus:ring-green-500"
+                          )}
                           required
                         />
                       </div>
                       <p className="text-sm text-gray-500 mt-1">
-                        سيُستخدم في رابط مؤسستك: hackpro.com/{formData.organizationSlug || 'your-org'}
+                        سيُستخدم في رابط مؤسستك: {formData.organizationSlug || 'your-org'}.hackpro.com
                       </p>
+                      
+                      {/* Slug Status */}
+                      {formData.organizationSlug && formData.organizationSlug.length >= 3 && (
+                        <div className={cn(
+                          "mt-2 p-3 rounded-lg border",
+                          slugStatus.checking && "bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700",
+                          slugStatus.available === true && "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800",
+                          slugStatus.available === false && "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800",
+                          slugStatus.available === null && !slugStatus.checking && "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800"
+                        )}>
+                          {slugStatus.checking ? (
+                            <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">
+                              <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              </svg>
+                              {slugStatus.message}
+                            </p>
+                          ) : (
+                            <p className={cn(
+                              "text-sm font-medium",
+                              slugStatus.available === true && "text-green-900 dark:text-green-100",
+                              slugStatus.available === false && "text-red-900 dark:text-red-100",
+                              slugStatus.available === null && "text-blue-900 dark:text-blue-100"
+                            )}>
+                              {slugStatus.message || `🌐 رابط مؤسستك: ${formData.organizationSlug}.hackpro.com`}
+                            </p>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

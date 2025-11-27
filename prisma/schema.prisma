@@ -1215,3 +1215,25 @@ enum CommentStatus {
   spam
 }
 
+// OTP Verification model for registration
+model OtpVerification {
+  id        String   @id @default(cuid())
+  email     String
+  code      String
+  type      String   @default("registration") // registration, password_reset, etc.
+  expiresAt DateTime
+  verified  Boolean  @default(false)
+  attempts  Int      @default(0)
+  maxAttempts Int    @default(5)
+  
+  // Registration data (stored as JSON)
+  registrationData Json? // { name, password, organizationName, organizationSlug }
+  
+  createdAt DateTime @default(now())
+  verifiedAt DateTime?
+  
+  @@index([email, type])
+  @@index([code])
+  @@map("otp_verifications")
+}
+

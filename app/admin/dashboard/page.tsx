@@ -12,7 +12,7 @@ import { motion } from 'framer-motion'
 import { 
   Trophy, Users, Calendar, Settings, Bell, Search, Menu,
   BarChart3, Shield, Building2, Plus, TrendingUp, UserPlus,
-  Clock, CheckCircle2, XCircle, Gavel, Eye
+  Clock, CheckCircle2, XCircle, Gavel, Eye, Palette, FileText, Award
 } from 'lucide-react'
 import { 
   BarChart, Bar, PieChart, Pie, Cell,
@@ -166,6 +166,28 @@ export default function AdminDashboard() {
                 {language === 'ar' ? 'الحكام' : 'Judges'}
               </Button>
             </Link>
+            {(user?.role === 'admin' || user?.role === 'supervisor') && (
+              <Link href="/admin/forms">
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start gap-2"
+                >
+                  <FileText className="h-4 w-4" />
+                  {language === 'ar' ? 'النماذج' : 'Forms'}
+                </Button>
+              </Link>
+            )}
+            {user?.role === 'admin' && (
+              <Link href="/results">
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start gap-2"
+                >
+                  <BarChart3 className="h-4 w-4" />
+                  {language === 'ar' ? 'النتائج' : 'Results'}
+                </Button>
+              </Link>
+            )}
             {user?.role === 'master' && (
               <Link href="/admin/users">
                 <Button 
@@ -310,13 +332,50 @@ export default function AdminDashboard() {
                     <h3 className="text-lg font-semibold mb-4">
                       {language === 'ar' ? 'إجراءات سريعة' : 'Quick Actions'}
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                       <Button 
                         className="w-full justify-start gap-2 bg-indigo-600 hover:bg-indigo-700"
                         onClick={() => router.push('/admin/hackathons/create')}
                       >
                         <Plus className="h-4 w-4" />
                         {language === 'ar' ? 'إنشاء هاكاثون جديد' : 'Create New Hackathon'}
+                      </Button>
+                      <Button 
+                        className="w-full justify-start gap-2 bg-purple-600 hover:bg-purple-700 text-white"
+                        onClick={async () => {
+                          try {
+                            // Fetch hackathons to get the latest one
+                            const response = await fetch('/api/admin/hackathons')
+                            
+                            if (response.ok) {
+                              const data = await response.json()
+                              const hackathons = Array.isArray(data) ? data : (data.hackathons || [])
+                              
+                              if (hackathons.length > 0) {
+                                // Get the first/most recent hackathon
+                                const latestHackathon = hackathons[0]
+                                const url = `/admin/hackathons/${latestHackathon.id}/homepage-builder`
+                                // Use window.location for reliable navigation
+                                window.location.href = url
+                              } else {
+                                // No hackathons, go to create page
+                                if (confirm(language === 'ar' ? 'لا توجد هاكاثونات. هل تريد إنشاء هاكاثون جديد؟' : 'No hackathons found. Would you like to create a new hackathon?')) {
+                                  window.location.href = '/admin/hackathons/create'
+                                }
+                              }
+                            } else {
+                              // Fallback to hackathons page
+                              window.location.href = '/admin/hackathons'
+                            }
+                          } catch (error) {
+                            console.error('Error fetching hackathons:', error)
+                            // Fallback to hackathons page
+                            window.location.href = '/admin/hackathons'
+                          }
+                        }}
+                      >
+                        <Palette className="h-4 w-4" />
+                        {language === 'ar' ? 'إنشاء/تعديل الصفحة الرئيسية' : 'Create/Edit Homepage'}
                       </Button>
                       <Button 
                         className="w-full justify-start gap-2" 
