@@ -18,15 +18,23 @@ const translations = {
   ar: {
     // Header
     'nav.home': 'الرئيسية',
+    'nav.about': 'من نحن',
+    'nav.features': 'المميزات',
+    'nav.pricing': 'الأسعار',
+    'nav.blog': 'المدونة',
+    'nav.contact': 'تواصل معنا',
     'nav.hackathons': 'الهاكاثونات',
     'nav.forms': 'النماذج',
     'nav.results': 'النتائج',
     'nav.dashboard': 'لوحة التحكم',
     'nav.profile': 'الملف الشخصي',
-    'nav.settings': 'الإعدادات',
-    'nav.logout': 'تسجيل خروج',
-    'nav.login': 'تسجيل دخول',
-    'nav.register': 'إنشاء حساب',
+    'nav.settings': 'إعدادات النظام',
+    'nav.logout': 'تسجيل الخروج',
+    'nav.login': 'تسجيل الدخول',
+    'nav.register': 'ابدأ مجاناً',
+    'nav.theme.light': 'الوضع الفاتح',
+    'nav.theme.dark': 'الوضع الداكن',
+    'nav.language.switch': 'التبديل للعربية',
 
     // Hero Section
     'hero.badge': 'منصة SaaS متعددة المؤسسات',
@@ -108,15 +116,23 @@ const translations = {
   en: {
     // Header
     'nav.home': 'Home',
+    'nav.about': 'About',
+    'nav.features': 'Features',
+    'nav.pricing': 'Pricing',
+    'nav.blog': 'Blog',
+    'nav.contact': 'Contact',
     'nav.hackathons': 'Hackathons',
     'nav.forms': 'Forms',
     'nav.results': 'Results',
     'nav.dashboard': 'Dashboard',
     'nav.profile': 'Profile',
-    'nav.settings': 'Settings',
+    'nav.settings': 'System Settings',
     'nav.logout': 'Logout',
     'nav.login': 'Login',
-    'nav.register': 'Sign Up',
+    'nav.register': 'Start Free',
+    'nav.theme.light': 'Light Mode',
+    'nav.theme.dark': 'Dark Mode',
+    'nav.language.switch': 'Switch to English',
 
     // Hero Section
     'hero.badge': 'Multi-Tenant SaaS Platform',

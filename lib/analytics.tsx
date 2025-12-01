@@ -12,21 +12,44 @@ declare global {
 
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX'
 
-export function GoogleAnalytics() {
+function GoogleAnalyticsInner() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
   useEffect(() => {
     if (!GA_MEASUREMENT_ID || GA_MEASUREMENT_ID === 'G-XXXXXXXXXX') return
+    if (typeof window === 'undefined') return
 
-    const url = pathname + searchParams.toString()
-    
-    // Page view
-    window.gtag('config', GA_MEASUREMENT_ID, {
-      page_path: url,
-    })
+    try {
+      const url = pathname + (searchParams?.toString() || '')
+      
+      // Initialize dataLayer if not exists
+      if (!window.dataLayer) {
+        window.dataLayer = []
+      }
+      
+      // Initialize gtag if not exists
+      if (!window.gtag) {
+        window.gtag = function() {
+          window.dataLayer.push(arguments)
+        }
+      }
+      
+      // Page view
+      if (window.gtag) {
+        window.gtag('config', GA_MEASUREMENT_ID, {
+          page_path: url,
+        })
+      }
+    } catch (error) {
+      console.error('Google Analytics error:', error)
+    }
   }, [pathname, searchParams])
 
+  return null
+}
+
+export function GoogleAnalytics() {
   if (!GA_MEASUREMENT_ID || GA_MEASUREMENT_ID === 'G-XXXXXXXXXX') return null
 
   return (
@@ -39,15 +62,20 @@ export function GoogleAnalytics() {
         id="google-analytics"
         dangerouslySetInnerHTML={{
           __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA_MEASUREMENT_ID}', {
-              page_path: window.location.pathname,
-            });
+            try {
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GA_MEASUREMENT_ID}', {
+                page_path: window.location.pathname,
+              });
+            } catch (e) {
+              console.error('Google Analytics initialization error:', e);
+            }
           `,
         }}
       />
+      <GoogleAnalyticsInner />
     </>
   )
 }

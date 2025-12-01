@@ -109,7 +109,7 @@ export function ModernHeader() {
               }`}
               onClick={() => router.push('/about')}
             >
-              {language === 'ar' ? 'من نحن' : 'About'}
+              {t('nav.about')}
             </Button>
 
             <Button
@@ -119,7 +119,7 @@ export function ModernHeader() {
               }`}
               onClick={() => router.push('/features')}
             >
-              {language === 'ar' ? 'المميزات' : 'Features'}
+              {t('nav.features')}
             </Button>
 
             <Button
@@ -129,7 +129,7 @@ export function ModernHeader() {
               }`}
               onClick={() => router.push('/pricing')}
             >
-              {language === 'ar' ? 'الأسعار' : 'Pricing'}
+              {t('nav.pricing')}
             </Button>
 
             <Button
@@ -139,7 +139,7 @@ export function ModernHeader() {
               }`}
               onClick={() => router.push('/blog')}
             >
-              {language === 'ar' ? 'المدونة' : 'Blog'}
+              {t('nav.blog')}
             </Button>
 
             <Button
@@ -149,7 +149,7 @@ export function ModernHeader() {
               }`}
               onClick={() => router.push('/contact')}
             >
-              {language === 'ar' ? 'تواصل معنا' : 'Contact'}
+              {t('nav.contact')}
             </Button>
 
           </div>
@@ -162,7 +162,7 @@ export function ModernHeader() {
               size="sm"
               onClick={toggleTheme}
               className="w-9 h-9 p-0 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950"
-              title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+              title={theme === 'dark' ? t('nav.theme.light') : t('nav.theme.dark')}
             >
               {theme === 'dark' ? (
                 <Sun className="h-5 w-5" />
@@ -177,81 +177,81 @@ export function ModernHeader() {
               size="sm"
               onClick={toggleLanguage}
               className="hidden sm:flex items-center gap-1 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950"
-              title={language === 'ar' ? 'Switch to English' : 'التبديل للعربية'}
+              title={t('nav.language.switch')}
             >
               <Globe className="h-4 w-4" />
               <span className="text-sm font-medium">{language === 'ar' ? 'EN' : 'عربي'}</span>
             </Button>
 
             {loading ? (
-              <div className="w-8 h-8 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
+              <div className="w-8 h-8 border-2 border-indigo-200 dark:border-indigo-800 border-t-indigo-600 dark:border-t-indigo-400 rounded-full animate-spin" />
             ) : user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="flex items-center gap-2 hover:bg-indigo-50 border border-gray-200 hover:border-indigo-300 transition-all"
+                    className="flex items-center gap-2 hover:bg-indigo-50 dark:hover:bg-indigo-950 border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all"
                   >
                     <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm">
                       {user.name.charAt(0).toUpperCase()}
                     </div>
                     <div className="hidden sm:flex flex-col items-start">
-                      <span className="text-sm font-semibold text-gray-900">{user.name}</span>
-                      <span className="text-xs text-gray-500">{getRoleName(user.role)}</span>
+                      <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{user.name}</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">{getRoleName(user.role)}</span>
                     </div>
-                    <ChevronDown className="h-4 w-4 text-gray-500" />
+                    <ChevronDown className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-64 bg-white border border-gray-200 shadow-xl rounded-xl p-2">
+                <DropdownMenuContent align="end" className="w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-xl rounded-xl p-2">
                   <DropdownMenuLabel className="px-3 py-2">
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
                         {user.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-900">{user.name}</p>
-                        <p className="text-sm text-gray-500">{user.email}</p>
-                        <p className="text-xs text-indigo-600 font-medium mt-1">{getRoleName(user.role)}</p>
+                        <p className="font-semibold text-gray-900 dark:text-gray-100">{user.name}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
+                        <p className="text-xs text-indigo-600 dark:text-indigo-400 font-medium mt-1">{getRoleName(user.role)}</p>
                       </div>
                     </div>
                   </DropdownMenuLabel>
 
-                  <DropdownMenuSeparator className="bg-gray-200" />
+                  <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-700" />
 
                   <DropdownMenuItem
                     onClick={handleDashboardClick}
-                    className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 transition-colors"
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-950 transition-colors text-gray-900 dark:text-gray-100"
                   >
-                    <LayoutDashboard className="h-4 w-4 text-indigo-600" />
-                    <span className="font-medium">لوحة التحكم</span>
+                    <LayoutDashboard className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                    <span className="font-medium">{t('nav.dashboard')}</span>
                   </DropdownMenuItem>
 
                   <DropdownMenuItem
                     onClick={() => router.push('/profile')}
-                    className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 transition-colors"
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-950 transition-colors text-gray-900 dark:text-gray-100"
                   >
-                    <User className="h-4 w-4 text-indigo-600" />
-                    <span className="font-medium">الملف الشخصي</span>
+                    <User className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                    <span className="font-medium">{t('nav.profile')}</span>
                   </DropdownMenuItem>
 
                   {user.role === 'admin' && (
                     <DropdownMenuItem
                       onClick={() => router.push('/admin/dashboard')}
-                      className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 transition-colors"
+                      className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-950 transition-colors text-gray-900 dark:text-gray-100"
                     >
-                      <Settings className="h-4 w-4 text-indigo-600" />
-                      <span className="font-medium">إعدادات النظام</span>
+                      <Settings className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                      <span className="font-medium">{t('nav.settings')}</span>
                     </DropdownMenuItem>
                   )}
 
-                  <DropdownMenuSeparator className="bg-gray-200" />
+                  <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-700" />
 
                   <DropdownMenuItem
                     onClick={logout}
-                    className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-red-50 text-red-600 transition-colors"
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-950 text-red-600 dark:text-red-400 transition-colors"
                   >
                     <LogOut className="h-4 w-4" />
-                    <span className="font-medium">تسجيل الخروج</span>
+                    <span className="font-medium">{t('nav.logout')}</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -260,15 +260,15 @@ export function ModernHeader() {
                 <Button
                   variant="ghost"
                   onClick={() => router.push('/login')}
-                  className="text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                  className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950"
                 >
-                  تسجيل الدخول
+                  {t('nav.login')}
                 </Button>
                 <Button
                   onClick={() => router.push('/register')}
                   className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg transition-all"
                 >
-                  ابدأ مجاناً
+                  {t('nav.register')}
                   <ArrowLeft className="mr-2 h-4 w-4" />
                 </Button>
               </div>
@@ -278,7 +278,7 @@ export function ModernHeader() {
             <Button
               variant="ghost"
               size="sm"
-              className="md:hidden p-2"
+              className="md:hidden p-2 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -293,60 +293,60 @@ export function ModernHeader() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-gray-200 bg-white"
+              className="md:hidden border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
             >
               <div className="px-4 py-6 space-y-3">
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                  className="w-full justify-start text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950"
                   onClick={() => {
                     router.push('/')
                     setMobileMenuOpen(false)
                   }}
                 >
                   <Home className="h-4 w-4 ml-2" />
-                  الرئيسية
+                  {t('nav.home')}
                 </Button>
 
                 {user && (
                   <>
                     <Button
                       variant="ghost"
-                      className="w-full justify-start text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                      className="w-full justify-start text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950"
                       onClick={() => {
                         handleDashboardClick()
                         setMobileMenuOpen(false)
                       }}
                     >
                       <LayoutDashboard className="h-4 w-4 ml-2" />
-                      لوحة التحكم
+                      {t('nav.dashboard')}
                     </Button>
 
 
                     <Button
                       variant="ghost"
-                      className="w-full justify-start text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                      className="w-full justify-start text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950"
                       onClick={() => {
                         router.push('/profile')
                         setMobileMenuOpen(false)
                       }}
                     >
                       <User className="h-4 w-4 ml-2" />
-                      الملف الشخصي
+                      {t('nav.profile')}
                     </Button>
 
-                    <div className="border-t border-gray-200 my-3" />
+                    <div className="border-t border-gray-200 dark:border-gray-700 my-3" />
 
                     <Button
                       variant="ghost"
-                      className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                      className="w-full justify-start text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-950"
                       onClick={() => {
                         logout()
                         setMobileMenuOpen(false)
                       }}
                     >
                       <LogOut className="h-4 w-4 ml-2" />
-                      تسجيل الخروج
+                      {t('nav.logout')}
                     </Button>
                   </>
                 )}
@@ -355,13 +355,13 @@ export function ModernHeader() {
                   <>
                     <Button
                       variant="ghost"
-                      className="w-full justify-start text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                      className="w-full justify-start text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950"
                       onClick={() => {
                         router.push('/login')
                         setMobileMenuOpen(false)
                       }}
                     >
-                      تسجيل الدخول
+                      {t('nav.login')}
                     </Button>
                     <Button
                       className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white"
@@ -370,7 +370,7 @@ export function ModernHeader() {
                         setMobileMenuOpen(false)
                       }}
                     >
-                      ابدأ مجاناً
+                      {t('nav.register')}
                       <ArrowLeft className="mr-2 h-4 w-4" />
                     </Button>
                   </>

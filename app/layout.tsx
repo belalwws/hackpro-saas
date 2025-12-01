@@ -11,6 +11,7 @@ import { ScrollProgress } from "@/components/scroll-progress"
 import { MagneticCursor } from "@/components/magnetic-cursor"
 import { CookieConsent } from "@/components/cookie-consent"
 import { GoogleAnalytics } from "@/lib/analytics"
+import { Suspense } from "react"
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -36,7 +37,9 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body className="font-sans">
-        <GoogleAnalytics />
+        <Suspense fallback={null}>
+          <GoogleAnalytics />
+        </Suspense>
         <AuthProvider>
           <OrganizationProvider>
             <ThemeProvider>

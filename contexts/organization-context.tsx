@@ -104,7 +104,18 @@ export function OrganizationProvider({ children }: { children: React.ReactNode }
           setIsLoading(false)
           return
         }
-        throw new Error('فشل في تحميل بيانات المنظمة')
+        if (response.status === 401) {
+          // User is not authenticated
+          setOrganization(null)
+          setIsLoading(false)
+          return
+        }
+        // For other errors, set error but don't throw
+        const errorData = await response.json().catch(() => ({ error: 'فشل في تحميل بيانات المنظمة' }))
+        setError(errorData.error || 'فشل في تحميل بيانات المنظمة')
+        setOrganization(null)
+        setIsLoading(false)
+        return
       }
       
       const data = await response.json()
@@ -113,7 +124,13 @@ export function OrganizationProvider({ children }: { children: React.ReactNode }
       setCanManageBilling(data.canManageBilling || false)
     } catch (err) {
       console.error('Error fetching organization:', err)
-      setError(err instanceof Error ? err.message : 'حدث خطأ')
+      // Handle network errors gracefully
+      if (err instanceof TypeError && err.message.includes('fetch')) {
+        setError('فشل الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت.')
+      } else {
+        setError(err instanceof Error ? err.message : 'حدث خطأ')
+      }
+      setOrganization(null)
     } finally {
       setIsLoading(false)
     }

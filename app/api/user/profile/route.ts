@@ -34,6 +34,7 @@ export async function GET(request: NextRequest) {
         experience: true,
         preferredRole: true,
         role: true,
+        profilePicture: true,
         createdAt: true,
         participations: {
           include: {
@@ -138,6 +139,7 @@ export async function PUT(request: NextRequest) {
         experience: true,
         preferredRole: true,
         role: true,
+        profilePicture: true,
         createdAt: true,
       },
     })
