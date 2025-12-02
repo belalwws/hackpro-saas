@@ -126,6 +126,16 @@ export async function GET(
             height: auto;
         }
 
+        /* Hide navbar/header from landing page */
+        header, nav, [role="navigation"], .navbar, .header, .nav {
+            display: none !important;
+        }
+        
+        /* Remove padding-top that was added for navbar */
+        body {
+            padding-top: 0 !important;
+        }
+
         /* Custom CSS from admin */
         ${landingPage.cssContent || ''}
     </style>

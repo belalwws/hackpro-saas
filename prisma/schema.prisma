@@ -349,6 +349,11 @@ model User {
   loginCount     Int       @default(0)
   isOnline       Boolean   @default(false)
   lastActivity   DateTime?
+  
+  // Password reset fields
+  resetPasswordToken   String?
+  resetPasswordExpiry  DateTime?
+  lastResetEmailSentAt DateTime? // آخر وقت إرسال بريد إعادة التعيين
 
   // New fields for supervisor profile
   dateOfBirth       String?
@@ -674,6 +679,7 @@ model HackathonLandingPage {
   hackathonId    String   @unique
   isEnabled      Boolean  @default(false)
   customDomain   String? // Optional custom domain
+  subdomain      String? // Subdomain for the landing page (e.g., "myhackathon" -> myhackathon.hackpro.cloud)
   htmlContent    String
   cssContent     String
   jsContent      String

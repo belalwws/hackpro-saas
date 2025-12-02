@@ -1,3 +1,22 @@
+import { 
+  LayoutTemplate, 
+  Info, 
+  Calendar, 
+  Trophy, 
+  HelpCircle, 
+  Mail, 
+  BarChart3, 
+  MessageSquare, 
+  Star, 
+  Image as ImageIcon, 
+  Timer, 
+  Users, 
+  TrendingUp, 
+  CreditCard, 
+  MousePointerClick 
+} from 'lucide-react'
+import React from 'react'
+
 export type BlockType = 
   | 'hero' 
   | 'about' 
@@ -26,7 +45,7 @@ export interface Block {
 
 export interface BlockConfig {
   name: { ar: string; en: string }
-  icon: string
+  icon: React.ReactNode
   category: 'content' | 'layout' | 'interactive' | 'media'
   defaultData: (hackathon?: any) => Record<string, any>
   defaultStyles?: Record<string, any>
@@ -35,7 +54,7 @@ export interface BlockConfig {
 export const BLOCK_CONFIGS: Record<BlockType, BlockConfig> = {
   hero: {
     name: { ar: 'القسم الرئيسي', en: 'Hero Section' },
-    icon: '✨',
+    icon: React.createElement(LayoutTemplate, { className: "w-5 h-5" }),
     category: 'content',
     defaultData: (hackathon) => ({
       title: hackathon?.title || 'هاكاثون الابتكار',
@@ -53,7 +72,7 @@ export const BLOCK_CONFIGS: Record<BlockType, BlockConfig> = {
   },
   about: {
     name: { ar: 'عن الهاكاثون', en: 'About' },
-    icon: '📝',
+    icon: React.createElement(Info, { className: "w-5 h-5" }),
     category: 'content',
     defaultData: (hackathon) => ({
       title: 'عن الهاكاثون',
@@ -64,7 +83,7 @@ export const BLOCK_CONFIGS: Record<BlockType, BlockConfig> = {
   },
   schedule: {
     name: { ar: 'الجدول الزمني', en: 'Schedule' },
-    icon: '📅',
+    icon: React.createElement(Calendar, { className: "w-5 h-5" }),
     category: 'content',
     defaultData: (hackathon) => ({
       title: 'الجدول الزمني',
@@ -73,7 +92,7 @@ export const BLOCK_CONFIGS: Record<BlockType, BlockConfig> = {
   },
   prizes: {
     name: { ar: 'الجوائز', en: 'Prizes' },
-    icon: '🏆',
+    icon: React.createElement(Trophy, { className: "w-5 h-5" }),
     category: 'content',
     defaultData: () => ({
       title: 'الجوائز',
@@ -82,7 +101,7 @@ export const BLOCK_CONFIGS: Record<BlockType, BlockConfig> = {
   },
   faq: {
     name: { ar: 'الأسئلة الشائعة', en: 'FAQ' },
-    icon: '❓',
+    icon: React.createElement(HelpCircle, { className: "w-5 h-5" }),
     category: 'content',
     defaultData: () => ({
       title: 'الأسئلة الشائعة',
@@ -91,7 +110,7 @@ export const BLOCK_CONFIGS: Record<BlockType, BlockConfig> = {
   },
   contact: {
     name: { ar: 'تواصل معنا', en: 'Contact' },
-    icon: '📧',
+    icon: React.createElement(Mail, { className: "w-5 h-5" }),
     category: 'interactive',
     defaultData: () => ({
       title: 'تواصل معنا',
@@ -103,7 +122,7 @@ export const BLOCK_CONFIGS: Record<BlockType, BlockConfig> = {
   },
   stats: {
     name: { ar: 'الإحصائيات', en: 'Statistics' },
-    icon: '📊',
+    icon: React.createElement(BarChart3, { className: "w-5 h-5" }),
     category: 'content',
     defaultData: () => ({
       title: 'إحصائيات الهاكاثون',
@@ -112,7 +131,7 @@ export const BLOCK_CONFIGS: Record<BlockType, BlockConfig> = {
   },
   testimonials: {
     name: { ar: 'آراء المشاركين', en: 'Testimonials' },
-    icon: '💬',
+    icon: React.createElement(MessageSquare, { className: "w-5 h-5" }),
     category: 'content',
     defaultData: () => ({
       title: 'آراء المشاركين',
@@ -121,7 +140,7 @@ export const BLOCK_CONFIGS: Record<BlockType, BlockConfig> = {
   },
   features: {
     name: { ar: 'المميزات', en: 'Features' },
-    icon: '⭐',
+    icon: React.createElement(Star, { className: "w-5 h-5" }),
     category: 'content',
     defaultData: () => ({
       title: 'مميزات الهاكاثون',
@@ -130,7 +149,7 @@ export const BLOCK_CONFIGS: Record<BlockType, BlockConfig> = {
   },
   gallery: {
     name: { ar: 'معرض الصور', en: 'Gallery' },
-    icon: '🖼️',
+    icon: React.createElement(ImageIcon, { className: "w-5 h-5" }),
     category: 'media',
     defaultData: () => ({
       title: 'معرض الصور',
@@ -139,7 +158,7 @@ export const BLOCK_CONFIGS: Record<BlockType, BlockConfig> = {
   },
   countdown: {
     name: { ar: 'العد التنازلي', en: 'Countdown' },
-    icon: '⏰',
+    icon: React.createElement(Timer, { className: "w-5 h-5" }),
     category: 'interactive',
     defaultData: (hackathon) => ({
       title: 'العد التنازلي',
@@ -148,7 +167,7 @@ export const BLOCK_CONFIGS: Record<BlockType, BlockConfig> = {
   },
   sponsors: {
     name: { ar: 'الرعاة', en: 'Sponsors' },
-    icon: '🤝',
+    icon: React.createElement(Users, { className: "w-5 h-5" }),
     category: 'content',
     defaultData: () => ({
       title: 'الرعاة',
@@ -157,7 +176,7 @@ export const BLOCK_CONFIGS: Record<BlockType, BlockConfig> = {
   },
   timeline: {
     name: { ar: 'الخط الزمني', en: 'Timeline' },
-    icon: '📈',
+    icon: React.createElement(TrendingUp, { className: "w-5 h-5" }),
     category: 'content',
     defaultData: () => ({
       title: 'الخط الزمني',
@@ -166,7 +185,7 @@ export const BLOCK_CONFIGS: Record<BlockType, BlockConfig> = {
   },
   pricing: {
     name: { ar: 'الأسعار', en: 'Pricing' },
-    icon: '💰',
+    icon: React.createElement(CreditCard, { className: "w-5 h-5" }),
     category: 'content',
     defaultData: () => ({
       title: 'الأسعار',
@@ -175,7 +194,7 @@ export const BLOCK_CONFIGS: Record<BlockType, BlockConfig> = {
   },
   cta: {
     name: { ar: 'دعوة للعمل', en: 'Call to Action' },
-    icon: '🎯',
+    icon: React.createElement(MousePointerClick, { className: "w-5 h-5" }),
     category: 'interactive',
     defaultData: (hackathon) => ({
       title: 'سجل الآن',
@@ -185,4 +204,5 @@ export const BLOCK_CONFIGS: Record<BlockType, BlockConfig> = {
     })
   }
 }
+
 

@@ -1,5 +1,6 @@
 'use client'
 
+import * as React from 'react'
 import { useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -16,6 +17,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu"
+import {
   Rocket,
   ArrowLeft,
   ChevronDown,
@@ -24,16 +34,53 @@ import {
   LayoutDashboard,
   Settings,
   User,
-  LogOut,
-  Award,
   Users,
+  LogOut,
+  Shield,
+  Zap,
   BarChart3,
   FileText,
   Home,
   Sun,
   Moon,
-  Globe
+  Globe,
+  CreditCard,
+  HelpCircle,
+  Code,
+  Info,
+  Mail,
+  Sparkles
 } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+const ListItem = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a"> & { title: string; icon?: any }
+>(({ className, title, children, icon: Icon, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground group",
+            className
+          )}
+          {...props}
+        >
+          <div className="flex items-center gap-2 text-sm font-medium leading-none group-hover:text-[#155DFC] transition-colors">
+             {Icon && <Icon className="h-4 w-4 text-muted-foreground group-hover:text-[#155DFC]" />}
+             {title}
+          </div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-1">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  )
+})
+ListItem.displayName = "ListItem"
 
 export function ModernHeader() {
   const router = useRouter()
@@ -42,6 +89,7 @@ export function ModernHeader() {
   const { theme, toggleTheme } = useTheme()
   const { language, toggleLanguage, t } = useLanguage()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const isRTL = language === 'ar'
 
   const handleDashboardClick = () => {
     if (!user) {
@@ -73,95 +121,128 @@ export function ModernHeader() {
     return roleNames[role] || role
   }
 
-  const isActive = (path: string) => pathname === path
-
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-gray-900/60 transition-colors">
+    <header className="fixed top-0 left-0 right-0 z-[100] w-full border-b border-slate-200/50 dark:border-slate-800/50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-950/60 transition-all shadow-sm">
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-20 items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push('/')}>
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow">
-              <Rocket className="h-6 w-6 text-white" />
+          <div className="flex items-center gap-2 cursor-pointer group" onClick={() => router.push('/')}>
+            <div className="relative">
+              <div className="absolute inset-0 bg-[#155DFC] blur-lg opacity-20 group-hover:opacity-40 transition-opacity rounded-xl" />
+              <div className="w-10 h-10 bg-gradient-to-br from-[#155DFC] to-[#1248C9] rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-2xl group-hover:scale-105 transition-all duration-300 relative z-10">
+                <Rocket className="h-5 w-5 text-white" />
+              </div>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent hidden sm:inline">
+            <span className="text-2xl font-bold bg-gradient-to-r from-[#155DFC] to-[#1248C9] bg-clip-text text-transparent hidden sm:inline font-display">
               HackPro
             </span>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
-            <Button
-              variant="ghost"
-              className={`text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950 ${
-                isActive('/') ? 'bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400' : ''
-              }`}
-              onClick={() => router.push('/')}
-            >
-              <Home className="h-4 w-4 ml-2" />
-              {t('nav.home')}
-            </Button>
+          <div className="hidden md:flex items-center justify-center flex-1 px-8">
+            <NavigationMenu dir={isRTL ? "rtl" : "ltr"}>
+              <NavigationMenuList className="space-x-2 rtl:space-x-reverse">
+                <NavigationMenuItem>
+                  <NavigationMenuLink 
+                    className={cn(navigationMenuTriggerStyle(), "cursor-pointer bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-base")}
+                    onClick={() => router.push('/')}
+                  >
+                    {t('nav.home')}
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
 
-            <Button
-              variant="ghost"
-              className={`text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950 ${
-                isActive('/about') ? 'bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400' : ''
-              }`}
-              onClick={() => router.push('/about')}
-            >
-              {t('nav.about')}
-            </Button>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-base">{t('nav.features')}</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                      <li className="row-span-3">
+                        <NavigationMenuLink asChild>
+                          <a
+                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-[#155DFC]/10 to-[#155DFC]/30 p-6 no-underline outline-none focus:shadow-md relative overflow-hidden group"
+                            href="/"
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#155DFC] to-[#1248C9] opacity-0 group-hover:opacity-10 transition-opacity" />
+                            <Rocket className="h-6 w-6 text-[#155DFC]" />
+                            <div className="mb-2 mt-4 text-lg font-medium text-[#155DFC]">
+                              HackPro Platform
+                            </div>
+                            <p className="text-sm leading-tight text-slate-600 dark:text-slate-400">
+                              {isRTL 
+                                ? 'المنصة المتكاملة لإدارة الهاكاثونات والمسابقات التقنية باحترافية.' 
+                                : 'The complete platform for managing hackathons and tech competitions professionally.'}
+                            </p>
+                          </a>
+                        </NavigationMenuLink>
+                      </li>
+                      <ListItem href="/features" title={isRTL ? "المميزات" : "Features"} icon={Sparkles}>
+                        {isRTL ? "اكتشف جميع مميزات المنصة" : "Explore all platform features"}
+                      </ListItem>
+                      <ListItem href="/pricing" title={isRTL ? "الأسعار" : "Pricing"} icon={CreditCard}>
+                        {isRTL ? "خطط مرنة تناسب الجميع" : "Flexible plans for everyone"}
+                      </ListItem>
+                      <ListItem href="/security" title={isRTL ? "الأمان" : "Security"} icon={Shield}>
+                        {isRTL ? "حماية بياناتك هي أولويتنا" : "Your data security is our priority"}
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
 
-            <Button
-              variant="ghost"
-              className={`text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950 ${
-                isActive('/features') ? 'bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400' : ''
-              }`}
-              onClick={() => router.push('/features')}
-            >
-              {t('nav.features')}
-            </Button>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-base">{isRTL ? "المصادر" : "Resources"}</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                      <ListItem href="/blog" title={t('nav.blog')} icon={FileText}>
+                        {isRTL ? "أحدث المقالات والأخبار" : "Latest articles and news"}
+                      </ListItem>
+                      <ListItem href="/help" title={isRTL ? "مركز المساعدة" : "Help Center"} icon={HelpCircle}>
+                        {isRTL ? "شروحات وأدلة الاستخدام" : "Guides and documentation"}
+                      </ListItem>
+                      <ListItem href="/api" title={isRTL ? "للمطورين" : "Developers"} icon={Code}>
+                        {isRTL ? "وثائق API والربط البرمجي" : "API docs and integration"}
+                      </ListItem>
+                      <ListItem href="/community" title={isRTL ? "المجتمع" : "Community"} icon={Users}>
+                        {isRTL ? "انضم لمجتمع HackPro" : "Join HackPro community"}
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
 
-            <Button
-              variant="ghost"
-              className={`text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950 ${
-                isActive('/pricing') ? 'bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400' : ''
-              }`}
-              onClick={() => router.push('/pricing')}
-            >
-              {t('nav.pricing')}
-            </Button>
-
-            <Button
-              variant="ghost"
-              className={`text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950 ${
-                isActive('/blog') ? 'bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400' : ''
-              }`}
-              onClick={() => router.push('/blog')}
-            >
-              {t('nav.blog')}
-            </Button>
-
-            <Button
-              variant="ghost"
-              className={`text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950 ${
-                isActive('/contact') ? 'bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400' : ''
-              }`}
-              onClick={() => router.push('/contact')}
-            >
-              {t('nav.contact')}
-            </Button>
-
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-base">{isRTL ? "الشركة" : "Company"}</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                      <ListItem href="/about" title={t('nav.about')} icon={Info}>
+                        {isRTL ? "تعرف على فريقنا ورؤيتنا" : "Meet our team and vision"}
+                      </ListItem>
+                      <ListItem href="/contact" title={t('nav.contact')} icon={Mail}>
+                        {isRTL ? "تواصل معنا لأي استفسار" : "Contact us for any inquiries"}
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
           </div>
 
           {/* Right Side - Theme Toggle, Language Switcher & Auth Buttons / User Menu */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Language Switcher */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleLanguage}
+              className="hidden sm:flex text-slate-600 dark:text-slate-400 hover:text-[#155DFC] dark:hover:text-[#155DFC] hover:bg-slate-100 dark:hover:bg-slate-800"
+              title={t('nav.language.switch')}
+            >
+              <Globe className="h-5 w-5" />
+            </Button>
+
             {/* Theme Toggle */}
             <Button
               variant="ghost"
-              size="sm"
+              size="icon"
               onClick={toggleTheme}
-              className="w-9 h-9 p-0 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950"
+              className="text-slate-600 dark:text-slate-400 hover:text-[#155DFC] dark:hover:text-[#155DFC] hover:bg-slate-100 dark:hover:bg-slate-800"
               title={theme === 'dark' ? t('nav.theme.light') : t('nav.theme.dark')}
             >
               {theme === 'dark' ? (
@@ -171,105 +252,137 @@ export function ModernHeader() {
               )}
             </Button>
 
-            {/* Language Switcher */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleLanguage}
-              className="hidden sm:flex items-center gap-1 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950"
-              title={t('nav.language.switch')}
-            >
-              <Globe className="h-4 w-4" />
-              <span className="text-sm font-medium">{language === 'ar' ? 'EN' : 'عربي'}</span>
-            </Button>
+            <div className="h-6 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1 hidden sm:block" />
 
             {loading ? (
-              <div className="w-8 h-8 border-2 border-indigo-200 dark:border-indigo-800 border-t-indigo-600 dark:border-t-indigo-400 rounded-full animate-spin" />
+              <div className="w-9 h-9 border-2 border-slate-200 dark:border-slate-800 border-t-[#155DFC] dark:border-t-[#155DFC] rounded-full animate-spin" />
             ) : user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="flex items-center gap-2 hover:bg-indigo-50 dark:hover:bg-indigo-950 border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all"
+                    className="flex items-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-800 px-2 py-1.5 h-auto rounded-full border border-transparent hover:border-slate-200 dark:hover:border-slate-700 transition-all"
                   >
-                    <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm">
+                    {user.profilePicture ? (
+                      <img
+                        src={user.profilePicture}
+                        alt={user.name}
+                        className="w-8 h-8 rounded-full object-cover shadow-md ring-2 ring-white dark:ring-slate-950"
+                        onError={(e) => {
+                          // Fallback to initial if image fails to load
+                          const target = e.target as HTMLImageElement
+                          target.style.display = 'none'
+                          const fallback = target.nextElementSibling as HTMLElement
+                          if (fallback) fallback.style.display = 'flex'
+                        }}
+                      />
+                    ) : null}
+                    <div 
+                      className={cn(
+                        "w-8 h-8 bg-gradient-to-br from-[#155DFC] to-[#1248C9] rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md ring-2 ring-white dark:ring-slate-950",
+                        user.profilePicture && "hidden"
+                      )}
+                    >
                       {user.name.charAt(0).toUpperCase()}
                     </div>
-                    <div className="hidden sm:flex flex-col items-start">
-                      <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{user.name}</span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">{getRoleName(user.role)}</span>
+                    <div className="hidden sm:flex flex-col items-start text-start">
+                      <span className="text-sm font-bold text-slate-900 dark:text-white leading-none mb-1">{user.name}</span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{getRoleName(user.role)}</span>
                     </div>
-                    <ChevronDown className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                    <ChevronDown className="h-4 w-4 text-slate-400" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-xl rounded-xl p-2">
-                  <DropdownMenuLabel className="px-3 py-2">
+                <DropdownMenuContent align="end" className="w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-2xl p-2 mt-2">
+                  <div className="px-4 py-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl mb-2">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                      {user.profilePicture ? (
+                        <img
+                          src={user.profilePicture}
+                          alt={user.name}
+                          className="w-12 h-12 rounded-full object-cover shadow-inner ring-2 ring-white dark:ring-slate-800"
+                          onError={(e) => {
+                            // Fallback to initial if image fails to load
+                            const target = e.target as HTMLImageElement
+                            target.style.display = 'none'
+                            const fallback = target.nextElementSibling as HTMLElement
+                            if (fallback) fallback.style.display = 'flex'
+                          }}
+                        />
+                      ) : null}
+                      <div 
+                        className={cn(
+                          "w-12 h-12 bg-gradient-to-br from-[#155DFC] to-[#1248C9] rounded-full flex items-center justify-center text-white font-bold text-lg shadow-inner",
+                          user.profilePicture && "hidden"
+                        )}
+                      >
                         {user.name.charAt(0).toUpperCase()}
                       </div>
-                      <div>
-                        <p className="font-semibold text-gray-900 dark:text-gray-100">{user.name}</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
-                        <p className="text-xs text-indigo-600 dark:text-indigo-400 font-medium mt-1">{getRoleName(user.role)}</p>
+                      <div className="flex-1 overflow-hidden">
+                        <p className="font-bold text-slate-900 dark:text-white truncate">{user.name}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{user.email}</p>
+                        <div className="flex items-center gap-1 mt-1">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+                            {getRoleName(user.role)}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </DropdownMenuLabel>
-
-                  <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-700" />
+                  </div>
 
                   <DropdownMenuItem
                     onClick={handleDashboardClick}
-                    className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-950 transition-colors text-gray-900 dark:text-gray-100"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 focus:bg-slate-100 dark:focus:bg-slate-800 transition-colors text-slate-700 dark:text-slate-200"
                   >
-                    <LayoutDashboard className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
-                    <span className="font-medium">{t('nav.dashboard')}</span>
+                    <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-[#155DFC]">
+                      <LayoutDashboard className="h-4 w-4" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-sm">{t('nav.dashboard')}</span>
+                      <span className="text-xs text-slate-500">{isRTL ? 'الوصول للوحة التحكم' : 'Access your dashboard'}</span>
+                    </div>
                   </DropdownMenuItem>
 
                   <DropdownMenuItem
                     onClick={() => router.push('/profile')}
-                    className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-950 transition-colors text-gray-900 dark:text-gray-100"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 focus:bg-slate-100 dark:focus:bg-slate-800 transition-colors text-slate-700 dark:text-slate-200"
                   >
-                    <User className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
-                    <span className="font-medium">{t('nav.profile')}</span>
+                    <div className="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center text-purple-600">
+                      <User className="h-4 w-4" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-sm">{t('nav.profile')}</span>
+                      <span className="text-xs text-slate-500">{isRTL ? 'تعديل بياناتك الشخصية' : 'Edit your profile'}</span>
+                    </div>
                   </DropdownMenuItem>
 
-                  {user.role === 'admin' && (
-                    <DropdownMenuItem
-                      onClick={() => router.push('/admin/dashboard')}
-                      className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-950 transition-colors text-gray-900 dark:text-gray-100"
-                    >
-                      <Settings className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
-                      <span className="font-medium">{t('nav.settings')}</span>
-                    </DropdownMenuItem>
-                  )}
-
-                  <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-700" />
+                  <DropdownMenuSeparator className="bg-slate-200 dark:bg-slate-800 my-1" />
 
                   <DropdownMenuItem
                     onClick={logout}
-                    className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-950 text-red-600 dark:text-red-400 transition-colors"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-950/30 focus:bg-red-50 dark:focus:bg-red-950/30 text-red-600 dark:text-red-400 transition-colors"
                   >
-                    <LogOut className="h-4 w-4" />
-                    <span className="font-medium">{t('nav.logout')}</span>
+                    <div className="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
+                      <LogOut className="h-4 w-4" />
+                    </div>
+                    <span className="font-semibold text-sm">{t('nav.logout')}</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="hidden sm:flex items-center gap-2">
+              <div className="hidden sm:flex items-center gap-3">
                 <Button
                   variant="ghost"
                   onClick={() => router.push('/login')}
-                  className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950"
+                  className="text-slate-700 dark:text-slate-300 hover:text-[#155DFC] dark:hover:text-[#155DFC] hover:bg-slate-100 dark:hover:bg-slate-800 font-medium"
                 >
                   {t('nav.login')}
                 </Button>
                 <Button
                   onClick={() => router.push('/register')}
-                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg transition-all"
+                  className="bg-[#155DFC] hover:bg-[#1248C9] text-white shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 transition-all rounded-full px-6"
                 >
                   {t('nav.register')}
-                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  {isRTL ? <ArrowLeft className="mr-2 h-4 w-4 rotate-180" /> : <ArrowLeft className="ml-2 h-4 w-4" />}
                 </Button>
               </div>
             )}
@@ -277,8 +390,8 @@ export function ModernHeader() {
             {/* Mobile Menu Button */}
             <Button
               variant="ghost"
-              size="sm"
-              className="md:hidden p-2 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950"
+              size="icon"
+              className="md:hidden text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -293,69 +406,118 @@ export function ModernHeader() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
+              className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-hidden"
             >
-              <div className="px-4 py-6 space-y-3">
+              <div className="px-4 py-6 space-y-1">
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950"
+                  className="w-full justify-start text-slate-700 dark:text-slate-300 hover:text-[#155DFC] dark:hover:text-[#155DFC] hover:bg-slate-50 dark:hover:bg-slate-900"
                   onClick={() => {
                     router.push('/')
                     setMobileMenuOpen(false)
                   }}
                 >
-                  <Home className="h-4 w-4 ml-2" />
+                  <Home className="h-4 w-4 mx-2" />
                   {t('nav.home')}
                 </Button>
 
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-slate-700 dark:text-slate-300 hover:text-[#155DFC] dark:hover:text-[#155DFC] hover:bg-slate-50 dark:hover:bg-slate-900"
+                  onClick={() => {
+                    router.push('/features')
+                    setMobileMenuOpen(false)
+                  }}
+                >
+                  <Sparkles className="h-4 w-4 mx-2" />
+                  {t('nav.features')}
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-slate-700 dark:text-slate-300 hover:text-[#155DFC] dark:hover:text-[#155DFC] hover:bg-slate-50 dark:hover:bg-slate-900"
+                  onClick={() => {
+                    router.push('/pricing')
+                    setMobileMenuOpen(false)
+                  }}
+                >
+                  <CreditCard className="h-4 w-4 mx-2" />
+                  {t('nav.pricing')}
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-slate-700 dark:text-slate-300 hover:text-[#155DFC] dark:hover:text-[#155DFC] hover:bg-slate-50 dark:hover:bg-slate-900"
+                  onClick={() => {
+                    router.push('/blog')
+                    setMobileMenuOpen(false)
+                  }}
+                >
+                  <FileText className="h-4 w-4 mx-2" />
+                  {t('nav.blog')}
+                </Button>
+
+                <div className="border-t border-slate-200 dark:border-slate-800 my-2" />
+
+                <div className="flex items-center justify-between px-2 py-2">
+                  <span className="text-sm font-medium text-slate-500 dark:text-slate-400">{isRTL ? 'اللغة' : 'Language'}</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={toggleLanguage}
+                    className="h-8"
+                  >
+                    <Globe className="h-4 w-4 mr-2" />
+                    {language === 'ar' ? 'English' : 'العربية'}
+                  </Button>
+                </div>
+
                 {user && (
                   <>
+                    <div className="border-t border-slate-200 dark:border-slate-800 my-2" />
                     <Button
                       variant="ghost"
-                      className="w-full justify-start text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950"
+                      className="w-full justify-start text-slate-700 dark:text-slate-300 hover:text-[#155DFC] dark:hover:text-[#155DFC] hover:bg-slate-50 dark:hover:bg-slate-900"
                       onClick={() => {
                         handleDashboardClick()
                         setMobileMenuOpen(false)
                       }}
                     >
-                      <LayoutDashboard className="h-4 w-4 ml-2" />
+                      <LayoutDashboard className="h-4 w-4 mx-2" />
                       {t('nav.dashboard')}
                     </Button>
 
-
                     <Button
                       variant="ghost"
-                      className="w-full justify-start text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950"
+                      className="w-full justify-start text-slate-700 dark:text-slate-300 hover:text-[#155DFC] dark:hover:text-[#155DFC] hover:bg-slate-50 dark:hover:bg-slate-900"
                       onClick={() => {
                         router.push('/profile')
                         setMobileMenuOpen(false)
                       }}
                     >
-                      <User className="h-4 w-4 ml-2" />
+                      <User className="h-4 w-4 mx-2" />
                       {t('nav.profile')}
                     </Button>
 
-                    <div className="border-t border-gray-200 dark:border-gray-700 my-3" />
-
                     <Button
                       variant="ghost"
-                      className="w-full justify-start text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-950"
+                      className="w-full justify-start text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/50"
                       onClick={() => {
                         logout()
                         setMobileMenuOpen(false)
                       }}
                     >
-                      <LogOut className="h-4 w-4 ml-2" />
+                      <LogOut className="h-4 w-4 mx-2" />
                       {t('nav.logout')}
                     </Button>
                   </>
                 )}
 
                 {!user && (
-                  <>
+                  <div className="flex flex-col gap-2 mt-4 px-2">
                     <Button
-                      variant="ghost"
-                      className="w-full justify-start text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950"
+                      variant="outline"
+                      className="w-full justify-center border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
                       onClick={() => {
                         router.push('/login')
                         setMobileMenuOpen(false)
@@ -364,16 +526,15 @@ export function ModernHeader() {
                       {t('nav.login')}
                     </Button>
                     <Button
-                      className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white"
+                      className="w-full justify-center bg-[#155DFC] hover:bg-[#1248C9] text-white"
                       onClick={() => {
                         router.push('/register')
                         setMobileMenuOpen(false)
                       }}
                     >
                       {t('nav.register')}
-                      <ArrowLeft className="mr-2 h-4 w-4" />
                     </Button>
-                  </>
+                  </div>
                 )}
               </div>
             </motion.div>

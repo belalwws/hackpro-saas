@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '@/contexts/auth-context'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Trophy, Medal, Award, Users, Star, Download, Mail, FileText, Send, CheckCircle, XCircle, Clock, Eye, ArrowLeft, Upload, Settings, Loader2, Save } from 'lucide-react'
+import { Trophy, Medal, Award, Users, Star, Download, Mail, FileText, Send, CheckCircle, XCircle, Clock, Eye, ArrowLeft, Upload, Settings, Save } from 'lucide-react'
+import { Loader } from '@/components/ui/loader'
 import { Certificate } from '@/components/Certificate'
 
 type CertificateType = 'participant' | 'judge' | 'expert'
@@ -1143,7 +1144,7 @@ export default function SendCertificatesPage() {
               >
                 {savingSettings ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader variant="spinner" size="xs" variantColor="white" />
                     جاري الحفظ...
                   </>
                 ) : (
@@ -1187,7 +1188,7 @@ export default function SendCertificatesPage() {
                   >
                     {sendingTestEmail ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <Loader variant="spinner" size="xs" variantColor="white" />
                         إرسال...
                       </>
                     ) : (
@@ -1324,7 +1325,7 @@ export default function SendCertificatesPage() {
 
                   {loadingJudgesExperts ? (
                     <div className="flex items-center justify-center py-8">
-                      <Loader2 className="w-8 h-8 animate-spin text-purple-600" />
+                      <Loader variant="spinner" size="md" variantColor="primary" />
                     </div>
                   ) : judgeApplications.length > 0 ? (
                     <div className="space-y-3 max-h-96 overflow-y-auto">
@@ -1389,7 +1390,7 @@ export default function SendCertificatesPage() {
 
                   {loadingJudgesExperts ? (
                     <div className="flex items-center justify-center py-8">
-                      <Loader2 className="w-8 h-8 animate-spin text-cyan-600" />
+                      <Loader variant="spinner" size="md" variantColor="primary" />
                     </div>
                   ) : expertApplications.length > 0 ? (
                     <div className="space-y-3 max-h-96 overflow-y-auto">

@@ -11,9 +11,10 @@ import {
   Building2, Users, Database, Activity, TrendingUp, Shield, 
   Calendar, UserPlus, BarChart3, DollarSign, Zap, Globe,
   ArrowUpRight, ArrowDownRight, Sparkles, Trophy, Image, BookOpen,
-  Settings, Bell, Search, Menu, Plus, Edit, Trash2, Eye, Tag, Loader2,
+  Settings, Bell, Search, Menu, Plus, Edit, Trash2, Eye, Tag,
   Save, X, Upload, Copy, Check
 } from 'lucide-react'
+import { Loader } from '@/components/ui/loader'
 import { 
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -384,28 +385,7 @@ export default function MasterDashboard() {
   })
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-900 dark:to-indigo-950">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-center"
-        >
-          <div className="relative mb-6">
-            <div className="w-24 h-24 border-4 border-indigo-200 dark:border-indigo-800 border-t-indigo-600 rounded-full animate-spin mx-auto"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Shield className="h-10 w-10 text-indigo-600 animate-pulse" />
-            </div>
-          </div>
-          <p className="text-xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Loading Dashboard...</p>
-          <div className="flex items-center justify-center gap-1 mt-3">
-            <div className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-            <div className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-            <div className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-          </div>
-        </motion.div>
-      </div>
-    )
+    return <Loader fullScreen text="Loading Dashboard..." variant="spinner" size="xl" />
   }
 
   return (
@@ -839,7 +819,7 @@ export default function MasterDashboard() {
 
                 {usersLoading ? (
                   <div className="text-center py-12">
-                    <Loader2 className="h-12 w-12 animate-spin text-indigo-600 mx-auto mb-4" />
+                    <Loader variant="spinner" size="xl" variantColor="primary" className="mx-auto mb-4" />
                     <p className="text-gray-600 dark:text-gray-400">
                       {language === 'ar' ? 'جاري تحميل المستخدمين...' : 'Loading users...'}
                     </p>
@@ -1264,7 +1244,7 @@ export default function MasterDashboard() {
                             <div className="mb-3">
                               <label className="flex items-center justify-center gap-2 px-4 py-3 bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 rounded-lg border-2 border-dashed border-indigo-300 dark:border-indigo-700 hover:bg-indigo-100 dark:hover:bg-indigo-900 transition-colors cursor-pointer">
                                 <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
-                                {uploading ? <><Loader2 className="h-5 w-5 animate-spin" /><span>Uploading...</span></> : <><Upload className="h-5 w-5" /><span>Upload from device (Cloudinary)</span></>}
+                                {uploading ? <><Loader variant="spinner" size="sm" variantColor="primary" className="mr-2" /><span>Uploading...</span></> : <><Upload className="h-5 w-5" /><span>Upload from device (Cloudinary)</span></>}
                               </label>
                             </div>
                             <input type="url" value={formData.coverImage} onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })} placeholder="Or paste image URL..." className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700" />
@@ -1315,7 +1295,7 @@ export default function MasterDashboard() {
                       <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-4">
                         <Button variant="outline" onClick={() => setShowEditor(false)} disabled={saving}>Cancel</Button>
                         <Button onClick={handleSave} disabled={saving} className="bg-indigo-600 hover:bg-indigo-700">
-                          {saving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving...</> : <><Save className="h-4 w-4 mr-2" />Save</>}
+                          {saving ? <><Loader variant="spinner" size="xs" variantColor="white" className="mr-2" />Saving...</> : <><Save className="h-4 w-4 mr-2" />Save</>}
                         </Button>
                       </div>
                     </motion.div>

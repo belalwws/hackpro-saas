@@ -62,6 +62,17 @@ const config: Config = {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
+  			},
+  			// Custom brand colors from palette
+  			brand: {
+  				primary: '#155DFC',
+  				'primary-light': '#E6F0FF',
+  				black: '#0A0A0A',
+  				slate: '#6A7282',
+  				green: '#F0FDF4',
+  				cream: '#FFF7ED',
+  				lavender: '#FAF5FF',
+  				peach: '#FEFCE8'
   			}
   		},
   		borderRadius: {

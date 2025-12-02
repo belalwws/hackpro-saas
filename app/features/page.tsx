@@ -219,7 +219,7 @@ export default function FeaturesPage() {
     : features.filter(f => f.category === activeCategory)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-900 dark:to-indigo-950 transition-colors">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 transition-colors">
       <BackgroundAnimations />
       
       {/* Hero Section */}
@@ -228,18 +228,18 @@ export default function FeaturesPage() {
           <AnimatedSection direction="fade">
             <div className="text-center max-w-4xl mx-auto">
               <motion.div
-                className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-full mb-6"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-[#E6F0FF] dark:bg-[#155DFC]/20 rounded-full mb-6"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
               >
-                <Zap className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
-                <span className="text-sm font-medium text-indigo-600 dark:text-indigo-400">
+                <Zap className="h-4 w-4 text-[#155DFC] dark:text-[#155DFC]" />
+                <span className="text-sm font-medium text-[#155DFC] dark:text-[#155DFC]">
                   {language === 'ar' ? 'ميزات قوية' : 'Powerful Features'}
                 </span>
               </motion.div>
               
               <motion.h1 
-                className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent"
+                className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-[#155DFC] via-[#1248C9] to-[#0F3AA5] dark:from-[#155DFC] dark:via-[#1248C9] dark:to-[#0F3AA5] bg-clip-text text-transparent"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -269,7 +269,7 @@ export default function FeaturesPage() {
                   onClick={() => setActiveCategory(category.id)}
                   className={`px-6 py-3 rounded-full font-medium transition-all ${
                     activeCategory === category.id
-                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg scale-105'
+                      ? 'bg-gradient-to-r from-[#155DFC] to-[#1248C9] text-white shadow-lg scale-105'
                       : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
                 >
@@ -321,7 +321,7 @@ export default function FeaturesPage() {
 
       {/* CTA Section */}
       <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-700 dark:to-purple-700"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#155DFC] to-[#1248C9] dark:from-[#1248C9] dark:to-[#0F3AA5]"></div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection>
             <div className="text-center max-w-3xl mx-auto text-white">
@@ -336,7 +336,7 @@ export default function FeaturesPage() {
               </p>
               <motion.a
                 href="/register"
-                className="inline-block px-8 py-4 bg-white text-indigo-600 rounded-full font-semibold text-lg hover:shadow-2xl transition-all hover:scale-105"
+                className="inline-block px-8 py-4 bg-white text-[#155DFC] rounded-full font-semibold text-lg hover:shadow-2xl transition-all hover:scale-105"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >

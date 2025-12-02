@@ -65,7 +65,7 @@ const plans = [
     yearlyPrice: 2990,
     savings: 598,
     icon: Crown,
-    color: 'from-blue-600 to-purple-600',
+    color: 'from-[#155DFC] to-[#1248C9]',
     popular: true,
     features: {
       hackathons: '10 هاكاثونات نشطة',
@@ -90,7 +90,7 @@ const plans = [
     monthlyPrice: null,
     yearlyPrice: null,
     icon: Building2,
-    color: 'from-purple-600 to-pink-600',
+    color: 'from-[#1248C9] to-[#0F3AA5]',
     popular: false,
     features: {
       hackathons: 'غير محدود',
@@ -151,12 +151,12 @@ export default function PricingPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <Badge className="mb-4 px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg shadow-lg">
+          <Badge className="mb-4 px-6 py-2 bg-gradient-to-r from-[#155DFC] to-[#1248C9] text-white text-lg shadow-lg">
             <CreditCard className="w-5 h-5 ml-2" />
             الأسعار والباقات
           </Badge>
           
-          <h1 className="text-5xl sm:text-6xl font-display font-black text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-blue-900 to-purple-900 dark:from-slate-100 dark:via-blue-100 dark:to-purple-100 mb-4">
+            <h1 className="text-5xl sm:text-6xl font-display font-black text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-[#155DFC] to-[#1248C9] dark:from-slate-100 dark:via-[#155DFC] dark:to-[#1248C9] mb-4">
             خطط مرنة تناسب احتياجاتك
           </h1>
           
@@ -219,7 +219,7 @@ export default function PricingPage() {
               >
                 {plan.popular && (
                   <div className="absolute -top-5 left-0 right-0 flex justify-center z-10">
-                    <Badge className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-2xl text-base">
+                    <Badge className="px-6 py-2 bg-gradient-to-r from-[#155DFC] to-[#1248C9] text-white shadow-2xl text-base">
                       <Star className="w-5 h-5 ml-2 fill-white" />
                       الأكثر شعبية
                     </Badge>
@@ -233,7 +233,7 @@ export default function PricingPage() {
                     : "border-slate-200 dark:border-slate-800 hover:border-blue-300 hover:shadow-xl"
                 )}>
                   {plan.popular && (
-                    <div className="h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"></div>
+                    <div className="h-1 bg-gradient-to-r from-[#155DFC] via-[#1248C9] to-[#0F3AA5]"></div>
                   )}
                   
                   <CardContent className="p-8">
@@ -258,7 +258,7 @@ export default function PricingPage() {
                       {price !== null ? (
                         <>
                           <div className="flex items-baseline gap-2 mb-2">
-                            <span className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                            <span className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#155DFC] to-[#1248C9]">
                               ${price}
                             </span>
                             <span className="text-slate-600 dark:text-slate-400">
@@ -272,7 +272,7 @@ export default function PricingPage() {
                           )}
                         </>
                       ) : (
-                        <div className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
+                        <div className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#1248C9] to-[#0F3AA5]">
                           حسب الطلب
                         </div>
                       )}
@@ -317,7 +317,7 @@ export default function PricingPage() {
                       className={cn(
                         "w-full py-7 text-lg font-bold rounded-xl transition-all duration-300",
                         plan.popular
-                          ? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl"
+                          ? "bg-gradient-to-r from-[#155DFC] to-[#1248C9] hover:from-[#1248C9] hover:to-[#0F3AA5] shadow-xl hover:shadow-2xl"
                           : "bg-slate-900 hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600"
                       )}
                       onClick={() => handleSelectPlan(plan.id)}
@@ -462,7 +462,7 @@ export default function PricingPage() {
           viewport={{ once: true }}
           className="mt-20 text-center"
         >
-          <Card className="border-2 border-blue-200 dark:border-blue-800 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950">
+          <Card className="border-2 border-[#155DFC]/20 dark:border-[#155DFC]/30 bg-gradient-to-br from-[#E6F0FF] to-blue-50 dark:from-[#155DFC]/10 dark:to-[#1248C9]/10">
             <CardContent className="p-12">
               <h3 className="text-3xl font-black text-slate-900 dark:text-slate-100 mb-4">
                 هل لديك أسئلة؟
@@ -473,7 +473,7 @@ export default function PricingPage() {
               <Button
                 size="lg"
                 onClick={() => router.push('/contact')}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8 py-6 text-lg"
+                className="bg-gradient-to-r from-[#155DFC] to-[#1248C9] hover:from-[#1248C9] hover:to-[#0F3AA5] px-8 py-6 text-lg"
               >
                 تحدث مع فريق المبيعات
                 <Mail className="w-5 h-5 mr-2" />

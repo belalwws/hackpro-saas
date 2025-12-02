@@ -197,6 +197,7 @@ export async function POST(request: NextRequest) {
         name: user ? user.name : fileParticipant!.name,
         email: user ? user.email : fileParticipant!.email,
         role: role,
+        profilePicture: user?.profilePicture || null,
         permissions,
         activeHackathons
       },

@@ -10,6 +10,7 @@ interface User {
 	name: string
 	email: string
 	role: Role
+	profilePicture?: string | null
 }
 
 interface AuthContextValue {

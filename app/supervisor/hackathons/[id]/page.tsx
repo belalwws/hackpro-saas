@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Users, Filter, Settings, FileText, Trophy, Eye, UserCheck, UserX, MapPin, Flag, Mail, Trash2, Pin, PinOff, Upload, Download, FormInput, Palette, Star, BarChart3, ExternalLink, Award, Shuffle, AlertCircle, Shield, Send, Plus, Crown, RefreshCw, GripVertical, Phone, User, Loader2, Sliders, X, Check, CheckCircle2, XCircle, Clock } from 'lucide-react'
+import { ArrowLeft, Users, Filter, Settings, FileText, Trophy, Eye, UserCheck, UserX, MapPin, Flag, Mail, Trash2, Pin, PinOff, Upload, Download, FormInput, Palette, Star, BarChart3, ExternalLink, Award, Shuffle, AlertCircle, Shield, Send, Plus, Crown, RefreshCw, GripVertical, Phone, User, Sliders, X, Check, CheckCircle2, XCircle, Clock } from 'lucide-react'
+import { Loader } from '@/components/ui/loader'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -947,18 +948,7 @@ export default function SupervisorHackathonManagementPage() {
   )]
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-[#c3e956]/10 to-[#3ab666]/10 p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-center h-64">
-            <div className="text-center">
-              <div className="w-16 h-16 border-4 border-[#01645e]/20 border-t-[#01645e] rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-[#01645e] font-semibold">جاري تحميل بيانات الهاكاثون...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+    return <Loader fullScreen text="جاري تحميل بيانات الهاكاثون..." variant="spinner" size="xl" />
   }
 
   if (!hackathon) {
@@ -1102,7 +1092,7 @@ export default function SupervisorHackathonManagementPage() {
                         >
                           {exportingExcel ? (
                             <>
-                              <RefreshCw className="w-4 h-4 ml-2 animate-spin" />
+                              <Loader variant="spinner" size="xs" variantColor="white" className="ml-2" />
                               جاري التحميل...
                             </>
                           ) : (
@@ -1513,7 +1503,7 @@ export default function SupervisorHackathonManagementPage() {
                           className="bg-gradient-to-r from-[#01645e] to-[#3ab666]"
                         >
                           {creatingTeams ? (
-                            <RefreshCw className="w-4 h-4 ml-2 animate-spin" />
+                            <Loader variant="spinner" size="xs" variantColor="white" className="ml-2" />
                           ) : (
                             <Shuffle className="w-4 h-4 ml-2" />
                           )}
@@ -2082,7 +2072,7 @@ export default function SupervisorHackathonManagementPage() {
                 className="gap-2"
               >
                 {creatingNewTeam ? (
-                  <RefreshCw className="w-4 h-4 animate-spin" />
+                  <Loader variant="spinner" size="xs" variantColor="white" />
                 ) : (
                   <Plus className="w-4 h-4" />
                 )}

@@ -67,7 +67,7 @@ export default function BlogPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-900 dark:to-indigo-950 transition-colors">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 transition-colors">
       <BackgroundAnimations />
       
       {/* Hero Section */}
@@ -86,7 +86,7 @@ export default function BlogPage() {
               </motion.div>
 
               <motion.h1
-                className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
+                className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#155DFC] to-[#1248C9] bg-clip-text text-transparent"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
@@ -118,7 +118,7 @@ export default function BlogPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={language === 'ar' ? 'ابحث في المقالات...' : 'Search articles...'}
-                  className="w-full pl-12 pr-4 py-4 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all shadow-lg"
+                  className="w-full pl-12 pr-4 py-4 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#155DFC] focus:border-transparent transition-all shadow-lg"
                 />
               </motion.div>
             </div>
@@ -133,7 +133,7 @@ export default function BlogPage() {
                   onClick={() => setActiveCategory(category.id)}
                   className={`inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all ${
                     activeCategory === category.id
-                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg scale-105'
+                      ? 'bg-gradient-to-r from-[#155DFC] to-[#1248C9] text-white shadow-lg scale-105'
                       : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
                 >
@@ -151,7 +151,7 @@ export default function BlogPage() {
         <div className="container mx-auto px-4">
           {loading ? (
             <div className="flex items-center justify-center py-20">
-              <Loader2 className="h-12 w-12 animate-spin text-indigo-600" />
+              <Loader2 className="h-12 w-12 animate-spin text-[#155DFC]" />
             </div>
           ) : posts.length === 0 ? (
             <div className="text-center py-20">
@@ -175,7 +175,7 @@ export default function BlogPage() {
                           className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                         />
                         <div className="absolute top-4 right-4">
-                          <Badge className="bg-indigo-600 text-white">
+                          <Badge className="bg-[#155DFC] text-white">
                             {language === 'ar' ? post.category?.nameAr : post.category?.nameEn}
                           </Badge>
                         </div>
@@ -211,7 +211,7 @@ export default function BlogPage() {
 
                           <Link
                             href={`/blog/${post.slug}`}
-                            className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
+                            className="inline-flex items-center gap-2 text-[#155DFC] hover:text-[#1248C9] font-medium transition-colors"
                           >
                             {language === 'ar' ? 'اقرأ المزيد' : 'Read more'}
                             <ArrowRight className="h-4 w-4" />
@@ -243,14 +243,14 @@ export default function BlogPage() {
       </section>
 
       {/* Newsletter CTA */}
-      <section className="py-20 bg-gradient-to-r from-indigo-600 to-purple-600">
+      <section className="py-20 bg-gradient-to-r from-[#155DFC] to-[#1248C9]">
         <div className="container mx-auto px-4">
           <AnimatedSection>
             <div className="max-w-2xl mx-auto text-center text-white">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 {language === 'ar' ? 'اشترك في النشرة البريدية' : 'Subscribe to Newsletter'}
               </h2>
-              <p className="text-lg mb-8 text-indigo-100">
+              <p className="text-lg mb-8 text-white/90">
                 {language === 'ar' 
                   ? 'احصل على أحدث المقالات والنصائح مباشرة في بريدك'
                   : 'Get the latest articles and tips delivered to your inbox'}
@@ -264,7 +264,7 @@ export default function BlogPage() {
                 />
                 <button
                   type="submit"
-                  className="px-8 py-3 bg-white text-indigo-600 rounded-full font-bold hover:bg-gray-100 transition-colors"
+                  className="px-8 py-3 bg-white text-[#155DFC] rounded-full font-bold hover:bg-gray-100 transition-colors"
                 >
                   {language === 'ar' ? 'اشترك' : 'Subscribe'}
                 </button>

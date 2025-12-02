@@ -100,7 +100,7 @@ export default function ContactPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-900 dark:to-indigo-950 transition-colors">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 transition-colors">
       <BackgroundAnimations />
       
       {/* Hero Section */}
@@ -109,18 +109,18 @@ export default function ContactPage() {
           <AnimatedSection direction="fade">
             <div className="text-center max-w-4xl mx-auto">
               <motion.div
-                className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-full mb-6"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-[#E6F0FF] dark:bg-[#155DFC]/20 rounded-full mb-6"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
               >
-                <MessageSquare className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
-                <span className="text-sm font-medium text-indigo-600 dark:text-indigo-400">
+                <MessageSquare className="h-4 w-4 text-[#155DFC] dark:text-[#155DFC]" />
+                <span className="text-sm font-medium text-[#155DFC] dark:text-[#155DFC]">
                   {language === 'ar' ? 'نحن هنا للمساعدة' : "We're Here to Help"}
                 </span>
               </motion.div>
               
               <motion.h1 
-                className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent"
+                className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-[#155DFC] via-[#1248C9] to-[#0F3AA5] dark:from-[#155DFC] dark:via-[#1248C9] dark:to-[#0F3AA5] bg-clip-text text-transparent"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -200,7 +200,7 @@ export default function ContactPage() {
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#155DFC] focus:border-transparent transition-all"
                         placeholder={language === 'ar' ? 'اسمك الكامل' : 'Your full name'}
                       />
                     </div>
@@ -214,7 +214,7 @@ export default function ContactPage() {
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#155DFC] focus:border-transparent transition-all"
                         placeholder={language === 'ar' ? 'your@email.com' : 'your@email.com'}
                       />
                     </div>
@@ -227,7 +227,7 @@ export default function ContactPage() {
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#155DFC] focus:border-transparent transition-all"
                         placeholder={language === 'ar' ? '+20 123 456 7890' : '+1 234 567 8900'}
                       />
                     </div>
@@ -241,7 +241,7 @@ export default function ContactPage() {
                         required
                         value={formData.subject}
                         onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#155DFC] focus:border-transparent transition-all"
                         placeholder={language === 'ar' ? 'موضوع الرسالة' : 'Message subject'}
                       />
                     </div>
@@ -263,7 +263,7 @@ export default function ContactPage() {
                     <RippleButton
                       type="submit"
                       disabled={submitting}
-                      className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-4 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full bg-gradient-to-r from-[#155DFC] to-[#1248C9] hover:from-[#1248C9] hover:to-[#0F3AA5] text-white py-4 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {submitting 
                         ? (language === 'ar' ? 'جاري الإرسال...' : 'Sending...')
@@ -298,7 +298,7 @@ export default function ContactPage() {
                         transition={{ delay: index * 0.1 }}
                       >
                         <div className="flex items-start gap-4">
-                          <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl text-white">
+                          <div className="p-3 bg-gradient-to-br from-[#155DFC] to-[#1248C9] rounded-xl text-white">
                             <MapPin className="h-6 w-6" />
                           </div>
                           <div>
@@ -310,7 +310,7 @@ export default function ContactPage() {
                             </p>
                             <a 
                               href={`tel:${office.phone}`}
-                              className="text-indigo-600 dark:text-indigo-400 hover:underline"
+                              className="text-[#155DFC] dark:text-[#155DFC] hover:underline"
                             >
                               {office.phone}
                             </a>
@@ -323,7 +323,7 @@ export default function ContactPage() {
 
                 {/* Support Card */}
                 <HoverCard>
-                  <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-8 rounded-3xl shadow-xl text-white">
+                  <div className="bg-gradient-to-br from-[#155DFC] to-[#1248C9] p-8 rounded-3xl shadow-xl text-white">
                     <HeadphonesIcon className="h-12 w-12 mb-4" />
                     <h3 className="text-2xl font-bold mb-4">
                       {language === 'ar' ? 'دعم على مدار الساعة' : '24/7 Support'}
@@ -335,7 +335,7 @@ export default function ContactPage() {
                     </p>
                     <a 
                       href="mailto:support@hackpro.com"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-white text-indigo-600 rounded-full font-semibold hover:shadow-xl transition-all"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#155DFC] rounded-full font-semibold hover:shadow-xl transition-all"
                     >
                       <Mail className="h-5 w-5" />
                       support@hackpro.com

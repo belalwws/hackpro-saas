@@ -87,6 +87,7 @@ export async function POST(
         htmlContent: generatedHtml,
         cssContent: generatedCss,
         isEnabled: data.isEnabled || false,
+        subdomain: data.subdomain || null,
         updatedAt: new Date()
       },
       create: {
@@ -94,7 +95,8 @@ export async function POST(
         isEnabled: data.isEnabled || false,
         htmlContent: generatedHtml,
         cssContent: generatedCss,
-        jsContent: ''
+        jsContent: '',
+        subdomain: data.subdomain || null
       }
     })
 
@@ -106,9 +108,25 @@ export async function POST(
       }
     })
 
+    // Generate the public URL
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || request.nextUrl.origin
+    let publicUrl = ''
+    
+    if (landingPage.subdomain) {
+      // Use subdomain if available
+      const domain = baseUrl.replace(/^https?:\/\//, '').replace(/^www\./, '')
+      const mainDomain = domain.split('/')[0]
+      publicUrl = `https://${landingPage.subdomain}.${mainDomain}`
+    } else {
+      // Use regular landing page URL
+      publicUrl = `${baseUrl}/landing/${resolvedParams.id}`
+    }
+
     return NextResponse.json({
       success: true,
-      message: 'تم حفظ الصفحة الرئيسية بنجاح'
+      message: 'تم حفظ الصفحة الرئيسية بنجاح',
+      url: publicUrl,
+      subdomain: landingPage.subdomain
     })
 
   } catch (error) {

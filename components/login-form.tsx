@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Loader2, Eye, EyeOff } from 'lucide-react'
+import { Loader } from '@/components/ui/loader'
+import { Eye, EyeOff } from 'lucide-react'
 
 interface LoginFormProps {
   onLogin: (email: string, password: string) => Promise<void>
@@ -96,7 +97,7 @@ export function LoginForm({ onLogin, loading = false, error }: LoginFormProps) {
             >
               {loading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader variant="spinner" size="sm" variantColor="white" className="mr-2" />
                   جاري تسجيل الدخول...
                 </>
               ) : (

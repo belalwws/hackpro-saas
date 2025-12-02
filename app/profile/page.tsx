@@ -30,6 +30,7 @@ import { useAuth } from '@/contexts/auth-context'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useLanguage } from '@/contexts/language-context'
+import { cn } from '@/lib/utils'
 
 interface UserProfile {
   id: string
@@ -79,6 +80,7 @@ interface UserProfile {
 export default function ProfilePage() {
   const { user, refreshUser } = useAuth()
   const { language, t } = useLanguage()
+  const isRTL = language === 'ar'
   const router = useRouter()
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
@@ -149,14 +151,14 @@ export default function ProfilePage() {
     // Validate file type
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
     if (!allowedTypes.includes(file.type)) {
-      setError('نوع الملف غير مدعوم. يرجى اختيار صورة (JPG, PNG, WebP)')
+      setError(t('profile.upload.error.type'))
       return
     }
 
     // Validate file size (max 5MB)
     const maxSize = 5 * 1024 * 1024
     if (file.size > maxSize) {
-      setError('حجم الملف كبير جداً. الحد الأقصى 5 ميجابايت')
+      setError(t('profile.upload.error.size'))
       return
     }
 
@@ -176,10 +178,10 @@ export default function ProfilePage() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'فشل في رفع الصورة')
+        throw new Error(data.error || t('profile.upload.error.type'))
       }
 
-      setSuccess('تم تحديث الصورة الشخصية بنجاح')
+      setSuccess(t('profile.upload.success'))
       setProfile((prev) => (prev ? { ...prev, profilePicture: data.profilePicture } : null))
       if (refreshUser) {
         await refreshUser()
@@ -209,10 +211,10 @@ export default function ProfilePage() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'فشل في تحديث الملف الشخصي')
+        throw new Error(data.error || t('profile.update.error'))
       }
 
-      setSuccess('تم تحديث الملف الشخصي بنجاح')
+      setSuccess(t('profile.update.success'))
       setProfile((prev) => (prev ? { ...prev, ...formData } : null))
       setIsEditing(false)
       if (refreshUser) {
@@ -220,7 +222,7 @@ export default function ProfilePage() {
       }
     } catch (err) {
       console.error('Error updating profile:', err)
-      setError(err instanceof Error ? err.message : 'حدث خطأ في تحديث الملف الشخصي')
+      setError(err instanceof Error ? err.message : t('profile.update.error'))
     } finally {
       setSaving(false)
     }
@@ -228,12 +230,12 @@ export default function ProfilePage() {
 
   const handleChangePassword = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setError('كلمة المرور الجديدة وتأكيدها غير متطابقين')
+      setError(t('profile.password.mismatch'))
       return
     }
 
     if (passwordData.newPassword.length < 6) {
-      setError('كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل')
+      setError(t('profile.password.minLength'))
       return
     }
 
@@ -256,10 +258,10 @@ export default function ProfilePage() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'فشل في تغيير كلمة المرور')
+        throw new Error(data.error || t('profile.password.error'))
       }
 
-      setSuccess('تم تغيير كلمة المرور بنجاح')
+      setSuccess(t('profile.password.success'))
       setPasswordData({
         currentPassword: '',
         newPassword: '',
@@ -268,7 +270,7 @@ export default function ProfilePage() {
       setShowPasswordFields(false)
     } catch (err) {
       console.error('Error changing password:', err)
-      setError(err instanceof Error ? err.message : 'حدث خطأ في تغيير كلمة المرور')
+      setError(err instanceof Error ? err.message : t('profile.password.error'))
     } finally {
       setSaving(false)
     }
@@ -276,9 +278,9 @@ export default function ProfilePage() {
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      pending: { label: 'في الانتظار', color: 'bg-yellow-500', icon: Clock },
-      approved: { label: 'مقبول', color: 'bg-green-500', icon: CheckCircle },
-      rejected: { label: 'مرفوض', color: 'bg-red-500', icon: XCircle },
+      pending: { label: t('profile.status.pending'), color: 'bg-yellow-500', icon: Clock },
+      approved: { label: t('profile.status.approved'), color: 'bg-green-500', icon: CheckCircle },
+      rejected: { label: t('profile.status.rejected'), color: 'bg-red-500', icon: XCircle },
     }
 
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.pending
@@ -293,10 +295,10 @@ export default function ProfilePage() {
 
   const getHackathonStatusBadge = (status: string) => {
     const statusConfig = {
-      DRAFT: { label: 'مسودة', color: 'bg-gray-500' },
-      OPEN: { label: 'مفتوح', color: 'bg-green-500' },
-      CLOSED: { label: 'مغلق', color: 'bg-red-500' },
-      COMPLETED: { label: 'مكتمل', color: 'bg-blue-500' },
+      DRAFT: { label: t('profile.hackathon.draft'), color: 'bg-gray-500' },
+      OPEN: { label: t('profile.hackathon.open'), color: 'bg-green-500' },
+      CLOSED: { label: t('profile.hackathon.closed'), color: 'bg-red-500' },
+      COMPLETED: { label: t('profile.hackathon.completed'), color: 'bg-blue-500' },
     }
 
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.DRAFT
@@ -305,7 +307,7 @@ export default function ProfilePage() {
   }
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ar-SA', {
+    return new Date(dateString).toLocaleDateString(isRTL ? 'ar-SA' : 'en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -319,7 +321,7 @@ export default function ProfilePage() {
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
               <div className="w-16 h-16 border-4 border-indigo-200 dark:border-indigo-900 border-t-indigo-600 dark:border-t-indigo-400 rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-gray-700 dark:text-gray-300 font-semibold">جاري تحميل الملف الشخصي...</p>
+              <p className={cn("text-gray-700 dark:text-gray-300 font-semibold", isRTL && "text-arabic")}>{t('profile.loading')}</p>
             </div>
           </div>
         </div>
@@ -335,12 +337,12 @@ export default function ProfilePage() {
             <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <XCircle className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">خطأ في تحميل الملف الشخصي</h1>
+            <h1 className={cn("text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4", isRTL && "text-arabic")}>{t('profile.error.title')}</h1>
             <Button 
               onClick={() => window.location.reload()}
               className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white"
             >
-              إعادة المحاولة
+              {t('profile.error.retry')}
             </Button>
           </div>
         </div>
@@ -357,10 +359,10 @@ export default function ProfilePage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6 sm:mb-8"
         >
-          <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
-            الملف الشخصي
+          <h1 className={cn("text-3xl sm:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2", isRTL && "text-arabic")}>
+            {t('profile.title')}
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg">إدارة بياناتك الشخصية وإعدادات الحساب</p>
+          <p className={cn("text-gray-600 dark:text-gray-400 text-base sm:text-lg", isRTL && "text-arabic")}>{t('profile.subtitle')}</p>
         </motion.div>
 
         {/* Success/Error Messages */}
@@ -394,15 +396,15 @@ export default function ProfilePage() {
           <TabsList className="grid w-full grid-cols-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl p-1">
             <TabsTrigger 
               value="profile"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-lg transition-all"
+              className={cn("data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-lg transition-all", isRTL && "text-arabic")}
             >
-              الملف الشخصي
+              {t('profile.tabs.profile')}
             </TabsTrigger>
             <TabsTrigger 
               value="participations"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-lg transition-all"
+              className={cn("data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-lg transition-all", isRTL && "text-arabic")}
             >
-              المشاركات
+              {t('profile.tabs.participations')}
             </TabsTrigger>
           </TabsList>
 
@@ -411,12 +413,12 @@ export default function ProfilePage() {
             <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                    <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg">
-                      <User className="w-5 h-5 text-white" />
-                    </div>
-                    معلوماتي الشخصية
-                  </CardTitle>
+                    <CardTitle className={cn("text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2", isRTL && "text-arabic")}>
+                      <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg">
+                        <User className="w-5 h-5 text-white" />
+                      </div>
+                      {t('profile.personal.title')}
+                    </CardTitle>
                   {!isEditing && (
                     <Button
                       variant="outline"
@@ -424,8 +426,8 @@ export default function ProfilePage() {
                       onClick={() => setIsEditing(true)}
                       className="border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all"
                     >
-                      <Edit2 className="w-4 h-4 ml-2" />
-                      تعديل
+                      <Edit2 className={cn("w-4 h-4", isRTL ? "mr-2" : "ml-2")} />
+                      {t('profile.personal.edit')}
                     </Button>
                   )}
                 </div>
@@ -468,14 +470,14 @@ export default function ProfilePage() {
                         className="hidden"
                       />
                     </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 text-center">اضغط على الأيقونة لرفع صورة شخصية</p>
+                    <p className={cn("text-sm text-gray-500 dark:text-gray-400 text-center", isRTL && "text-arabic")}>{t('profile.personal.upload')}</p>
                   </div>
 
                   {/* Profile Form */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
                     <div className="space-y-2">
-                      <Label htmlFor="name" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        الاسم الكامل
+                      <Label htmlFor="name" className={cn("text-sm font-semibold text-gray-700 dark:text-gray-300", isRTL && "text-arabic")}>
+                        {t('profile.personal.name')}
                       </Label>
                       {isEditing ? (
                         <Input
@@ -490,21 +492,21 @@ export default function ProfilePage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="email" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        البريد الإلكتروني
+                      <Label htmlFor="email" className={cn("text-sm font-semibold text-gray-700 dark:text-gray-300", isRTL && "text-arabic")}>
+                        {t('profile.personal.email')}
                       </Label>
                       <div className="flex items-center gap-2 py-2 px-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                         <Mail className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                         <p className="text-gray-900 dark:text-gray-100 font-medium flex-1">{profile.email}</p>
-                        <Badge variant="outline" className="border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 text-xs">
-                          غير قابل للتعديل
+                        <Badge variant="outline" className={cn("border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 text-xs", isRTL && "text-arabic")}>
+                          {t('profile.personal.email.readonly')}
                         </Badge>
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="phone" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        رقم الهاتف
+                      <Label htmlFor="phone" className={cn("text-sm font-semibold text-gray-700 dark:text-gray-300", isRTL && "text-arabic")}>
+                        {t('profile.personal.phone')}
                       </Label>
                       {isEditing ? (
                         <Input
@@ -514,13 +516,13 @@ export default function ProfilePage() {
                           className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                         />
                       ) : (
-                        <p className="text-gray-900 dark:text-gray-100 font-medium py-2 px-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">{profile.phone || 'غير محدد'}</p>
+                        <p className="text-gray-900 dark:text-gray-100 font-medium py-2 px-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">{profile.phone || t('profile.personal.notSet')}</p>
                       )}
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="city" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        المدينة
+                      <Label htmlFor="city" className={cn("text-sm font-semibold text-gray-700 dark:text-gray-300", isRTL && "text-arabic")}>
+                        {t('profile.personal.city')}
                       </Label>
                       {isEditing ? (
                         <Input
@@ -530,13 +532,13 @@ export default function ProfilePage() {
                           className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                         />
                       ) : (
-                        <p className="text-gray-900 dark:text-gray-100 font-medium py-2 px-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">{profile.city || 'غير محدد'}</p>
+                        <p className="text-gray-900 dark:text-gray-100 font-medium py-2 px-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">{profile.city || t('profile.personal.notSet')}</p>
                       )}
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="nationality" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        الجنسية
+                      <Label htmlFor="nationality" className={cn("text-sm font-semibold text-gray-700 dark:text-gray-300", isRTL && "text-arabic")}>
+                        {t('profile.personal.nationality')}
                       </Label>
                       {isEditing ? (
                         <Input
@@ -547,13 +549,13 @@ export default function ProfilePage() {
                         />
                       ) : (
                         <p className="text-gray-900 dark:text-gray-100 font-medium py-2 px-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                          {profile.nationality || 'غير محدد'}
+                          {profile.nationality || t('profile.personal.notSet')}
                         </p>
                       )}
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-gray-700 dark:text-gray-300">تاريخ التسجيل</Label>
+                      <Label className={cn("text-sm font-semibold text-gray-700 dark:text-gray-300", isRTL && "text-arabic")}>{t('profile.personal.registrationDate')}</Label>
                       <div className="flex items-center gap-2 py-2 px-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                         <Calendar className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                         <p className="text-gray-900 dark:text-gray-100 font-medium">{formatDate(profile.createdAt)}</p>
@@ -571,13 +573,13 @@ export default function ProfilePage() {
                       >
                         {saving ? (
                           <>
-                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin ml-2" />
-                            جاري الحفظ...
+                            <div className={cn("w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin", isRTL ? "mr-2" : "ml-2")} />
+                            {t('profile.personal.saving')}
                           </>
                         ) : (
                           <>
-                            <Save className="w-4 h-4 ml-2" />
-                            حفظ التغييرات
+                            <Save className={cn("w-4 h-4", isRTL ? "mr-2" : "ml-2")} />
+                            {t('profile.personal.save')}
                           </>
                         )}
                       </Button>
@@ -595,8 +597,8 @@ export default function ProfilePage() {
                         }}
                         className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 flex-1 sm:flex-none"
                       >
-                        <X className="w-4 h-4 ml-2" />
-                        إلغاء
+                        <X className={cn("w-4 h-4", isRTL ? "mr-2" : "ml-2")} />
+                        {t('profile.personal.cancel')}
                       </Button>
                     </div>
                   )}
@@ -607,14 +609,14 @@ export default function ProfilePage() {
             {/* Change Password Card */}
             <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader className="pb-4">
-                <CardTitle className="text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                <CardTitle className={cn("text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2", isRTL && "text-arabic")}>
                   <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg">
                     <Lock className="w-5 h-5 text-white" />
                   </div>
-                  تغيير كلمة المرور
+                  {t('profile.password.title')}
                 </CardTitle>
-                <CardDescription className="text-gray-600 dark:text-gray-400 mt-2">
-                  قم بتغيير كلمة المرور الخاصة بك عن طريق إدخال كلمة المرور الحالية ثم الجديدة
+                <CardDescription className={cn("text-gray-600 dark:text-gray-400 mt-2", isRTL && "text-arabic")}>
+                  {t('profile.password.description')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -624,14 +626,14 @@ export default function ProfilePage() {
                     onClick={() => setShowPasswordFields(true)}
                     className="border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all"
                   >
-                    <Lock className="w-4 h-4 ml-2" />
-                    تغيير كلمة المرور
+                    <Lock className={cn("w-4 h-4", isRTL ? "mr-2" : "ml-2")} />
+                    {t('profile.password.change')}
                   </Button>
                 ) : (
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="currentPassword" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        كلمة المرور الحالية
+                      <Label htmlFor="currentPassword" className={cn("text-sm font-semibold text-gray-700 dark:text-gray-300", isRTL && "text-arabic")}>
+                        {t('profile.password.current')}
                       </Label>
                       <div className="relative">
                         <Input
@@ -654,8 +656,8 @@ export default function ProfilePage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="newPassword" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        كلمة المرور الجديدة
+                      <Label htmlFor="newPassword" className={cn("text-sm font-semibold text-gray-700 dark:text-gray-300", isRTL && "text-arabic")}>
+                        {t('profile.password.new')}
                       </Label>
                       <div className="relative">
                         <Input
@@ -676,8 +678,8 @@ export default function ProfilePage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="confirmPassword" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        تأكيد كلمة المرور الجديدة
+                      <Label htmlFor="confirmPassword" className={cn("text-sm font-semibold text-gray-700 dark:text-gray-300", isRTL && "text-arabic")}>
+                        {t('profile.password.confirm')}
                       </Label>
                       <Input
                         id="confirmPassword"
@@ -696,13 +698,13 @@ export default function ProfilePage() {
                       >
                         {saving ? (
                           <>
-                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin ml-2" />
-                            جاري التغيير...
+                            <div className={cn("w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin", isRTL ? "mr-2" : "ml-2")} />
+                            {t('profile.password.changing')}
                           </>
                         ) : (
                           <>
-                            <Lock className="w-4 h-4 ml-2" />
-                            تغيير كلمة المرور
+                            <Lock className={cn("w-4 h-4", isRTL ? "mr-2" : "ml-2")} />
+                            {t('profile.password.change')}
                           </>
                         )}
                       </Button>
@@ -719,8 +721,8 @@ export default function ProfilePage() {
                         }}
                         className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 flex-1 sm:flex-none"
                       >
-                        <X className="w-4 h-4 ml-2" />
-                        إلغاء
+                        <X className={cn("w-4 h-4", isRTL ? "mr-2" : "ml-2")} />
+                        {t('profile.personal.cancel')}
                       </Button>
                     </div>
                   </div>
@@ -733,13 +735,13 @@ export default function ProfilePage() {
             {/* Participations Section - Keep the existing code */}
             <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-gray-200 dark:border-gray-700 shadow-lg">
               <CardHeader className="pb-4">
-                <CardTitle className="text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                <CardTitle className={cn("text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2", isRTL && "text-arabic")}>
                   <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg">
                     <Trophy className="w-5 h-5 text-white" />
                   </div>
-                  رحلتي في الهاكاثونات
+                  {t('profile.participations.title')}
                 </CardTitle>
-                <CardDescription className="text-gray-600 dark:text-gray-400 mt-2">تتبع جميع مشاركاتك ومراحلها</CardDescription>
+                <CardDescription className={cn("text-gray-600 dark:text-gray-400 mt-2", isRTL && "text-arabic")}>{t('profile.participations.description')}</CardDescription>
               </CardHeader>
               <CardContent>
                 {!profile.participations || profile.participations.length === 0 ? (
@@ -747,11 +749,11 @@ export default function ProfilePage() {
                     <div className="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                       <Trophy className="w-8 h-8 text-white" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">ابدأ رحلتك!</h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-6">لم تسجل في أي هاكاثون بعد</p>
+                    <h3 className={cn("text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2", isRTL && "text-arabic")}>{t('profile.participations.empty.title')}</h3>
+                    <p className={cn("text-gray-600 dark:text-gray-400 mb-6", isRTL && "text-arabic")}>{t('profile.participations.empty.description')}</p>
                     <Link href="/hackathons">
                       <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all">
-                        استكشف الهاكاثونات
+                        {t('profile.participations.empty.cta')}
                       </Button>
                     </Link>
                   </div>
@@ -786,8 +788,8 @@ export default function ProfilePage() {
                                 size="sm"
                                 className="border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all"
                               >
-                                <Eye className="w-4 h-4 ml-1" />
-                                عرض التفاصيل
+                                <Eye className={cn("w-4 h-4", isRTL ? "mr-1" : "ml-1")} />
+                                {t('profile.participations.view')}
                               </Button>
                             </Link>
                           </div>

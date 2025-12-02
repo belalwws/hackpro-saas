@@ -101,7 +101,7 @@ export default function AboutPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-900 dark:to-indigo-950 transition-colors">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 transition-colors">
       <BackgroundAnimations />
       
       {/* Hero Section */}
@@ -110,7 +110,7 @@ export default function AboutPage() {
           <AnimatedSection direction="fade">
             <div className="text-center max-w-4xl mx-auto">
               <motion.h1 
-                className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent"
+                className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-[#155DFC] via-[#1248C9] to-[#0F3AA5] dark:from-[#155DFC] dark:via-[#1248C9] dark:to-[#0F3AA5] bg-clip-text text-transparent"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -141,7 +141,7 @@ export default function AboutPage() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.6 + index * 0.1 }}
                 >
-                  <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent mb-2">
+                  <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#155DFC] to-[#1248C9] dark:from-[#155DFC] dark:to-[#1248C9] bg-clip-text text-transparent mb-2">
                     {stat.number}
                   </div>
                   <div className="text-gray-600 dark:text-gray-400">
@@ -160,7 +160,7 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
             <AnimatedSection direction="left">
               <HoverCard>
-                <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-12 rounded-3xl shadow-2xl text-white h-full">
+                <div className="bg-gradient-to-br from-[#155DFC] to-[#1248C9] p-12 rounded-3xl shadow-2xl text-white h-full">
                   <Target className="h-16 w-16 mb-6" />
                   <h2 className="text-4xl font-bold mb-6">
                     {language === 'ar' ? 'مهمتنا' : 'Our Mission'}
@@ -176,7 +176,7 @@ export default function AboutPage() {
 
             <AnimatedSection direction="right">
               <HoverCard>
-                <div className="bg-gradient-to-br from-pink-500 to-purple-600 p-12 rounded-3xl shadow-2xl text-white h-full">
+                <div className="bg-gradient-to-br from-[#1248C9] to-[#0F3AA5] p-12 rounded-3xl shadow-2xl text-white h-full">
                   <Eye className="h-16 w-16 mb-6" />
                   <h2 className="text-4xl font-bold mb-6">
                     {language === 'ar' ? 'رؤيتنا' : 'Our Vision'}
@@ -214,7 +214,12 @@ export default function AboutPage() {
               <AnimatedSection key={index} delay={index * 0.1}>
                 <HoverCard>
                   <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 h-full">
-                    <div className={`inline-flex p-4 rounded-2xl bg-gradient-to-br from-${value.color}-500 to-${value.color}-600 text-white mb-6`}>
+                    <div className={`inline-flex p-4 rounded-2xl ${
+                      value.color === 'indigo' ? 'bg-gradient-to-br from-[#155DFC] to-[#1248C9]' :
+                      value.color === 'pink' ? 'bg-gradient-to-br from-pink-500 to-pink-600' :
+                      value.color === 'purple' ? 'bg-gradient-to-br from-[#155DFC] to-[#1248C9]' :
+                      'bg-gradient-to-br from-amber-500 to-amber-600'
+                    } text-white mb-6`}>
                       {value.icon}
                     </div>
                     <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
@@ -252,7 +257,7 @@ export default function AboutPage() {
               <AnimatedSection key={index} delay={index * 0.1} direction="up">
                 <HoverCard>
                   <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 h-full">
-                    <div className="relative h-48 bg-gradient-to-br from-indigo-500 to-purple-600">
+                    <div className="relative h-48 bg-gradient-to-br from-[#155DFC] to-[#1248C9]">
                       <img 
                         src={member.image} 
                         alt={member.name}
@@ -263,20 +268,20 @@ export default function AboutPage() {
                       <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">
                         {member.name}
                       </h3>
-                      <p className="text-indigo-600 dark:text-indigo-400 font-medium mb-4">
+                      <p className="text-[#155DFC] dark:text-[#155DFC] font-medium mb-4">
                         {member.role}
                       </p>
                       <p className="text-gray-600 dark:text-gray-400 text-sm mb-6">
                         {member.bio}
                       </p>
                       <div className="flex justify-center gap-4">
-                        <a href="#" className="text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                        <a href="#" className="text-gray-400 hover:text-[#155DFC] dark:hover:text-[#155DFC] transition-colors">
                           <Twitter className="h-5 w-5" />
                         </a>
-                        <a href="#" className="text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                        <a href="#" className="text-gray-400 hover:text-[#155DFC] dark:hover:text-[#155DFC] transition-colors">
                           <Linkedin className="h-5 w-5" />
                         </a>
-                        <a href="#" className="text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                        <a href="#" className="text-gray-400 hover:text-[#155DFC] dark:hover:text-[#155DFC] transition-colors">
                           <Github className="h-5 w-5" />
                         </a>
                       </div>
@@ -291,7 +296,7 @@ export default function AboutPage() {
 
       {/* CTA Section */}
       <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-700 dark:to-purple-700"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#155DFC] to-[#1248C9] dark:from-[#1248C9] dark:to-[#0F3AA5]"></div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection>
             <div className="text-center max-w-3xl mx-auto text-white">
@@ -306,7 +311,7 @@ export default function AboutPage() {
               </p>
               <motion.a
                 href="/register"
-                className="inline-block px-8 py-4 bg-white text-indigo-600 rounded-full font-semibold text-lg hover:shadow-2xl transition-all hover:scale-105"
+                className="inline-block px-8 py-4 bg-white text-[#155DFC] rounded-full font-semibold text-lg hover:shadow-2xl transition-all hover:scale-105"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >

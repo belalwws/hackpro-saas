@@ -10,7 +10,6 @@ import FAQBlockPreview from './block-previews/FAQBlockPreview'
 import ContactBlockPreview from './block-previews/ContactBlockPreview'
 import StatsBlockPreview from './block-previews/StatsBlockPreview'
 import { cn } from '@/lib/utils'
-import { Edit3 } from 'lucide-react'
 
 interface HomepagePreviewProps {
   blocks: Block[]
@@ -77,39 +76,33 @@ function HomepagePreview({
       case 'stats':
         blockComponent = <StatsBlockPreview key={block.id} {...props} />
         break
-      case 'testimonials':
-      case 'features':
-      case 'gallery':
-      case 'countdown':
-      case 'sponsors':
-      case 'timeline':
-      case 'pricing':
-      case 'cta':
-        // Placeholder previews for missing blocks
+      default:
+        // Placeholder for blocks without preview
         blockComponent = (
-          <div key={block.id} className="p-8 text-center border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg m-4">
-            <div className="text-4xl mb-4">{BLOCK_CONFIGS[block.type].icon}</div>
-            <h3 className={cn("text-xl font-semibold mb-2", isRTL && "text-arabic")}>
-              {block.data?.title || BLOCK_CONFIGS[block.type].name[isRTL ? 'ar' : 'en']}
-            </h3>
-            <p className={cn("text-gray-500", isRTL && "text-arabic")}>
-              {isRTL ? 'معاينة هذا القسم قيد التطوير' : 'Preview for this section is under development'}
-            </p>
+          <div key={block.id} className="py-16 px-8">
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-4">
+                {config.icon}
+              </div>
+              <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
+                {block.data?.title || config.name[isRTL ? 'ar' : 'en']}
+              </h3>
+              <p className="text-slate-500 text-sm">
+                {isRTL ? 'قسم قيد التطوير' : 'Section under development'}
+              </p>
+            </div>
           </div>
         )
-        break
-      default:
-        return null
     }
 
-    // If in editor mode (onBlockClick is provided), wrap with interactive overlay
+    // If in editor mode, wrap with interactive overlay
     if (onBlockClick) {
       return (
         <div
           key={block.id}
           className={cn(
-            "relative group",
-            isActive && "ring-2 ring-indigo-500 ring-offset-2"
+            "relative group cursor-pointer transition-all",
+            isActive && "ring-2 ring-blue-500 ring-inset"
           )}
           onClick={(e) => {
             e.stopPropagation()
@@ -118,32 +111,25 @@ function HomepagePreview({
           onMouseEnter={() => onBlockHover?.(block.id)}
           onMouseLeave={() => onBlockHover?.(null)}
         >
-          {/* Overlay indicator */}
-          <div
-            className={cn(
-              "absolute top-0 left-0 right-0 z-10 h-1 transition-all",
-              isActive
-                ? "bg-indigo-500"
-                : "bg-transparent group-hover:bg-indigo-300"
-            )}
-          />
-          
-          {/* Edit button on hover */}
-          {!isActive && (
-            <div className="absolute top-2 right-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
-              <div className="bg-indigo-600 text-white px-3 py-1.5 rounded-lg flex items-center gap-2 text-xs font-medium shadow-lg">
-                <Edit3 className="w-3 h-3" />
-                {config.name[isRTL ? 'ar' : 'en']}
-              </div>
+          {/* Selection Indicator */}
+          {isActive && (
+            <div className="absolute top-2 left-2 z-20 bg-blue-600 text-white text-xs font-medium px-2 py-1 rounded-md shadow-lg flex items-center gap-1.5">
+              {config.icon}
+              <span>{config.name[isRTL ? 'ar' : 'en']}</span>
             </div>
           )}
 
-          {/* Active indicator */}
-          {isActive && (
-            <div className="absolute top-2 right-2 z-20">
-              <div className="bg-indigo-600 text-white px-3 py-1.5 rounded-lg flex items-center gap-2 text-xs font-medium shadow-lg">
-                <Edit3 className="w-3 h-3" />
-                {isRTL ? 'جاري التحرير' : 'Editing'}
+          {/* Hover Overlay */}
+          {!isActive && (
+            <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-colors z-10 pointer-events-none" />
+          )}
+
+          {/* Hover Label */}
+          {!isActive && (
+            <div className="absolute top-2 left-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="bg-slate-900/80 text-white text-xs font-medium px-2 py-1 rounded-md flex items-center gap-1.5">
+                {config.icon}
+                <span>{config.name[isRTL ? 'ar' : 'en']}</span>
               </div>
             </div>
           )}
@@ -158,21 +144,13 @@ function HomepagePreview({
 
   return (
     <div 
-      className="min-h-screen w-full relative"
+      className="min-h-full w-full"
       style={{ 
         backgroundColor: colors.background,
         color: colors.text,
         direction: isRTL ? 'rtl' : 'ltr'
       }}
-      id="preview-drop-zone"
     >
-      {sortedBlocks.length === 0 && draggedBlockId && (
-        <div className="absolute inset-0 flex items-center justify-center border-2 border-dashed border-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/20 rounded-lg m-4">
-          <p className={cn("text-indigo-600 dark:text-indigo-400 font-medium", isRTL && "text-arabic")}>
-            {isRTL ? 'أسقط القسم هنا' : 'Drop section here'}
-          </p>
-        </div>
-      )}
       {sortedBlocks.map(block => renderBlock(block))}
     </div>
   )

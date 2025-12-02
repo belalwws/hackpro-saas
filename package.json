@@ -81,6 +81,7 @@
     "jose": "latest",
     "js-cookie": "latest",
     "jsonwebtoken": "latest",
+    "lottie-react": "^2.4.1",
     "lucide-react": "^0.454.0",
     "next": "^15.5.2",
     "next-themes": "latest",
