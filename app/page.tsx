@@ -300,13 +300,8 @@ const testimonials = {
   ]
 }
 
-// Scroll Story Component
+// How It Works Component
 function ScrollStory() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  })
   const { language } = useLanguage()
   const isRTL = language === 'ar'
 
@@ -400,180 +395,100 @@ function ScrollStory() {
   const currentSteps = steps[language]
 
   return (
-    <div ref={containerRef} className="relative py-12 sm:py-16 lg:py-32">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="py-16 sm:py-20 lg:py-28 bg-gradient-to-b from-white to-slate-50 dark:from-slate-950 dark:to-slate-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12 lg:mb-20"
+          className={cn("text-center mb-12 lg:mb-16", isRTL && "text-right")}
         >
-          <Badge className="mb-4 sm:mb-6 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-[#155DFC] to-[#6A7282] text-white text-sm sm:text-lg">
-            <Target className={cn("w-5 h-5", isRTL ? "ml-2" : "mr-2")} />
+          <Badge className="mb-4 px-4 py-2 bg-gradient-to-r from-[#155DFC] to-[#6A7282] text-white">
+            <Target className={cn("w-4 h-4", isRTL ? "ml-2" : "mr-2")} />
             {isRTL ? 'كيف يعمل؟' : 'How It Works?'}
-            </Badge>
-              <h2 className={cn(
-                "text-2xl sm:text-4xl lg:text-6xl font-display font-black text-slate-900 dark:text-slate-100 mb-4 sm:mb-6 break-words",
-                isRTL && "text-arabic leading-relaxed"
-              )}>
-            {isRTL ? (
-              <>
-                من الفكرة إلى النتائج
-                <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#155DFC] to-[#6A7282]">
-                  في 5 خطوات بسيطة
-                </span>
-              </>
-            ) : (
-              <>
-                From Idea to Results
-                <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#155DFC] to-[#6A7282]">
-                  In 5 Simple Steps
-                </span>
-              </>
-            )}
-            </h2>
+          </Badge>
+          <h2 className={cn(
+            "text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-4",
+            isRTL && "text-arabic"
+          )}>
+            {isRTL ? 'من الفكرة إلى النتائج في 5 خطوات بسيطة' : 'From Idea to Results in 5 Simple Steps'}
+          </h2>
         </motion.div>
 
-        <div className="space-y-12 sm:space-y-16 lg:space-y-32">
+        {/* Steps Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {currentSteps.map((step, index) => {
             const Icon = step.icon
-            const isEven = index % 2 === 0
-            
             return (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 100 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="relative"
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
+                className="group"
               >
                 <div className={cn(
-                  "grid lg:grid-cols-2 gap-12 items-center",
-                  isEven ? "lg:grid-flow-col" : "lg:grid-flow-col-dense"
+                  "h-full bg-white dark:bg-slate-800 rounded-2xl p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all border border-slate-200 dark:border-slate-700",
+                  isRTL && "text-right"
                 )}>
-                  {/* Content Side */}
-                  <motion.div
-                    initial={{ opacity: 0, x: isEven ? -50 : 50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.3 }}
-                    className={cn(
-                      "space-y-6 text-center",
-                      isRTL ? "lg:text-right" : "lg:text-left",
-                      !isEven && "lg:col-start-2"
-                    )}
-                  >
-                    <div className={cn("flex items-center gap-4 justify-center", isRTL ? "lg:justify-end" : "lg:justify-start")}>
-                      <div className={cn(
-                        "w-12 sm:w-16 h-12 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br flex items-center justify-center shadow-xl",
-                        step.color
-                      )}>
-                        <Icon className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
-          </div>
-                      <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-full bg-slate-900 dark:bg-white flex items-center justify-center">
-                        <span className="text-xl sm:text-2xl font-black text-white dark:text-slate-900">
-                          {index + 1}
-                        </span>
-        </div>
-        </div>
-
-                    <h3 className={cn(
-                      "text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-slate-100 break-words",
-                      isRTL && "text-arabic leading-relaxed"
+                  {/* Icon and Number */}
+                  <div className={cn("flex items-center gap-3 mb-4", isRTL ? "justify-end" : "justify-start")}>
+                    <div className={cn(
+                      "w-14 h-14 rounded-xl bg-gradient-to-br flex items-center justify-center shadow-lg",
+                      step.color
                     )}>
-                      {step.title}
-                    </h3>
+                      <Icon className="w-7 h-7 text-white" />
+                    </div>
+                    <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+                      <span className="text-lg font-bold text-slate-700 dark:text-slate-300">
+                        {index + 1}
+                      </span>
+                    </div>
+                  </div>
 
-                    <p className={cn(
-                      "text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-400 leading-relaxed break-words",
-                      isRTL && "text-arabic"
-                    )}>
-                      {step.description}
-                    </p>
+                  {/* Title */}
+                  <h3 className={cn(
+                    "text-xl lg:text-2xl font-bold text-slate-900 dark:text-white mb-3",
+                    isRTL && "text-arabic"
+                  )}>
+                    {step.title}
+                  </h3>
 
-                    <ul className="space-y-3">
-                      {step.details.map((detail, idx) => (
-                        <motion.li
-                          key={idx}
-                          initial={{ opacity: 0, x: -20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.4 + idx * 0.1 }}
-                          className={cn("flex items-center gap-3 justify-center", isRTL ? "lg:justify-end" : "lg:justify-start")}
-                        >
-                          <CheckCircle2 className="w-6 h-6 text-green-600 shrink-0" />
-                          <span className={cn(
-                            "text-lg text-slate-700 dark:text-slate-300 font-medium break-words",
-                            isRTL && "text-arabic"
-                          )}>
-                            {detail}
-                          </span>
-                        </motion.li>
-                      ))}
-                    </ul>
+                  {/* Description */}
+                  <p className={cn(
+                    "text-slate-600 dark:text-slate-400 mb-4 leading-relaxed",
+                    isRTL && "text-arabic"
+                  )}>
+                    {step.description}
+                  </p>
 
-                    <div className={cn("flex", isRTL ? "justify-center lg:justify-end" : "justify-center lg:justify-start")}>
-                      <Button
-                        size="lg"
-                        className={cn(
-                          "text-sm sm:text-lg px-6 sm:px-8 py-4 sm:py-6 rounded-xl shadow-lg bg-gradient-to-r relative overflow-hidden group",
-                          step.color,
-                          "hover:shadow-2xl transition-all duration-300"
-                        )}
+                  {/* Details List */}
+                  <ul className="space-y-2">
+                    {step.details.map((detail, idx) => (
+                      <li
+                        key={idx}
+                        className={cn("flex items-center gap-2", isRTL ? "justify-end flex-row-reverse" : "justify-start")}
                       >
-                        {/* Shine effect on hover */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                        
-                        <span className="relative z-10 flex items-center gap-2">
-                          {isRTL ? 'جرّب الآن' : 'Try Now'}
-                          <ArrowLeft className={cn("w-5 h-5", isRTL ? "mr-0" : "ml-0")} />
+                        <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
+                        <span className={cn(
+                          "text-sm text-slate-700 dark:text-slate-300",
+                          isRTL && "text-arabic"
+                        )}>
+                          {detail}
                         </span>
-                      </Button>
-                    </div>
-                  </motion.div>
-
-                  {/* Visual Side - Lottie Animation Only */}
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                    className={cn(
-                      "relative flex items-center justify-center",
-                      isEven ? "lg:col-start-2" : "lg:col-start-1"
-                    )}
-                  >
-                    <div className="w-full max-w-[250px] sm:max-w-md lg:max-w-lg mx-auto">
-                      <LottieStepAnimation stepIndex={index} />
-                    </div>
-                  </motion.div>
-        </div>
-
-                {/* Connector Line */}
-                {index < currentSteps.length - 1 && (
-                  <motion.div
-                    initial={{ scaleY: 0 }}
-                    whileInView={{ scaleY: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.5 }}
-                    className="absolute left-1/2 -translate-x-1/2 -bottom-16 w-1 h-32 bg-gradient-to-b from-slate-300 to-transparent dark:from-slate-700 origin-top"
-                  >
-                    <motion.div
-                      animate={{ y: [0, 20, 0] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                      className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#155DFC] rounded-full shadow-lg shadow-[#155DFC]/50"
-                    />
-                  </motion.div>
-                )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </motion.div>
             )
           })}
         </div>
       </div>
-    </div>
+    </section>
   )
 }
 
