@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useLanguage } from '@/contexts/language-context'
 import { motion } from 'framer-motion'
+import { AdminSidebar } from '@/components/admin/admin-sidebar'
 import { 
   Trophy, Search, Plus, Eye, Edit, Trash2, Building2, BarChart3, 
   Users, Gavel, Settings, Bell, ArrowLeft, Calendar, Pin, PinOff,
@@ -188,56 +189,7 @@ export default function HackathonsPage() {
         </div>
       </div>
 
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="hidden md:flex flex-col w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen">
-          <div className="p-4 space-y-2">
-            <Link href="/admin/dashboard">
-              <Button 
-                variant="ghost" 
-                className="w-full justify-start gap-2"
-              >
-                <BarChart3 className="h-4 w-4" />
-                {language === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
-              </Button>
-            </Link>
-            <Button 
-              variant="ghost" 
-              className="w-full justify-start gap-2 bg-indigo-50 dark:bg-indigo-950 text-indigo-600"
-            >
-              <Trophy className="h-4 w-4" />
-              {language === 'ar' ? 'الهاكاثونات' : 'Hackathons'}
-            </Button>
-            <Link href="/admin/participants">
-              <Button 
-                variant="ghost" 
-                className="w-full justify-start gap-2"
-              >
-                <Users className="h-4 w-4" />
-                {language === 'ar' ? 'المشاركين' : 'Participants'}
-              </Button>
-            </Link>
-            <Link href="/admin/judges">
-              <Button 
-                variant="ghost" 
-                className="w-full justify-start gap-2"
-              >
-                <Gavel className="h-4 w-4" />
-                {language === 'ar' ? 'الحكام' : 'Judges'}
-              </Button>
-            </Link>
-            <Link href="/admin/settings">
-              <Button 
-                variant="ghost" 
-                className="w-full justify-start gap-2"
-              >
-                <Settings className="h-4 w-4" />
-                {language === 'ar' ? 'الإعدادات' : 'Settings'}
-              </Button>
-            </Link>
-          </div>
-        </div>
-
+      <div className="flex flex-row-reverse">
         {/* Main Content */}
         <div className="flex-1 p-6 overflow-auto">
           <div className="max-w-7xl mx-auto">
@@ -445,6 +397,9 @@ export default function HackathonsPage() {
             </motion.div>
           </div>
         </div>
+        
+        {/* Sidebar */}
+        <AdminSidebar />
       </div>
     </div>
   )

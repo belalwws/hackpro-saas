@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import nodemailer from 'nodemailer'
+import { NotificationService } from '@/lib/services/notification-service'
 
 const prisma = new PrismaClient()
 
@@ -98,6 +99,21 @@ export async function PATCH(
       }
     } else {
       console.log(`⏸️ Status changed to pending for ${participant.user.email} - no email sent`)
+    }
+
+    // Send in-app notification
+    if (status !== 'pending') {
+      try {
+        await NotificationService.notifyRegistration(
+          participant.userId,
+          participant.hackathonId,
+          participant.hackathon.title,
+          status as 'approved' | 'rejected'
+        )
+        console.log(`🔔 In-app notification sent to ${participant.user.email}`)
+      } catch (notifError) {
+        console.error(`❌ Failed to send in-app notification:`, notifError)
+      }
     }
 
     const statusMessage = status === 'approved' ? 'قبول' : status === 'rejected' ? 'رفض' : 'إعادة للانتظار'

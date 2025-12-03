@@ -400,7 +400,7 @@ function ScrollStory() {
   const currentSteps = steps[language]
 
   return (
-    <div ref={containerRef} className="relative py-16 lg:py-32">
+    <div ref={containerRef} className="relative py-12 sm:py-16 lg:py-32">
       <div className="max-w-7xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -408,12 +408,12 @@ function ScrollStory() {
           viewport={{ once: true }}
           className="text-center mb-12 lg:mb-20"
         >
-          <Badge className="mb-6 px-6 py-3 bg-gradient-to-r from-[#155DFC] to-[#6A7282] text-white text-lg">
+          <Badge className="mb-4 sm:mb-6 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-[#155DFC] to-[#6A7282] text-white text-sm sm:text-lg">
             <Target className={cn("w-5 h-5", isRTL ? "ml-2" : "mr-2")} />
             {isRTL ? 'كيف يعمل؟' : 'How It Works?'}
             </Badge>
               <h2 className={cn(
-                "text-3xl sm:text-5xl lg:text-6xl font-display font-black text-slate-900 dark:text-slate-100 mb-6 break-words",
+                "text-2xl sm:text-4xl lg:text-6xl font-display font-black text-slate-900 dark:text-slate-100 mb-4 sm:mb-6 break-words",
                 isRTL && "text-arabic leading-relaxed"
               )}>
             {isRTL ? (
@@ -436,7 +436,7 @@ function ScrollStory() {
             </h2>
         </motion.div>
 
-        <div className="space-y-16 lg:space-y-32">
+        <div className="space-y-12 sm:space-y-16 lg:space-y-32">
           {currentSteps.map((step, index) => {
             const Icon = step.icon
             const isEven = index % 2 === 0
@@ -468,27 +468,27 @@ function ScrollStory() {
                   >
                     <div className={cn("flex items-center gap-4 justify-center", isRTL ? "lg:justify-end" : "lg:justify-start")}>
                       <div className={cn(
-                        "w-16 h-16 rounded-2xl bg-gradient-to-br flex items-center justify-center shadow-xl",
+                        "w-12 sm:w-16 h-12 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br flex items-center justify-center shadow-xl",
                         step.color
                       )}>
-                        <Icon className="w-8 h-8 text-white" />
+                        <Icon className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
           </div>
-                      <div className="w-12 h-12 rounded-full bg-slate-900 dark:bg-white flex items-center justify-center">
-                        <span className="text-2xl font-black text-white dark:text-slate-900">
+                      <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-full bg-slate-900 dark:bg-white flex items-center justify-center">
+                        <span className="text-xl sm:text-2xl font-black text-white dark:text-slate-900">
                           {index + 1}
                         </span>
         </div>
         </div>
 
                     <h3 className={cn(
-                      "text-4xl font-black text-slate-900 dark:text-slate-100 break-words",
+                      "text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-slate-100 break-words",
                       isRTL && "text-arabic leading-relaxed"
                     )}>
                       {step.title}
                     </h3>
 
                     <p className={cn(
-                      "text-xl text-slate-600 dark:text-slate-400 leading-relaxed break-words",
+                      "text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-400 leading-relaxed break-words",
                       isRTL && "text-arabic"
                     )}>
                       {step.description}
@@ -519,7 +519,7 @@ function ScrollStory() {
                       <Button
                         size="lg"
                         className={cn(
-                          "text-lg px-8 py-6 rounded-xl shadow-lg bg-gradient-to-r relative overflow-hidden group",
+                          "text-sm sm:text-lg px-6 sm:px-8 py-4 sm:py-6 rounded-xl shadow-lg bg-gradient-to-r relative overflow-hidden group",
                           step.color,
                           "hover:shadow-2xl transition-all duration-300"
                         )}
@@ -546,7 +546,7 @@ function ScrollStory() {
                       isEven ? "lg:col-start-2" : "lg:col-start-1"
                     )}
                   >
-                    <div className="w-full max-w-md lg:max-w-lg">
+                    <div className="w-full max-w-[250px] sm:max-w-md lg:max-w-lg mx-auto">
                       <LottieStepAnimation stepIndex={index} />
                     </div>
                   </motion.div>
@@ -597,12 +597,12 @@ export default function LandingPage() {
   }, [])
 
   const handleGetStarted = () => {
-    router.push('/signup')
+    router.push('/register')
   }
 
   const handleEarlyAccess = (e: React.FormEvent) => {
     e.preventDefault()
-    router.push(`/signup?email=${encodeURIComponent(email)}`)
+    router.push(`/register?email=${encodeURIComponent(email)}`)
   }
 
   const currentStats = stats[language]
@@ -613,7 +613,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
       {/* Hero Section */}
-      <section className="relative pt-20 pb-20 lg:pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-[600px] lg:min-h-screen flex items-center">
+      <section className="relative pt-16 sm:pt-20 pb-12 sm:pb-20 lg:pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-[auto] lg:min-h-screen flex items-center">
         {/* Enhanced Animated Background */}
         <div className="absolute inset-0 overflow-hidden">
           {/* Gradient Mesh Background */}
@@ -665,18 +665,6 @@ export default function LandingPage() {
           {/* Grid Pattern - Enhanced */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-50"></div>
           
-          {/* Light rays - Enhanced */}
-          <motion.div
-            animate={{ opacity: [0.3, 0.6, 0.3] }}
-            transition={{ duration: 3, repeat: Infinity }}
-            className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-[#155DFC]/0 via-[#155DFC]/50 to-[#155DFC]/0"
-          />
-          <motion.div
-            animate={{ opacity: [0.3, 0.6, 0.3] }}
-            transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
-            className="absolute top-0 right-1/4 w-px h-full bg-gradient-to-b from-[#6A7282]/0 via-[#6A7282]/50 to-[#6A7282]/0"
-          />
-          
           {/* Floating particles */}
           {particlePositions.map((particle, i) => (
             <motion.div
@@ -700,10 +688,10 @@ export default function LandingPage() {
           ))}
         </div>
 
-        <div className="max-w-7xl mx-auto relative z-10 px-4">
+        <div className="max-w-7xl mx-auto relative z-10">
           {/* Two Column Hero Layout */}
           <div className={cn(
-            "grid lg:grid-cols-2 gap-10 lg:gap-16 items-center min-h-[70vh] py-8 lg:py-16",
+            "grid lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[auto] lg:min-h-[70vh] py-4 lg:py-16",
             isRTL && "direction-rtl"
           )}>
             
@@ -717,7 +705,7 @@ export default function LandingPage() {
                 isRTL && "lg:order-2"
               )}
             >
-              <div className="w-full max-w-md lg:max-w-lg">
+              <div className="w-full max-w-[280px] sm:max-w-md lg:max-w-lg mx-auto">
                 <LottieHero />
               </div>
             </motion.div>
@@ -734,7 +722,7 @@ export default function LandingPage() {
             >
               {/* Main Heading */}
               <h1 className={cn(
-                "text-3xl sm:text-5xl lg:text-6xl font-display font-black",
+                "text-2xl sm:text-4xl lg:text-6xl font-display font-black",
                 isRTL ? "leading-relaxed text-arabic" : "leading-[1.1]"
               )}>
                 <span className="block text-slate-900 dark:text-white">
@@ -743,14 +731,14 @@ export default function LandingPage() {
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#155DFC] to-[#1248C9]">
                   {isRTL ? 'باحترافية' : 'Hackathons'}
                 </span>
-                <span className="block text-slate-900 dark:text-white text-2xl sm:text-4xl lg:text-5xl mt-2">
+                <span className="block text-slate-900 dark:text-white text-xl sm:text-3xl lg:text-5xl mt-1 sm:mt-2">
                   {isRTL ? 'من البداية للنهاية' : 'Like a Pro'}
                 </span>
               </h1>
 
               {/* Description */}
               <p className={cn(
-                "text-lg text-slate-600 dark:text-slate-400 max-w-lg leading-relaxed mx-auto",
+                "text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-lg leading-relaxed mx-auto px-2 sm:px-0",
                 isRTL ? "lg:mr-0 lg:ml-auto" : "lg:ml-0 lg:mr-auto",
                 isRTL && "text-arabic"
               )}>
@@ -760,24 +748,24 @@ export default function LandingPage() {
               </p>
 
               {/* CTA Buttons */}
-              <div className={cn("flex flex-wrap gap-4 pt-2 justify-center", isRTL ? "lg:justify-end flex-row-reverse" : "lg:justify-start")}>
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+              <div className={cn("flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 justify-center items-center", isRTL ? "lg:justify-end sm:flex-row-reverse" : "lg:justify-start")}>
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} className="w-full sm:w-auto">
                   <Button
                     size="lg"
                     onClick={handleGetStarted}
-                    className="text-base px-7 py-6 rounded-xl bg-[#155DFC] hover:bg-[#1248C9] shadow-lg shadow-blue-500/30 transition-all font-semibold"
+                    className="w-full sm:w-auto text-sm sm:text-base px-6 sm:px-7 py-5 sm:py-6 rounded-xl bg-[#155DFC] hover:bg-[#1248C9] shadow-lg shadow-blue-500/30 transition-all font-semibold"
                   >
                     {isRTL ? 'ابدأ مجاناً الآن' : 'Get Started Free'}
-                    <Rocket className={cn("w-5 h-5", isRTL ? "mr-2" : "ml-2")} />
+                    <Rocket className={cn("w-4 sm:w-5 h-4 sm:h-5", isRTL ? "mr-2" : "ml-2")} />
                   </Button>
                 </motion.div>
                 
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} className="w-full sm:w-auto">
                   <Button
                     size="lg"
                     variant="outline"
                     onClick={() => router.push('/pricing')}
-                    className="text-base px-7 py-6 rounded-xl border-2 border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all font-semibold"
+                    className="w-full sm:w-auto text-sm sm:text-base px-6 sm:px-7 py-5 sm:py-6 rounded-xl border-2 border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all font-semibold"
                   >
                     {isRTL ? 'شاهد العرض' : 'See Demo'}
                   </Button>
@@ -785,7 +773,7 @@ export default function LandingPage() {
               </div>
 
               {/* Trust Indicators */}
-              <div className={cn("flex flex-wrap items-center gap-6 pt-2 text-sm text-slate-500 dark:text-slate-400 justify-center", isRTL ? "lg:justify-end flex-row-reverse" : "lg:justify-start")}>
+              <div className={cn("flex flex-wrap items-center gap-3 sm:gap-6 pt-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400 justify-center", isRTL ? "lg:justify-end flex-row-reverse" : "lg:justify-start")}>
                 <div className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
                   <CheckCircle2 className="w-4 h-4 text-green-500" />
                   <span>{isRTL ? 'مجاني للبدء' : 'Free to start'}</span>
@@ -807,7 +795,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
-            className="mt-20 lg:mt-28 relative"
+            className="mt-12 sm:mt-20 lg:mt-28 relative"
           >
             {/* Preview Section Header */}
             <motion.div
@@ -844,10 +832,23 @@ export default function LandingPage() {
               </p>
             </motion.div>
 
-            <div className="overflow-x-auto pb-6 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0">
-              <div className="min-w-[1000px] md:min-w-0">
-                <PlatformPreview />
+            <div className="hidden sm:block">
+              <PlatformPreview />
+            </div>
+            {/* Mobile: Show simplified preview message */}
+            <div className="sm:hidden bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-2xl p-6 text-center">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-[#155DFC] to-[#1248C9] rounded-2xl flex items-center justify-center">
+                <LayoutDashboard className="w-8 h-8 text-white" />
               </div>
+              <h4 className={cn("text-lg font-bold text-slate-900 dark:text-white mb-2", isRTL && "text-arabic")}>
+                {isRTL ? 'لوحة تحكم احترافية' : 'Professional Dashboard'}
+              </h4>
+              <p className={cn("text-sm text-slate-600 dark:text-slate-400 mb-4", isRTL && "text-arabic")}>
+                {isRTL ? 'شاهد المعاينة الكاملة على شاشة أكبر' : 'View full preview on a larger screen'}
+              </p>
+              <Button onClick={handleGetStarted} className="bg-[#155DFC] hover:bg-[#1248C9]">
+                {isRTL ? 'جرب الآن' : 'Try Now'}
+              </Button>
             </div>
           </motion.div>
         </div>
@@ -878,7 +879,7 @@ export default function LandingPage() {
             </h2>
           </motion.div>
           
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {currentStats.map((stat, index) => {
               const Icon = stat.icon
               return (
@@ -891,14 +892,14 @@ export default function LandingPage() {
                   whileHover={{ y: -5 }}
                   className="group"
                 >
-                  <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-slate-100 dark:border-slate-700 text-center">
-                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-[#155DFC] to-[#1248C9] text-white mb-4 shadow-lg group-hover:scale-110 transition-transform">
-                      <Icon className="w-7 h-7" />
+                  <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all border border-slate-100 dark:border-slate-700 text-center">
+                    <div className="inline-flex items-center justify-center w-10 sm:w-14 h-10 sm:h-14 rounded-lg sm:rounded-xl bg-gradient-to-br from-[#155DFC] to-[#1248C9] text-white mb-2 sm:mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                      <Icon className="w-5 sm:w-7 h-5 sm:h-7" />
                     </div>
-                    <h3 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#155DFC] to-[#1248C9] mb-2">
+                    <h3 className="text-2xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#155DFC] to-[#1248C9] mb-1 sm:mb-2">
                       {stat.number}
                     </h3>
-                    <p className="text-slate-600 dark:text-slate-400 font-medium">{stat.label}</p>
+                    <p className="text-xs sm:text-base text-slate-600 dark:text-slate-400 font-medium">{stat.label}</p>
                   </div>
                 </motion.div>
               )
@@ -908,7 +909,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 lg:py-24 px-4 bg-gradient-to-b from-white to-slate-50 dark:from-slate-950 dark:to-slate-900">
+      <section className="py-12 sm:py-16 lg:py-24 px-4 bg-gradient-to-b from-white to-slate-50 dark:from-slate-950 dark:to-slate-900">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -940,7 +941,7 @@ export default function LandingPage() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {currentFeatures.map((feature, index) => {
               const Icon = feature.icon
               return (
@@ -953,7 +954,7 @@ export default function LandingPage() {
                   whileHover={{ y: -8 }}
                   className="group"
                 >
-                  <div className="h-full bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 dark:border-slate-700 relative overflow-hidden">
+                  <div className="h-full bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-5 sm:p-7 shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 dark:border-slate-700 relative overflow-hidden">
                     {/* Hover gradient effect */}
                     <div className={cn(
                       "absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity bg-gradient-to-br",
@@ -962,19 +963,19 @@ export default function LandingPage() {
                     
                     <div className="relative z-10">
                       <div className={cn(
-                        "w-14 h-14 rounded-xl bg-gradient-to-br flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300",
+                        "w-12 sm:w-14 h-12 sm:h-14 rounded-lg sm:rounded-xl bg-gradient-to-br flex items-center justify-center mb-4 sm:mb-5 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300",
                         feature.color
                       )}>
-                        <Icon className="w-7 h-7 text-white" />
+                        <Icon className="w-6 sm:w-7 h-6 sm:h-7 text-white" />
                       </div>
                       <h3 className={cn(
-                        "text-xl font-bold text-slate-900 dark:text-slate-100 mb-3",
+                        "text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100 mb-2 sm:mb-3",
                         isRTL && "text-arabic"
                       )}>
                         {feature.title}
                       </h3>
                       <p className={cn(
-                        "text-slate-600 dark:text-slate-400 leading-relaxed text-sm",
+                        "text-slate-600 dark:text-slate-400 leading-relaxed text-xs sm:text-sm",
                         isRTL && "text-arabic"
                       )}>
                         {feature.description}
@@ -989,7 +990,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-16 lg:py-24 px-4 bg-slate-50 dark:bg-slate-900/50">
+      <section className="py-12 sm:py-16 lg:py-24 px-4 bg-slate-50 dark:bg-slate-900/50">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -1009,7 +1010,7 @@ export default function LandingPage() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
             {currentPlans.map((plan, index) => {
               const Icon = plan.icon
   return (
@@ -1040,20 +1041,20 @@ export default function LandingPage() {
                       ? "border-blue-500 shadow-2xl shadow-blue-500/20 dark:border-blue-400" 
                       : "border-slate-200 dark:border-slate-800 hover:border-blue-300"
                   )}>
-                    <CardContent className="p-8">
+                    <CardContent className="p-5 sm:p-8">
                       <div className={cn(
-                        "w-14 h-14 rounded-xl flex items-center justify-center mb-6 shadow-lg",
+                        "w-12 sm:w-14 h-12 sm:h-14 rounded-lg sm:rounded-xl flex items-center justify-center mb-4 sm:mb-6 shadow-lg",
                         plan.popular 
                           ? "bg-gradient-to-br from-[#155DFC] to-[#1248C9]" 
                           : "bg-gradient-to-br from-slate-600 to-slate-700"
                       )}>
-                        <Icon className="w-7 h-7 text-white" />
+                        <Icon className="w-6 sm:w-7 h-6 sm:h-7 text-white" />
                       </div>
 
-                      <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2 break-words">
+                      <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2 break-words">
                         {plan.name}
                       </h3>
-                      <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 break-words">
+                      <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm mb-4 sm:mb-6 break-words">
                         {plan.description}
                       </p>
 
@@ -1061,36 +1062,36 @@ export default function LandingPage() {
                         {plan.price !== null ? (
                           <>
                             <div className="flex items-baseline gap-2">
-                              <span className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#155DFC] to-[#1248C9]">
+                              <span className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#155DFC] to-[#1248C9]">
                                 ${plan.price}
                               </span>
                               <span className="text-slate-600 dark:text-slate-400 break-words">/{plan.period}</span>
         </div>
                           </>
                         ) : (
-                          <div className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#155DFC] to-[#1248C9]">
+                          <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#155DFC] to-[#1248C9]">
                             {plan.period}
       </div>
                         )}
                       </div>
 
-      <ul className="space-y-3 mb-8">
+      <ul className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
                         {plan.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-start gap-3">
-                            <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
-                            <span className="text-slate-700 dark:text-slate-300 break-words">{feature}</span>
+                          <li key={idx} className="flex items-start gap-2 sm:gap-3">
+                            <CheckCircle2 className="w-4 sm:w-5 h-4 sm:h-5 text-green-600 shrink-0 mt-0.5" />
+                            <span className="text-sm sm:text-base text-slate-700 dark:text-slate-300 break-words">{feature}</span>
           </li>
         ))}
       </ul>
 
       <Button 
                         className={cn(
-                          "w-full py-6 text-lg font-bold rounded-xl",
+                          "w-full py-5 sm:py-6 text-base sm:text-lg font-bold rounded-xl",
                           plan.popular
                             ? "bg-gradient-to-r from-[#155DFC] to-[#1248C9] hover:from-[#1248C9] hover:to-[#0F3AA5] shadow-xl"
                             : "bg-slate-900 hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600"
                         )}
-                        onClick={() => plan.price !== null ? router.push('/signup') : router.push('/contact')}
+                        onClick={() => plan.price !== null ? router.push('/register') : router.push('/contact')}
                       >
                         {plan.cta}
                       </Button>
@@ -1104,7 +1105,7 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 lg:py-24 px-4 relative overflow-hidden">
+      <section className="py-12 sm:py-16 lg:py-24 px-4 relative overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-[#E6F0FF] to-blue-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900" />
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl" />
@@ -1141,7 +1142,7 @@ export default function LandingPage() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {currentTestimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
@@ -1151,32 +1152,32 @@ export default function LandingPage() {
                 transition={{ delay: index * 0.1, duration: 0.5 }}
                 whileHover={{ y: -5 }}
               >
-                <div className="h-full bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-lg hover:shadow-xl transition-all border border-slate-100 dark:border-slate-700">
+                <div className="h-full bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-5 sm:p-7 shadow-lg hover:shadow-xl transition-all border border-slate-100 dark:border-slate-700">
                   {/* Quote icon */}
-                  <div className="text-4xl text-blue-500/20 mb-4">"</div>
+                  <div className="text-3xl sm:text-4xl text-blue-500/20 mb-3 sm:mb-4">"”</div>
                   
-                  <div className="flex gap-1 mb-4">
+                  <div className="flex gap-1 mb-3 sm:mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                      <Star key={i} className="w-4 sm:w-5 h-4 sm:h-5 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
                   
                   <p className={cn(
-                    "text-slate-700 dark:text-slate-300 mb-6 leading-relaxed",
+                    "text-sm sm:text-base text-slate-700 dark:text-slate-300 mb-4 sm:mb-6 leading-relaxed",
                     isRTL && "text-arabic"
                   )}>
                     {testimonial.content}
                   </p>
                   
-                  <div className="flex items-center gap-4 pt-4 border-t border-slate-100 dark:border-slate-700">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#155DFC] to-[#1248C9] flex items-center justify-center text-2xl shadow-lg">
+                  <div className="flex items-center gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-slate-100 dark:border-slate-700">
+                    <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-full bg-gradient-to-br from-[#155DFC] to-[#1248C9] flex items-center justify-center text-xl sm:text-2xl shadow-lg shrink-0">
                       {testimonial.avatar}
                     </div>
-                    <div>
-                      <h4 className="font-bold text-slate-900 dark:text-slate-100">
+                    <div className="min-w-0">
+                      <h4 className="font-bold text-sm sm:text-base text-slate-900 dark:text-slate-100 truncate">
                         {testimonial.name}
                       </h4>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">
+                      <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 truncate">
                         {testimonial.role}
                       </p>
                     </div>
@@ -1189,7 +1190,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 lg:py-28 px-4 relative overflow-hidden">
+      <section className="py-12 sm:py-20 lg:py-28 px-4 relative overflow-hidden">
         {/* Animated gradient background */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#155DFC] via-[#1248C9] to-[#0F3AA5]" />
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIgMS44LTQgNC00czQgMS44IDQgNC0xLjggNC00IDQtNC0xLjgtNC00eiIvPjwvZz48L2c+PC9zdmc+')] opacity-30" />
@@ -1223,44 +1224,44 @@ export default function LandingPage() {
             </motion.div>
             
             <h2 className={cn(
-              "text-3xl sm:text-5xl lg:text-6xl font-display font-black text-white mb-6",
+              "text-2xl sm:text-4xl lg:text-6xl font-display font-black text-white mb-4 sm:mb-6",
               isRTL && "text-arabic"
             )}>
               {isRTL ? 'جاهز لتبدأ رحلتك؟' : 'Ready to Launch?'}
             </h2>
             <p className={cn(
-              "text-xl text-white/90 mb-10 max-w-2xl mx-auto",
+              "text-base sm:text-xl text-white/90 mb-6 sm:mb-10 max-w-2xl mx-auto px-4",
               isRTL && "text-arabic"
             )}>
               {isRTL ? 'انضم إلى آلاف المنظمات التي تثق بـ HackPro' : 'Join thousands of organizations that trust HackPro'}
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   onClick={handleGetStarted}
-                  className="text-lg px-10 py-7 rounded-full bg-white text-blue-600 hover:bg-slate-100 shadow-2xl font-bold"
+                  className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 py-5 sm:py-7 rounded-full bg-white text-blue-600 hover:bg-slate-100 shadow-2xl font-bold"
                 >
-                  <Rocket className={cn("w-5 h-5", isRTL ? "ml-2" : "mr-2")} />
+                  <Rocket className={cn("w-4 sm:w-5 h-4 sm:h-5", isRTL ? "ml-2" : "mr-2")} />
                   {isRTL ? 'ابدأ مجاناً' : 'Start Free'}
                 </Button>
               </motion.div>
               
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   variant="outline"
                   onClick={() => router.push('/contact')}
-                  className="text-lg px-10 py-7 rounded-full border-2 border-white/50 text-white hover:bg-white/10 backdrop-blur-sm"
+                  className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 py-5 sm:py-7 rounded-full border-2 border-white/50 text-white hover:bg-white/10 backdrop-blur-sm"
                 >
-                  <Mail className={cn("w-5 h-5", isRTL ? "ml-2" : "mr-2")} />
+                  <Mail className={cn("w-4 sm:w-5 h-4 sm:h-5", isRTL ? "ml-2" : "mr-2")} />
                   {isRTL ? 'تواصل معنا' : 'Contact Us'}
                 </Button>
               </motion.div>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-6 mt-10 text-white/80 text-sm">
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-6 sm:mt-10 text-white/80 text-xs sm:text-sm">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4" />
                 <span>{isRTL ? 'بدون بطاقة ائتمان' : 'No credit card'}</span>

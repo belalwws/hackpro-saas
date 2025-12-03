@@ -51,6 +51,7 @@ import {
   Mail,
   Sparkles
 } from 'lucide-react'
+import { NotificationBell } from '@/components/notifications'
 import { cn } from '@/lib/utils'
 
 const ListItem = React.forwardRef<
@@ -253,6 +254,9 @@ export function ModernHeader() {
             </Button>
 
             <div className="h-6 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1 hidden sm:block" />
+
+            {/* Notifications Bell - Only for logged in users */}
+            {user && <NotificationBell />}
 
             {loading ? (
               <div className="w-9 h-9 border-2 border-slate-200 dark:border-slate-800 border-t-[#155DFC] dark:border-t-[#155DFC] rounded-full animate-spin" />

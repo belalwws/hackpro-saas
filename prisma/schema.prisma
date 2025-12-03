@@ -1221,6 +1221,102 @@ enum CommentStatus {
   spam
 }
 
+// ========================================
+// NOTIFICATION SYSTEM
+// ========================================
+
+model Notification {
+  id          String             @id @default(cuid())
+  userId      String             // المستخدم المستلم
+  type        NotificationType
+  title       String             // عنوان الإشعار
+  titleAr     String?            // العنوان بالعربي
+  message     String             // محتوى الإشعار
+  messageAr   String?            // المحتوى بالعربي
+  link        String?            // رابط للانتقال عند الضغط
+  icon        String?            // أيقونة مخصصة
+  imageUrl    String?            // صورة مرفقة
+  isRead      Boolean            @default(false)
+  readAt      DateTime?
+  priority    NotificationPriority @default(normal)
+  
+  // Metadata
+  resourceType String?           // hackathon, team, participant, etc.
+  resourceId   String?           // ID of the related resource
+  actionType   String?           // created, updated, deleted, approved, rejected, etc.
+  metadata     Json?             // بيانات إضافية
+  
+  // Expiry
+  expiresAt    DateTime?         // تاريخ انتهاء الإشعار
+  
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([userId])
+  @@index([userId, isRead])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+enum NotificationType {
+  // System
+  system
+  announcement
+  
+  // Hackathon
+  hackathon_created
+  hackathon_updated
+  hackathon_started
+  hackathon_ended
+  hackathon_reminder
+  
+  // Participant
+  registration_received
+  registration_approved
+  registration_rejected
+  
+  // Team
+  team_created
+  team_joined
+  team_left
+  team_updated
+  team_submission
+  
+  // Evaluation
+  evaluation_started
+  evaluation_completed
+  score_received
+  results_announced
+  
+  // Certificate
+  certificate_ready
+  certificate_sent
+  
+  // Judge/Expert
+  judge_assigned
+  expert_assigned
+  evaluation_reminder
+  
+  // Invitation
+  invitation_received
+  invitation_accepted
+  invitation_expired
+  
+  // General
+  message
+  alert
+  success
+  warning
+  error
+}
+
+enum NotificationPriority {
+  low
+  normal
+  high
+  urgent
+}
+
 // OTP Verification model for registration
 model OtpVerification {
   id        String   @id @default(cuid())
