@@ -10,10 +10,10 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import { 
-  Rocket, 
-  Users, 
-  Award, 
+import {
+  Rocket,
+  Users,
+  Award,
   TrendingUp,
   Zap,
   Shield,
@@ -307,117 +307,128 @@ function ScrollStory() {
 
   const steps = {
     ar: [
-    {
-      icon: Rocket,
-      title: 'أنشئ هاكاثونك',
-      description: 'في 3 دقائق فقط، أنشئ هاكاثون احترافي بكل التفاصيل',
-      color: 'from-[#155DFC] to-[#6A7282]',
-      image: '📝',
-      details: ['تحديد التاريخ والمكان', 'إضافة الجوائز', 'تخصيص الشعار']
-    },
-    {
-      icon: Users,
-      title: 'أضف المشاركين',
-      description: 'استيراد جماعي من Excel أو إضافة يدوية سريعة',
-      color: 'from-[#155DFC] to-[#6A7282]',
-      image: '👥',
-      details: ['رفع ملف Excel', 'تسجيل عبر الرابط', 'موافقات تلقائية']
-    },
-    {
-      icon: Users,
-      title: 'كوّن الفرق',
-      description: 'تكوين ذكي للفرق بناءً على المهارات والتفضيلات',
-      color: 'from-green-500 to-emerald-500',
-      image: '🤝',
-      details: ['تكوين تلقائي', 'تكوين يدوي', 'إعادة ترتيب']
-    },
-    {
-      icon: Award,
-      title: 'قيّم المشاريع',
-      description: 'نظام تقييم متعدد المعايير مع حسابات تلقائية',
-      color: 'from-orange-500 to-red-500',
-      image: '⭐',
-      details: ['معايير مخصصة', 'تقييم محكمين', 'نتائج فورية']
-    },
-    {
-      icon: Award,
-      title: 'أعلن النتائج',
-      description: 'شهادات احترافية وإعلان تلقائي للفائزين',
-      color: 'from-yellow-500 to-orange-500',
-      image: '🏆',
-      details: ['شهادات PDF', 'إرسال تلقائي', 'تقارير شاملة']
-    }
+      {
+        icon: Rocket,
+        title: 'أنشئ هاكاثونك',
+        description: 'في 3 دقائق فقط، أنشئ هاكاثون احترافي بكل التفاصيل',
+        color: 'from-blue-600 to-indigo-600',
+        image: '📝',
+        details: ['تحديد التاريخ والمكان', 'إضافة الجوائز', 'تخصيص الشعار']
+      },
+      {
+        icon: Users,
+        title: 'أضف المشاركين',
+        description: 'استيراد جماعي من Excel أو إضافة يدوية سريعة',
+        color: 'from-indigo-600 to-violet-600',
+        image: '👥',
+        details: ['رفع ملف Excel', 'تسجيل عبر الرابط', 'موافقات تلقائية']
+      },
+      {
+        icon: Users,
+        title: 'كوّن الفرق',
+        description: 'تكوين ذكي للفرق بناءً على المهارات والتفضيلات',
+        color: 'from-violet-600 to-purple-600',
+        image: '🤝',
+        details: ['تكوين تلقائي', 'تكوين يدوي', 'إعادة ترتيب']
+      },
+      {
+        icon: Award,
+        title: 'قيّم المشاريع',
+        description: 'نظام تقييم متعدد المعايير مع حسابات تلقائية',
+        color: 'from-purple-600 to-fuchsia-600',
+        image: '⭐',
+        details: ['معايير مخصصة', 'تقييم محكمين', 'نتائج فورية']
+      },
+      {
+        icon: Crown,
+        title: 'أعلن النتائج',
+        description: 'شهادات احترافية وإعلان تلقائي للفائزين',
+        color: 'from-fuchsia-600 to-pink-600',
+        image: '🏆',
+        details: ['شهادات PDF', 'إرسال تلقائي', 'تقارير شاملة']
+      }
     ],
     en: [
-    {
-      icon: Rocket,
-      title: 'Create Your Hackathon',
-      description: 'In just 3 minutes, create a professional hackathon with all details',
-      color: 'from-[#155DFC] to-[#6A7282]',
-      image: '📝',
-      details: ['Set Date & Location', 'Add Prizes', 'Customize Logo']
-    },
-    {
-      icon: Users,
-      title: 'Add Participants',
-      description: 'Bulk import from Excel or quick manual addition',
-      color: 'from-[#155DFC] to-[#6A7282]',
-      image: '👥',
-      details: ['Upload Excel File', 'Register via Link', 'Automatic Approvals']
-    },
-    {
-      icon: Users,
-      title: 'Form Teams',
-      description: 'Smart team formation based on skills and preferences',
-      color: 'from-green-500 to-emerald-500',
-      image: '🤝',
-      details: ['Auto Formation', 'Manual Formation', 'Reorganize']
-    },
-    {
-      icon: Award,
-      title: 'Evaluate Projects',
-      description: 'Multi-criteria evaluation system with automatic calculations',
-      color: 'from-orange-500 to-red-500',
-      image: '⭐',
-      details: ['Custom Criteria', 'Judge Evaluation', 'Instant Results']
-    },
-    {
-      icon: Award,
-      title: 'Announce Results',
-      description: 'Professional certificates and automatic winner announcements',
-      color: 'from-yellow-500 to-orange-500',
-      image: '🏆',
-      details: ['PDF Certificates', 'Automatic Sending', 'Comprehensive Reports']
-    }
-  ]
+      {
+        icon: Rocket,
+        title: 'Create Your Hackathon',
+        description: 'In just 3 minutes, create a professional hackathon with all details',
+        color: 'from-blue-600 to-indigo-600',
+        image: '📝',
+        details: ['Set Date & Location', 'Add Prizes', 'Customize Logo']
+      },
+      {
+        icon: Users,
+        title: 'Add Participants',
+        description: 'Bulk import from Excel or quick manual addition',
+        color: 'from-indigo-600 to-violet-600',
+        image: '👥',
+        details: ['Upload Excel File', 'Register via Link', 'Automatic Approvals']
+      },
+      {
+        icon: Users,
+        title: 'Form Teams',
+        description: 'Smart team formation based on skills and preferences',
+        color: 'from-violet-600 to-purple-600',
+        image: '🤝',
+        details: ['Auto Formation', 'Manual Formation', 'Reorganize']
+      },
+      {
+        icon: Award,
+        title: 'Evaluate Projects',
+        description: 'Multi-criteria evaluation system with automatic calculations',
+        color: 'from-purple-600 to-fuchsia-600',
+        image: '⭐',
+        details: ['Custom Criteria', 'Judge Evaluation', 'Instant Results']
+      },
+      {
+        icon: Crown,
+        title: 'Announce Results',
+        description: 'Professional certificates and automatic winner announcements',
+        color: 'from-fuchsia-600 to-pink-600',
+        image: '🏆',
+        details: ['PDF Certificates', 'Automatic Sending', 'Comprehensive Reports']
+      }
+    ]
   }
-  
+
   const currentSteps = steps[language]
 
   return (
-    <section className="py-16 sm:py-20 lg:py-28 bg-gradient-to-b from-white to-slate-50 dark:from-slate-950 dark:to-slate-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 lg:py-32 bg-slate-50 dark:bg-[#0B1120] relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      <div className="absolute left-0 top-0 w-1/2 h-1/2 bg-blue-500/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={cn("text-center mb-12 lg:mb-16", isRTL && "text-right")}
+          className={cn("text-center mb-16 lg:mb-24", isRTL && "text-right")}
         >
-          <Badge className="mb-4 px-4 py-2 bg-gradient-to-r from-[#155DFC] to-[#6A7282] text-white">
-            <Target className={cn("w-4 h-4", isRTL ? "ml-2" : "mr-2")} />
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-sm font-medium mb-6 border border-blue-100 dark:border-blue-800">
+            <Sparkles className="w-4 h-4" />
             {isRTL ? 'كيف يعمل؟' : 'How It Works?'}
-          </Badge>
+          </div>
+
           <h2 className={cn(
-            "text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-4",
+            "text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white mb-6 tracking-tight",
             isRTL && "text-arabic"
           )}>
-            {isRTL ? 'من الفكرة إلى النتائج في 5 خطوات بسيطة' : 'From Idea to Results in 5 Simple Steps'}
+            {isRTL ? 'من الفكرة إلى النتائج' : 'From Idea to Results'}
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-violet-600 mt-2">
+              {isRTL ? 'في 5 خطوات بسيطة' : 'In 5 Simple Steps'}
+            </span>
           </h2>
         </motion.div>
 
         {/* Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
+          {/* Connecting Line (Desktop) */}
+          <div className="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-800 to-transparent -translate-y-1/2 z-0" />
+
           {currentSteps.map((step, index) => {
             const Icon = step.icon
             return (
@@ -427,31 +438,29 @@ function ScrollStory() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
-                className="group"
+                whileHover={{ y: -8 }}
+                className="group relative z-10"
               >
                 <div className={cn(
-                  "h-full bg-white dark:bg-slate-800 rounded-2xl p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all border border-slate-200 dark:border-slate-700",
+                  "h-full bg-white dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-slate-100 dark:border-slate-800",
                   isRTL && "text-right"
                 )}>
                   {/* Icon and Number */}
-                  <div className={cn("flex items-center gap-3 mb-4", isRTL ? "justify-end" : "justify-start")}>
+                  <div className={cn("flex items-center justify-between mb-8", isRTL && "flex-row-reverse")}>
                     <div className={cn(
-                      "w-14 h-14 rounded-xl bg-gradient-to-br flex items-center justify-center shadow-lg",
+                      "w-16 h-16 rounded-2xl bg-gradient-to-br flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300",
                       step.color
                     )}>
-                      <Icon className="w-7 h-7 text-white" />
+                      <Icon className="w-8 h-8 text-white" />
                     </div>
-                    <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
-                      <span className="text-lg font-bold text-slate-700 dark:text-slate-300">
-                        {index + 1}
-                      </span>
-                    </div>
+                    <span className="text-4xl font-black text-slate-100 dark:text-slate-800 select-none">
+                      0{index + 1}
+                    </span>
                   </div>
 
                   {/* Title */}
                   <h3 className={cn(
-                    "text-xl lg:text-2xl font-bold text-slate-900 dark:text-white mb-3",
+                    "text-2xl font-bold text-slate-900 dark:text-white mb-4",
                     isRTL && "text-arabic"
                   )}>
                     {step.title}
@@ -459,29 +468,29 @@ function ScrollStory() {
 
                   {/* Description */}
                   <p className={cn(
-                    "text-slate-600 dark:text-slate-400 mb-4 leading-relaxed",
+                    "text-slate-600 dark:text-slate-400 mb-6 leading-relaxed",
                     isRTL && "text-arabic"
                   )}>
                     {step.description}
                   </p>
 
                   {/* Details List */}
-                  <ul className="space-y-2">
+                  <div className="space-y-3 pt-6 border-t border-slate-100 dark:border-slate-800">
                     {step.details.map((detail, idx) => (
-                      <li
+                      <div
                         key={idx}
-                        className={cn("flex items-center gap-2", isRTL ? "justify-end flex-row-reverse" : "justify-start")}
+                        className={cn("flex items-center gap-3", isRTL ? "justify-end flex-row-reverse" : "justify-start")}
                       >
-                        <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
+                        <div className={cn("w-1.5 h-1.5 rounded-full bg-gradient-to-r", step.color)} />
                         <span className={cn(
-                          "text-sm text-slate-700 dark:text-slate-300",
+                          "text-sm font-medium text-slate-700 dark:text-slate-300",
                           isRTL && "text-arabic"
                         )}>
                           {detail}
                         </span>
-                      </li>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               </motion.div>
             )
@@ -528,74 +537,62 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
       {/* Hero Section */}
-      <section className="relative pt-16 sm:pt-20 pb-12 sm:pb-20 lg:pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-[auto] lg:min-h-screen flex items-center">
+      <section className="relative pt-20 sm:pt-24 pb-16 sm:pb-24 lg:pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-[auto] lg:min-h-screen flex items-center">
         {/* Enhanced Animated Background */}
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {/* Gradient Mesh Background */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#E6F0FF] via-white to-[#FAF5FF] dark:from-slate-900 dark:via-slate-950 dark:to-slate-950"></div>
-          
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-50 via-white to-indigo-50 dark:from-slate-950 dark:via-[#0B1120] dark:to-slate-950"></div>
+
           {/* Animated Blobs - Enhanced */}
           <motion.div
             animate={{
-              x: [0, 100, 0],
-              y: [0, 50, 0],
+              x: [0, 50, 0],
+              y: [0, 30, 0],
               scale: [1, 1.1, 1],
+              opacity: [0.3, 0.5, 0.3]
             }}
             transition={{
-              duration: 20,
+              duration: 15,
               repeat: Infinity,
               ease: "easeInOut"
             }}
-            className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-[#155DFC]/30 to-[#6A7282]/30 rounded-full blur-3xl"
+            className="absolute -top-20 -right-20 w-[600px] h-[600px] bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-full blur-[100px]"
           />
           <motion.div
             animate={{
-              x: [0, -100, 0],
-              y: [0, -50, 0],
+              x: [0, -50, 0],
+              y: [0, -30, 0],
               scale: [1, 1.2, 1],
+              opacity: [0.3, 0.5, 0.3]
             }}
             transition={{
-              duration: 25,
+              duration: 18,
               repeat: Infinity,
               ease: "easeInOut",
               delay: 2
             }}
-            className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-[#155DFC]/30 to-[#6A7282]/30 rounded-full blur-3xl"
+            className="absolute -bottom-20 -left-20 w-[600px] h-[600px] bg-gradient-to-br from-violet-500/20 to-purple-500/20 rounded-full blur-[100px]"
           />
-          <motion.div
-            animate={{
-              x: [0, 50, 0],
-              y: [0, 100, 0],
-              scale: [1, 1.15, 1],
-            }}
-            transition={{
-              duration: 30,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 4
-            }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-[#155DFC]/30 to-[#6A7282]/30 rounded-full blur-3xl"
-          />
-          
+
           {/* Grid Pattern - Enhanced */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-50"></div>
-          
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+
           {/* Floating particles */}
           {particlePositions.map((particle, i) => (
             <motion.div
               key={i}
-              className="absolute w-2 h-2 bg-[#155DFC]/20 rounded-full"
+              className="absolute w-1 h-1 bg-blue-500/30 rounded-full"
               style={{
                 left: `${particle.left}%`,
                 top: `${particle.top}%`,
               }}
               animate={{
-                y: [0, -30, 0],
-                opacity: [0, 1, 0],
-                scale: [0, 1, 0],
+                y: [0, -40, 0],
+                opacity: [0, 0.8, 0],
+                scale: [0, 1.5, 0],
               }}
               transition={{
-                duration: particle.duration,
+                duration: particle.duration * 2,
                 repeat: Infinity,
                 delay: particle.delay,
               }}
@@ -606,81 +603,100 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto relative z-10">
           {/* Two Column Hero Layout */}
           <div className={cn(
-            "grid lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[auto] lg:min-h-[70vh] py-4 lg:py-16",
+            "grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[auto] lg:min-h-[70vh] py-8 lg:py-16",
             isRTL && "direction-rtl"
           )}>
-            
-            {/* Illustration Side - Shows first on mobile, left on desktop LTR, right on desktop RTL */}
+
+            {/* Illustration Side */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              initial={{ opacity: 0, scale: 0.95, rotate: -2 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, type: "spring" }}
               className={cn(
-                "flex items-center justify-center order-1 lg:order-1",
+                "flex items-center justify-center order-1 lg:order-1 relative",
                 isRTL && "lg:order-2"
               )}
             >
-              <div className="w-full max-w-[280px] sm:max-w-md lg:max-w-lg mx-auto">
+              <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full blur-[80px] transform scale-75" />
+              <div className="w-full max-w-[320px] sm:max-w-md lg:max-w-xl mx-auto relative z-10 drop-shadow-2xl">
                 <LottieHero />
               </div>
             </motion.div>
 
-            {/* Content Side - Shows second on mobile, right on desktop LTR, left on desktop RTL */}
+            {/* Content Side */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
               className={cn(
-                "space-y-7 order-2 lg:order-2 text-center",
+                "space-y-8 order-2 lg:order-2 text-center",
                 isRTL ? "lg:text-right lg:order-1" : "lg:text-left"
               )}
             >
+              {/* Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className={cn("flex justify-center", isRTL ? "lg:justify-end" : "lg:justify-start")}
+              >
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 shadow-sm">
+                  <span className="flex h-2 w-2 relative">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </span>
+                  <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
+                    {isRTL ? 'المنصة رقم 1 لإدارة الهاكاثونات' : '#1 Platform for Hackathon Management'}
+                  </span>
+                </div>
+              </motion.div>
+
               {/* Main Heading */}
               <h1 className={cn(
-                "text-2xl sm:text-4xl lg:text-6xl font-display font-black",
-                isRTL ? "leading-relaxed text-arabic" : "leading-[1.1]"
+                "text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight",
+                isRTL ? "leading-tight text-arabic" : "leading-[1.1]"
               )}>
-                <span className="block text-slate-900 dark:text-white">
+                <span className="block text-slate-900 dark:text-white mb-2">
                   {isRTL ? 'أدر هاكاثوناتك' : 'Manage Your'}
                 </span>
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#155DFC] to-[#1248C9]">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 pb-2">
                   {isRTL ? 'باحترافية' : 'Hackathons'}
                 </span>
-                <span className="block text-slate-900 dark:text-white text-xl sm:text-3xl lg:text-5xl mt-1 sm:mt-2">
+                <span className="block text-slate-900 dark:text-white text-2xl sm:text-4xl lg:text-5xl mt-2 font-bold opacity-90">
                   {isRTL ? 'من البداية للنهاية' : 'Like a Pro'}
                 </span>
               </h1>
 
               {/* Description */}
               <p className={cn(
-                "text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-lg leading-relaxed mx-auto px-2 sm:px-0",
+                "text-lg sm:text-xl text-slate-600 dark:text-slate-400 max-w-xl leading-relaxed mx-auto px-2 sm:px-0",
                 isRTL ? "lg:mr-0 lg:ml-auto" : "lg:ml-0 lg:mr-auto",
                 isRTL && "text-arabic"
               )}>
-                {isRTL 
+                {isRTL
                   ? 'منصة شاملة لإنشاء وإدارة الهاكاثونات، تسجيل المشاركين، تكوين الفرق، والتقييم. كل ما تحتاجه في مكان واحد.'
                   : 'All-in-one platform to create hackathons, manage participants, form teams, and judge projects. Everything you need in one place.'}
               </p>
 
               {/* CTA Buttons */}
-              <div className={cn("flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 justify-center items-center", isRTL ? "lg:justify-end sm:flex-row-reverse" : "lg:justify-start")}>
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} className="w-full sm:w-auto">
+              <div className={cn("flex flex-col sm:flex-row gap-4 pt-4 justify-center items-center", isRTL ? "lg:justify-end sm:flex-row-reverse" : "lg:justify-start")}>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
                   <Button
                     size="lg"
                     onClick={handleGetStarted}
-                    className="w-full sm:w-auto text-sm sm:text-base px-6 sm:px-7 py-5 sm:py-6 rounded-xl bg-[#155DFC] hover:bg-[#1248C9] shadow-lg shadow-blue-500/30 transition-all font-semibold"
+                    className="w-full sm:w-auto h-14 px-8 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-500/25 text-lg font-bold"
                   >
                     {isRTL ? 'ابدأ مجاناً الآن' : 'Get Started Free'}
-                    <Rocket className={cn("w-4 sm:w-5 h-4 sm:h-5", isRTL ? "mr-2" : "ml-2")} />
+                    <Rocket className={cn("w-5 h-5", isRTL ? "mr-2" : "ml-2")} />
                   </Button>
                 </motion.div>
-                
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} className="w-full sm:w-auto">
+
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
                   <Button
                     size="lg"
                     variant="outline"
                     onClick={() => router.push('/pricing')}
-                    className="w-full sm:w-auto text-sm sm:text-base px-6 sm:px-7 py-5 sm:py-6 rounded-xl border-2 border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all font-semibold"
+                    className="w-full sm:w-auto h-14 px-8 rounded-full border-2 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-lg font-semibold text-slate-700 dark:text-slate-200"
                   >
                     {isRTL ? 'شاهد العرض' : 'See Demo'}
                   </Button>
@@ -688,17 +704,17 @@ export default function LandingPage() {
               </div>
 
               {/* Trust Indicators */}
-              <div className={cn("flex flex-wrap items-center gap-3 sm:gap-6 pt-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400 justify-center", isRTL ? "lg:justify-end flex-row-reverse" : "lg:justify-start")}>
+              <div className={cn("flex flex-wrap items-center gap-6 pt-4 text-sm font-medium text-slate-500 dark:text-slate-400 justify-center", isRTL ? "lg:justify-end flex-row-reverse" : "lg:justify-start")}>
                 <div className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
-                  <CheckCircle2 className="w-4 h-4 text-green-500" />
+                  <div className="w-2 h-2 rounded-full bg-green-500" />
                   <span>{isRTL ? 'مجاني للبدء' : 'Free to start'}</span>
                 </div>
                 <div className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
-                  <Clock className="w-4 h-4 text-blue-500" />
+                  <div className="w-2 h-2 rounded-full bg-blue-500" />
                   <span>{isRTL ? 'إعداد سريع' : 'Quick setup'}</span>
                 </div>
                 <div className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
-                  <Shield className="w-4 h-4 text-[#155DFC]" />
+                  <div className="w-2 h-2 rounded-full bg-indigo-500" />
                   <span>{isRTL ? 'آمن 100%' : '100% Secure'}</span>
                 </div>
               </div>
@@ -706,7 +722,7 @@ export default function LandingPage() {
           </div>
 
           {/* Platform Preview */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
@@ -741,7 +757,7 @@ export default function LandingPage() {
                 "text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto",
                 isRTL && "text-arabic"
               )}>
-                {isRTL 
+                {isRTL
                   ? 'استكشف لوحة التحكم الاحترافية'
                   : 'Explore the professional dashboard'}
               </p>
@@ -773,48 +789,37 @@ export default function LandingPage() {
       <ScrollStory />
 
       {/* Stats Section */}
-      <section className="py-12 lg:py-20 px-4 relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-950" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#155DFC]/5 rounded-full blur-3xl" />
-        
+      <section className="py-20 lg:py-32 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-slate-50 dark:bg-[#0B1120]" />
+
         <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className={cn(
-              "text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white",
-              isRTL && "text-arabic"
-            )}>
-              {isRTL ? 'أرقام تتحدث عنا' : 'Numbers That Speak'}
-            </h2>
-          </motion.div>
-          
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
             {currentStats.map((stat, index) => {
               const Icon = stat.icon
               return (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  whileHover={{ y: -5 }}
+                  transition={{ delay: index * 0.1 }}
                   className="group"
                 >
-                  <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all border border-slate-100 dark:border-slate-700 text-center">
-                    <div className="inline-flex items-center justify-center w-10 sm:w-14 h-10 sm:h-14 rounded-lg sm:rounded-xl bg-gradient-to-br from-[#155DFC] to-[#1248C9] text-white mb-2 sm:mb-4 shadow-lg group-hover:scale-110 transition-transform">
-                      <Icon className="w-5 sm:w-7 h-5 sm:h-7" />
+                  <div className="relative overflow-hidden bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-100 dark:border-slate-800 hover:border-blue-500/20 dark:hover:border-blue-500/20 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/5">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110" />
+
+                    <div className="relative z-10">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <Icon className="w-6 h-6" />
+                      </div>
+
+                      <h3 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">
+                        {stat.number}
+                      </h3>
+                      <p className="text-sm sm:text-base font-medium text-slate-500 dark:text-slate-400">
+                        {stat.label}
+                      </p>
                     </div>
-                    <h3 className="text-2xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#155DFC] to-[#1248C9] mb-1 sm:mb-2">
-                      {stat.number}
-                    </h3>
-                    <p className="text-xs sm:text-base text-slate-600 dark:text-slate-400 font-medium">{stat.label}</p>
                   </div>
                 </motion.div>
               )
@@ -824,35 +829,30 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-12 sm:py-16 lg:py-24 px-4 bg-gradient-to-b from-white to-slate-50 dark:from-slate-950 dark:to-slate-900">
+      <section className="py-24 lg:py-32 px-4 bg-white dark:bg-[#0B1120] relative">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-20"
           >
-            <motion.div
-              initial={{ scale: 0.9 }}
-              whileInView={{ scale: 1 }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-100 dark:bg-blue-900/50 rounded-full mb-6"
-            >
-              <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              <span className="text-blue-700 dark:text-blue-300 font-semibold">
-                {isRTL ? 'المميزات' : 'Features'}
-              </span>
-            </motion.div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-50 dark:bg-violet-900/20 text-violet-600 dark:text-violet-400 text-sm font-medium mb-6 border border-violet-100 dark:border-violet-800">
+              <Zap className="w-4 h-4" />
+              {isRTL ? 'المميزات' : 'Features'}
+            </div>
+
             <h2 className={cn(
-              "text-3xl sm:text-5xl font-display font-black text-slate-900 dark:text-slate-100 mb-4",
-              isRTL && "text-arabic leading-relaxed"
-            )}>
-              {isRTL ? 'كل ما تحتاجه لنجاح هاكاثونك' : 'Everything You Need'}
-            </h2>
-            <p className={cn(
-              "text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto",
+              "text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white mb-6",
               isRTL && "text-arabic"
             )}>
-              {isRTL ? 'مميزات قوية تجعل إدارة الهاكاثونات أسهل' : 'Powerful features that make hackathon management effortless'}
+              {isRTL ? 'كل ما تحتاجه للنجاح' : 'Everything You Need'}
+            </h2>
+            <p className={cn(
+              "text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed",
+              isRTL && "text-arabic"
+            )}>
+              {isRTL ? 'أدوات احترافية صممت خصيصاً لإدارة الهاكاثونات بكفاءة عالية' : 'Professional tools designed specifically for efficient hackathon management'}
             </p>
           </motion.div>
 
@@ -862,35 +862,35 @@ export default function LandingPage() {
               return (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.08, duration: 0.5 }}
-                  whileHover={{ y: -8 }}
+                  transition={{ delay: index * 0.1 }}
                   className="group"
                 >
-                  <div className="h-full bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-5 sm:p-7 shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 dark:border-slate-700 relative overflow-hidden">
-                    {/* Hover gradient effect */}
+                  <div className="h-full bg-slate-50 dark:bg-slate-900/50 rounded-3xl p-8 transition-all duration-300 hover:bg-white dark:hover:bg-slate-800 hover:shadow-2xl hover:shadow-blue-500/10 border border-slate-100 dark:border-slate-800 relative overflow-hidden">
                     <div className={cn(
-                      "absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity bg-gradient-to-br",
+                      "absolute top-0 right-0 w-32 h-32 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-bl-full",
                       feature.color
                     )} />
-                    
+
                     <div className="relative z-10">
                       <div className={cn(
-                        "w-12 sm:w-14 h-12 sm:h-14 rounded-lg sm:rounded-xl bg-gradient-to-br flex items-center justify-center mb-4 sm:mb-5 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300",
+                        "w-14 h-14 rounded-2xl bg-gradient-to-br flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300",
                         feature.color
                       )}>
-                        <Icon className="w-6 sm:w-7 h-6 sm:h-7 text-white" />
+                        <Icon className="w-7 h-7 text-white" />
                       </div>
+
                       <h3 className={cn(
-                        "text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100 mb-2 sm:mb-3",
+                        "text-xl font-bold text-slate-900 dark:text-white mb-3",
                         isRTL && "text-arabic"
                       )}>
                         {feature.title}
                       </h3>
+
                       <p className={cn(
-                        "text-slate-600 dark:text-slate-400 leading-relaxed text-xs sm:text-sm",
+                        "text-slate-600 dark:text-slate-400 leading-relaxed",
                         isRTL && "text-arabic"
                       )}>
                         {feature.description}
@@ -905,113 +905,131 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-12 sm:py-16 lg:py-24 px-4 bg-slate-50 dark:bg-slate-900/50">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-24 lg:py-32 px-4 bg-slate-50 dark:bg-[#0B1120] relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-500/5 via-transparent to-transparent" />
+
+        <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-20"
           >
-            <Badge className="mb-4 px-4 py-2 bg-[#E6F0FF] text-[#155DFC] dark:bg-[#155DFC]/20 dark:text-[#E6F0FF]">
-              <TrendingUp className={cn("w-4 h-4", isRTL ? "ml-2" : "mr-2")} />
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-sm font-medium mb-6 border border-blue-100 dark:border-blue-800">
+              <TrendingUp className="w-4 h-4" />
               {isRTL ? 'الأسعار' : 'Pricing'}
-            </Badge>
-            <h2 className="text-3xl sm:text-5xl font-display font-black text-slate-900 dark:text-slate-100 mb-4 break-words">
-              {isRTL ? 'خطط مرنة تناسب احتياجاتك' : 'Flexible Plans to Fit Your Needs'}
+            </div>
+
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white mb-6">
+              {isRTL ? 'خطط مرنة تناسب الجميع' : 'Flexible Plans for Everyone'}
             </h2>
-            <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto break-words">
-              {isRTL ? 'ابدأ مجاناً وقم بالترقية عندما تحتاج' : 'Start free and upgrade when you need'}
+            <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+              {isRTL ? 'ابدأ مجاناً وقم بالترقية عندما ينمو هاكاثونك' : 'Start free and upgrade as your hackathon grows'}
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto items-start">
             {currentPlans.map((plan, index) => {
               const Icon = plan.icon
-  return (
+              return (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: plan.popular ? 1.05 : 1.02 }}
+                  whileHover={{ y: -8 }}
                   className={cn(
-                    "relative",
-                    plan.popular && "md:-mt-4 md:mb-4"
+                    "relative group",
+                    plan.popular && "md:-mt-8 md:mb-8 z-10"
                   )}
                 >
-                  {plan.popular && (
-                    <div className="absolute -top-5 left-0 right-0 flex justify-center">
-                      <Badge className="px-6 py-2 bg-gradient-to-r from-[#155DFC] to-[#1248C9] text-white shadow-lg">
-                        <Star className={cn("w-4 h-4", isRTL ? "ml-2" : "mr-2")} />
-                        {isRTL ? 'الأكثر شعبية' : 'Most Popular'}
-          </Badge>
-        </div>
-      )}
-                  
-                  <Card className={cn(
-                    "h-full border-2 transition-all duration-300",
-                    plan.popular 
-                      ? "border-blue-500 shadow-2xl shadow-blue-500/20 dark:border-blue-400" 
-                      : "border-slate-200 dark:border-slate-800 hover:border-blue-300"
+                  <div className={cn(
+                    "h-full rounded-3xl p-8 transition-all duration-300 border relative overflow-hidden",
+                    plan.popular
+                      ? "bg-slate-900 text-white shadow-2xl shadow-blue-500/20 border-blue-500/50"
+                      : "bg-white dark:bg-slate-900/50 shadow-xl border-slate-100 dark:border-slate-800 hover:border-blue-500/20"
                   )}>
-                    <CardContent className="p-5 sm:p-8">
-                      <div className={cn(
-                        "w-12 sm:w-14 h-12 sm:h-14 rounded-lg sm:rounded-xl flex items-center justify-center mb-4 sm:mb-6 shadow-lg",
-                        plan.popular 
-                          ? "bg-gradient-to-br from-[#155DFC] to-[#1248C9]" 
-                          : "bg-gradient-to-br from-slate-600 to-slate-700"
-                      )}>
-                        <Icon className="w-6 sm:w-7 h-6 sm:h-7 text-white" />
-                      </div>
+                    {plan.popular && (
+                      <div className="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500" />
+                    )}
 
-                      <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2 break-words">
-                        {plan.name}
-                      </h3>
-                      <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm mb-4 sm:mb-6 break-words">
-                        {plan.description}
-                      </p>
+                    <div className={cn(
+                      "w-14 h-14 rounded-2xl flex items-center justify-center mb-8 shadow-lg",
+                      plan.popular
+                        ? "bg-gradient-to-br from-blue-600 to-indigo-600 text-white"
+                        : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"
+                    )}>
+                      <Icon className="w-7 h-7" />
+                    </div>
 
-      <div className="mb-6">
-                        {plan.price !== null ? (
-                          <>
-                            <div className="flex items-baseline gap-2">
-                              <span className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#155DFC] to-[#1248C9]">
-                                ${plan.price}
-                              </span>
-                              <span className="text-slate-600 dark:text-slate-400 break-words">/{plan.period}</span>
-        </div>
-                          </>
-                        ) : (
-                          <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#155DFC] to-[#1248C9]">
-                            {plan.period}
-      </div>
-                        )}
-                      </div>
+                    <h3 className={cn(
+                      "text-2xl font-bold mb-2",
+                      plan.popular ? "text-white" : "text-slate-900 dark:text-white"
+                    )}>
+                      {plan.name}
+                    </h3>
+                    <p className={cn(
+                      "text-sm mb-8",
+                      plan.popular ? "text-slate-400" : "text-slate-500 dark:text-slate-400"
+                    )}>
+                      {plan.description}
+                    </p>
 
-      <ul className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
-                        {plan.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-start gap-2 sm:gap-3">
-                            <CheckCircle2 className="w-4 sm:w-5 h-4 sm:h-5 text-green-600 shrink-0 mt-0.5" />
-                            <span className="text-sm sm:text-base text-slate-700 dark:text-slate-300 break-words">{feature}</span>
-          </li>
-        ))}
-      </ul>
+                    <div className="mb-8">
+                      {plan.price !== null ? (
+                        <div className="flex items-baseline gap-1">
+                          <span className={cn(
+                            "text-5xl font-black tracking-tight",
+                            plan.popular ? "text-white" : "text-slate-900 dark:text-white"
+                          )}>
+                            ${plan.price}
+                          </span>
+                          <span className={cn(
+                            "text-lg font-medium",
+                            plan.popular ? "text-slate-400" : "text-slate-500 dark:text-slate-400"
+                          )}>/{plan.period}</span>
+                        </div>
+                      ) : (
+                        <div className={cn(
+                          "text-4xl font-black tracking-tight",
+                          plan.popular ? "text-white" : "text-slate-900 dark:text-white"
+                        )}>
+                          {plan.period}
+                        </div>
+                      )}
+                    </div>
 
-      <Button 
-                        className={cn(
-                          "w-full py-5 sm:py-6 text-base sm:text-lg font-bold rounded-xl",
-                          plan.popular
-                            ? "bg-gradient-to-r from-[#155DFC] to-[#1248C9] hover:from-[#1248C9] hover:to-[#0F3AA5] shadow-xl"
-                            : "bg-slate-900 hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600"
-                        )}
-                        onClick={() => plan.price !== null ? router.push('/register') : router.push('/contact')}
-                      >
-                        {plan.cta}
-                      </Button>
-                    </CardContent>
-                  </Card>
+                    <ul className="space-y-4 mb-8">
+                      {plan.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-start gap-3">
+                          <div className={cn(
+                            "w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5",
+                            plan.popular ? "bg-blue-500/20 text-blue-400" : "bg-green-500/10 text-green-500"
+                          )}>
+                            <CheckCircle2 className="w-3 h-3" />
+                          </div>
+                          <span className={cn(
+                            "text-sm font-medium",
+                            plan.popular ? "text-slate-300" : "text-slate-600 dark:text-slate-300"
+                          )}>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <Button
+                      className={cn(
+                        "w-full h-14 rounded-xl text-base font-bold transition-all duration-300",
+                        plan.popular
+                          ? "bg-white text-slate-900 hover:bg-slate-100"
+                          : "bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100"
+                      )}
+                      onClick={() => plan.price !== null ? router.push('/register') : router.push('/contact')}
+                    >
+                      {plan.cta}
+                    </Button>
+                  </div>
                 </motion.div>
               )
             })}
@@ -1020,79 +1038,68 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-12 sm:py-16 lg:py-24 px-4 relative overflow-hidden">
-        {/* Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-[#E6F0FF] to-blue-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900" />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-[#155DFC]/10 rounded-full blur-3xl" />
-        
+      <section className="py-24 lg:py-32 px-4 relative overflow-hidden bg-slate-50 dark:bg-[#0B1120]">
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-20"
           >
-            <motion.div
-              initial={{ scale: 0.9 }}
-              whileInView={{ scale: 1 }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-100 dark:bg-green-900/50 rounded-full mb-6"
-            >
-              <Heart className="w-5 h-5 text-green-600 dark:text-green-400" />
-              <span className="text-green-700 dark:text-green-300 font-semibold">
-                {isRTL ? 'آراء العملاء' : 'Testimonials'}
-              </span>
-            </motion.div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-sm font-medium mb-6 border border-green-100 dark:border-green-800">
+              <Heart className="w-4 h-4" />
+              {isRTL ? 'آراء العملاء' : 'Testimonials'}
+            </div>
+
             <h2 className={cn(
-              "text-3xl sm:text-5xl font-display font-black text-slate-900 dark:text-slate-100 mb-4",
+              "text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white mb-6",
               isRTL && "text-arabic"
             )}>
-              {isRTL ? 'ماذا يقول عملاؤنا' : 'What Our Customers Say'}
+              {isRTL ? 'قصص نجاح حقيقية' : 'Real Success Stories'}
             </h2>
             <p className={cn(
               "text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto",
               isRTL && "text-arabic"
             )}>
-              {isRTL ? 'آلاف العملاء يثقون بنا' : 'Trusted by thousands of happy customers'}
+              {isRTL ? 'انضم إلى آلاف المنظمات التي تثق بنا' : 'Join thousands of organizations that trust us'}
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {currentTestimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                whileHover={{ y: -5 }}
+                transition={{ delay: index * 0.1 }}
+                className="group"
               >
-                <div className="h-full bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-5 sm:p-7 shadow-lg hover:shadow-xl transition-all border border-slate-100 dark:border-slate-700">
-                  {/* Quote icon */}
-                  <div className="text-3xl sm:text-4xl text-blue-500/20 mb-3 sm:mb-4">"”</div>
-                  
-                  <div className="flex gap-1 mb-3 sm:mb-4">
+                <div className="h-full bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-slate-100 dark:border-slate-800 relative">
+                  <div className="absolute top-8 right-8 text-6xl text-slate-100 dark:text-slate-800 font-serif opacity-50">"</div>
+
+                  <div className="flex gap-1 mb-6">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 sm:w-5 h-4 sm:h-5 fill-yellow-400 text-yellow-400" />
+                      <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
-                  
+
                   <p className={cn(
-                    "text-sm sm:text-base text-slate-700 dark:text-slate-300 mb-4 sm:mb-6 leading-relaxed",
+                    "text-lg text-slate-600 dark:text-slate-300 mb-8 leading-relaxed relative z-10",
                     isRTL && "text-arabic"
                   )}>
                     {testimonial.content}
                   </p>
-                  
-                  <div className="flex items-center gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-slate-100 dark:border-slate-700">
-                    <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-full bg-gradient-to-br from-[#155DFC] to-[#1248C9] flex items-center justify-center text-xl sm:text-2xl shadow-lg shrink-0">
+
+                  <div className="flex items-center gap-4 pt-6 border-t border-slate-100 dark:border-slate-800">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-xl text-white shadow-lg">
                       {testimonial.avatar}
                     </div>
-                    <div className="min-w-0">
-                      <h4 className="font-bold text-sm sm:text-base text-slate-900 dark:text-slate-100 truncate">
+                    <div>
+                      <h4 className="font-bold text-slate-900 dark:text-white">
                         {testimonial.name}
                       </h4>
-                      <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 truncate">
+                      <p className="text-sm text-slate-500 dark:text-slate-400">
                         {testimonial.role}
                       </p>
                     </div>
@@ -1105,23 +1112,12 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-20 lg:py-28 px-4 relative overflow-hidden">
-        {/* Animated gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#155DFC] via-[#1248C9] to-[#0F3AA5]" />
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIgMS44LTQgNC00czQgMS44IDQgNC0xLjggNC00IDQtNC0xLjgtNC00eiIvPjwvZz48L2c+PC9zdmc+')] opacity-30" />
-        
-        {/* Floating shapes */}
-        <motion.div 
-          animate={{ y: [-20, 20, -20], rotate: [0, 10, 0] }}
-          transition={{ duration: 8, repeat: Infinity }}
-          className="absolute top-20 left-20 w-32 h-32 bg-white/10 rounded-full blur-2xl"
-        />
-        <motion.div 
-          animate={{ y: [20, -20, 20], rotate: [0, -10, 0] }}
-          transition={{ duration: 10, repeat: Infinity }}
-          className="absolute bottom-20 right-20 w-40 h-40 bg-white/10 rounded-full blur-2xl"
-        />
-        
+      <section className="py-24 lg:py-32 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-slate-900 dark:bg-[#0B1120]">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/40 via-slate-900 to-slate-900" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+        </div>
+
         <div className="max-w-4xl mx-auto relative z-10 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -1129,64 +1125,55 @@ export default function LandingPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <motion.div
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              transition={{ delay: 0.2, type: "spring" }}
-              className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-8 backdrop-blur-sm"
-            >
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-600 rounded-3xl mb-8 shadow-2xl shadow-blue-500/30 rotate-3">
               <Rocket className="w-10 h-10 text-white" />
-            </motion.div>
-            
-            <h2 className={cn(
-              "text-2xl sm:text-4xl lg:text-6xl font-display font-black text-white mb-4 sm:mb-6",
-              isRTL && "text-arabic"
-            )}>
-              {isRTL ? 'جاهز لتبدأ رحلتك؟' : 'Ready to Launch?'}
-            </h2>
-            <p className={cn(
-              "text-base sm:text-xl text-white/90 mb-6 sm:mb-10 max-w-2xl mx-auto px-4",
-              isRTL && "text-arabic"
-            )}>
-              {isRTL ? 'انضم إلى آلاف المنظمات التي تثق بـ HackPro' : 'Join thousands of organizations that trust HackPro'}
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  onClick={handleGetStarted}
-                  className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 py-5 sm:py-7 rounded-full bg-white text-blue-600 hover:bg-slate-100 shadow-2xl font-bold"
-                >
-                  <Rocket className={cn("w-4 sm:w-5 h-4 sm:h-5", isRTL ? "ml-2" : "mr-2")} />
-                  {isRTL ? 'ابدأ مجاناً' : 'Start Free'}
-                </Button>
-              </motion.div>
-              
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  onClick={() => router.push('/contact')}
-                  className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 py-5 sm:py-7 rounded-full border-2 border-white/50 text-white hover:bg-white/10 backdrop-blur-sm"
-                >
-                  <Mail className={cn("w-4 sm:w-5 h-4 sm:h-5", isRTL ? "ml-2" : "mr-2")} />
-                  {isRTL ? 'تواصل معنا' : 'Contact Us'}
-                </Button>
-              </motion.div>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-6 sm:mt-10 text-white/80 text-xs sm:text-sm">
+            <h2 className={cn(
+              "text-4xl sm:text-5xl lg:text-7xl font-black text-white mb-8 tracking-tight",
+              isRTL && "text-arabic"
+            )}>
+              {isRTL ? 'جاهز لإطلاق هاكاثونك؟' : 'Ready to Launch?'}
+            </h2>
+            <p className={cn(
+              "text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed",
+              isRTL && "text-arabic"
+            )}>
+              {isRTL ? 'انضم إلى آلاف المنظمات التي تثق بـ HackPro لإدارة فعالياتها التقنية' : 'Join thousands of organizations that trust HackPro for their tech events'}
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button
+                size="lg"
+                onClick={handleGetStarted}
+                className="w-full sm:w-auto h-16 px-10 rounded-full bg-white text-slate-900 hover:bg-slate-100 text-lg font-bold shadow-2xl hover:scale-105 transition-all duration-300"
+              >
+                <Rocket className={cn("w-5 h-5", isRTL ? "ml-2" : "mr-2")} />
+                {isRTL ? 'ابدأ مجاناً' : 'Start Free'}
+              </Button>
+
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => router.push('/contact')}
+                className="w-full sm:w-auto h-16 px-10 rounded-full border-2 border-slate-700 text-white hover:bg-slate-800 text-lg font-bold hover:scale-105 transition-all duration-300"
+              >
+                <Mail className={cn("w-5 h-5", isRTL ? "ml-2" : "mr-2")} />
+                {isRTL ? 'تواصل معنا' : 'Contact Us'}
+              </Button>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-8 mt-12 text-slate-400 text-sm font-medium">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4" />
-                <span>{isRTL ? 'بدون بطاقة ائتمان' : 'No credit card'}</span>
+                <CheckCircle2 className="w-5 h-5 text-green-500" />
+                <span>{isRTL ? 'بدون بطاقة ائتمان' : 'No credit card required'}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Zap className="w-4 h-4" />
+                <Zap className="w-5 h-5 text-yellow-500" />
                 <span>{isRTL ? 'إعداد فوري' : 'Instant setup'}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Heart className="w-4 h-4" />
+                <Heart className="w-5 h-5 text-red-500" />
                 <span>{isRTL ? 'دعم مجاني' : 'Free support'}</span>
               </div>
             </div>
@@ -1195,25 +1182,25 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 dark:bg-slate-950 text-slate-300 border-t border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <footer className="bg-white dark:bg-[#0B1120] border-t border-slate-100 dark:border-slate-800 pt-20 pb-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             {/* Brand */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-[#155DFC] to-[#1248C9] rounded-xl flex items-center justify-center shadow-lg">
+            <div className="space-y-6">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
                   <Rocket className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-[#155DFC] to-[#1248C9] bg-clip-text text-transparent">
+                <span className="text-2xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                   HackPro
                 </span>
               </div>
               <p className={cn(
-                "text-sm text-slate-400 leading-relaxed",
+                "text-slate-500 dark:text-slate-400 leading-relaxed",
                 isRTL && "text-arabic"
               )}>
-                {isRTL 
-                  ? 'منصة احترافية لإدارة الهاكاثونات والمسابقات التقنية' 
+                {isRTL
+                  ? 'منصة احترافية لإدارة الهاكاثونات والمسابقات التقنية'
                   : 'Professional platform for managing hackathons and tech competitions'}
               </p>
             </div>
@@ -1221,15 +1208,15 @@ export default function LandingPage() {
             {/* Product */}
             <div>
               <h4 className={cn(
-                "text-white font-semibold mb-4",
+                "font-bold text-slate-900 dark:text-white mb-6",
                 isRTL && "text-arabic"
               )}>
                 {isRTL ? 'المنتج' : 'Product'}
               </h4>
-              <ul className="space-y-2">
+              <ul className="space-y-4">
                 <li>
                   <Link href="/features" className={cn(
-                    "text-slate-400 hover:text-white transition-colors text-sm",
+                    "text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 transition-colors",
                     isRTL && "text-arabic"
                   )}>
                     {isRTL ? 'المميزات' : 'Features'}
@@ -1237,7 +1224,7 @@ export default function LandingPage() {
                 </li>
                 <li>
                   <Link href="/pricing" className={cn(
-                    "text-slate-400 hover:text-white transition-colors text-sm",
+                    "text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 transition-colors",
                     isRTL && "text-arabic"
                   )}>
                     {isRTL ? 'الأسعار' : 'Pricing'}
@@ -1245,18 +1232,10 @@ export default function LandingPage() {
                 </li>
                 <li>
                   <Link href="/hackathons" className={cn(
-                    "text-slate-400 hover:text-white transition-colors text-sm",
+                    "text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 transition-colors",
                     isRTL && "text-arabic"
                   )}>
                     {isRTL ? 'الهاكاثونات' : 'Hackathons'}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/blog" className={cn(
-                    "text-slate-400 hover:text-white transition-colors text-sm",
-                    isRTL && "text-arabic"
-                  )}>
-                    {isRTL ? 'المدونة' : 'Blog'}
                   </Link>
                 </li>
               </ul>
@@ -1265,15 +1244,15 @@ export default function LandingPage() {
             {/* Company */}
             <div>
               <h4 className={cn(
-                "text-white font-semibold mb-4",
+                "font-bold text-slate-900 dark:text-white mb-6",
                 isRTL && "text-arabic"
               )}>
                 {isRTL ? 'الشركة' : 'Company'}
               </h4>
-              <ul className="space-y-2">
+              <ul className="space-y-4">
                 <li>
                   <Link href="/about" className={cn(
-                    "text-slate-400 hover:text-white transition-colors text-sm",
+                    "text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 transition-colors",
                     isRTL && "text-arabic"
                   )}>
                     {isRTL ? 'من نحن' : 'About Us'}
@@ -1281,18 +1260,18 @@ export default function LandingPage() {
                 </li>
                 <li>
                   <Link href="/contact" className={cn(
-                    "text-slate-400 hover:text-white transition-colors text-sm",
+                    "text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 transition-colors",
                     isRTL && "text-arabic"
                   )}>
                     {isRTL ? 'تواصل معنا' : 'Contact'}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/features" className={cn(
-                    "text-slate-400 hover:text-white transition-colors text-sm",
+                  <Link href="/blog" className={cn(
+                    "text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 transition-colors",
                     isRTL && "text-arabic"
                   )}>
-                    {isRTL ? 'المميزات' : 'Features'}
+                    {isRTL ? 'المدونة' : 'Blog'}
                   </Link>
                 </li>
               </ul>
@@ -1301,15 +1280,15 @@ export default function LandingPage() {
             {/* Legal */}
             <div>
               <h4 className={cn(
-                "text-white font-semibold mb-4",
+                "font-bold text-slate-900 dark:text-white mb-6",
                 isRTL && "text-arabic"
               )}>
                 {isRTL ? 'قانوني' : 'Legal'}
               </h4>
-              <ul className="space-y-2">
+              <ul className="space-y-4">
                 <li>
                   <Link href="/privacy" className={cn(
-                    "text-slate-400 hover:text-white transition-colors text-sm",
+                    "text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 transition-colors",
                     isRTL && "text-arabic"
                   )}>
                     {isRTL ? 'الخصوصية' : 'Privacy'}
@@ -1317,7 +1296,7 @@ export default function LandingPage() {
                 </li>
                 <li>
                   <Link href="/terms" className={cn(
-                    "text-slate-400 hover:text-white transition-colors text-sm",
+                    "text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 transition-colors",
                     isRTL && "text-arabic"
                   )}>
                     {isRTL ? 'الشروط' : 'Terms'}
@@ -1325,7 +1304,7 @@ export default function LandingPage() {
                 </li>
                 <li>
                   <Link href="/security" className={cn(
-                    "text-slate-400 hover:text-white transition-colors text-sm",
+                    "text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 transition-colors",
                     isRTL && "text-arabic"
                   )}>
                     {isRTL ? 'الأمان' : 'Security'}
@@ -1336,31 +1315,31 @@ export default function LandingPage() {
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-slate-800 pt-8 mt-8">
+          <div className="border-t border-slate-100 dark:border-slate-800 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className={cn(
-                "text-sm text-slate-400 text-center md:text-left",
+                "text-sm text-slate-500 dark:text-slate-400 text-center md:text-left",
                 isRTL && "text-arabic"
               )}>
-                {isRTL 
-                  ? '© 2025 HackPro. جميع الحقوق محفوظة.' 
+                {isRTL
+                  ? '© 2025 HackPro. جميع الحقوق محفوظة.'
                   : '© 2025 HackPro. All rights reserved.'}
               </p>
               <div className="flex items-center gap-6">
-                <a 
-                  href="https://github.com/belalwws/hackpro-saas" 
-                  target="_blank" 
+                <a
+                  href="https://github.com/belalwws/hackpro-saas"
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="text-slate-400 hover:text-white transition-colors"
+                  className="text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   aria-label="GitHub"
                 >
                   <Code className="w-5 h-5" />
                 </a>
-                <a 
-                  href="https://twitter.com" 
-                  target="_blank" 
+                <a
+                  href="https://twitter.com"
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="text-slate-400 hover:text-white transition-colors"
+                  className="text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   aria-label="Twitter"
                 >
                   <Globe className="w-5 h-5" />
