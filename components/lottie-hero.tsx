@@ -107,7 +107,7 @@ export function LottieHero() {
               <span className="text-sm opacity-90">هاكاثون نشط</span>
               <span className="px-2 py-0.5 bg-white/20 rounded-full text-xs">مباشر</span>
             </div>
-            <div className="font-bold mb-2">هاكاثون الابتكار 2024</div>
+            <div className="font-bold mb-2">HackPro</div>
             <div className="flex items-center gap-4 text-sm opacity-90">
               <div className="flex items-center gap-1">
                 <Users className="w-3 h-3" /> 234

@@ -4,7 +4,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 
 export default function Hackathon3DText() {
-  const arabicText = "هاكاثون الابتكار التقني"
+  const arabicText = "HackPro"
 
   return (
     <motion.div
@@ -81,7 +81,7 @@ export default function Hackathon3DText() {
           className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap"
         >
           <div className="text-lg md:text-xl font-semibold text-[#8b7632] tracking-widest">
-            الابتكار التقني
+            HackPro SaaS
           </div>
           
           {/* Underline animation */}

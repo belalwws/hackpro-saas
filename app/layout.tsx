@@ -16,7 +16,7 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export const metadata: Metadata = {
-  title: "هاكاثون الابتكار التقني",
+  title: "المنصة الجديدة",
   description: "منصة متكاملة لإدارة وتنظيم الهاكاثونات التقنية",
   generator: "v0.app",
 }
