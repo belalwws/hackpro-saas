@@ -532,10 +532,10 @@ export default function RegisterPage() {
                           slugStatus.available === null && !slugStatus.checking && "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800"
                         )}>
                           {slugStatus.checking ? (
-                            <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">
+                            <div className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">
                               <Loader variant="spinner" size="xs" variantColor="gray" />
                               {slugStatus.message}
-                            </p>
+                            </div>
                           ) : (
                             <p className={cn(
                               "text-sm font-medium",

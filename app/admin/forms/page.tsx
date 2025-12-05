@@ -68,17 +68,17 @@ export default function FormsManagement() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50/50 to-blue-100/50 dark:from-slate-900 dark:to-slate-800">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#01645e] mx-auto mb-4"></div>
-          <p className="text-[#01645e] font-semibold">جاري تحميل الفورمات...</p>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 dark:border-blue-400 mx-auto mb-4"></div>
+          <p className="text-blue-600 dark:text-blue-400 font-semibold">جاري تحميل الفورمات...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#c3e956]/10 to-[#3ab666]/10 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/50 via-indigo-50/30 to-blue-100/50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -86,33 +86,40 @@ export default function FormsManagement() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-4xl font-bold text-[#01645e] mb-2 flex items-center gap-3">
-                <FileText className="w-10 h-10" />
-                إدارة الفورمات
-              </h1>
-              <p className="text-[#8b7632] text-lg">
-                إدارة جميع فورمات الهاكاثون من مكان واحد
-              </p>
+          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-slate-200 dark:border-slate-700 p-6 mb-6 backdrop-blur-sm">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-lg">
+                  <FileText className="w-8 h-8 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1 flex items-center gap-3">
+                    إدارة الفورمات
+                  </h1>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">
+                    إدارة جميع فورمات الهاكاثون من مكان واحد
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Hackathon Selector */}
-          <Card className="bg-white/80 backdrop-blur">
+          <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-md rounded-xl overflow-hidden">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-[#01645e] mb-2">
+                  <label className="block text-sm font-semibold text-blue-600 dark:text-blue-400 mb-3 flex items-center gap-2">
+                    <Calendar className="w-4 h-4" />
                     اختر الهاكاثون
                   </label>
                   <Select value={selectedHackathon} onValueChange={setSelectedHackathon}>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full h-11 dark:bg-slate-700 dark:border-slate-600 hover:border-blue-400 transition-colors">
                       <SelectValue placeholder="اختر هاكاثون" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="dark:bg-slate-700">
                       {hackathons.map((hackathon) => (
-                        <SelectItem key={hackathon.id} value={hackathon.id}>
+                        <SelectItem key={hackathon.id} value={hackathon.id} className="dark:text-slate-200">
                           {hackathon.title}
                         </SelectItem>
                       ))}
@@ -120,8 +127,8 @@ export default function FormsManagement() {
                   </Select>
                 </div>
                 {selectedHackathon && (
-                  <div className="text-sm text-gray-600">
-                    <Badge variant="outline" className="bg-[#c3e956]/20 text-[#8b7632] border-[#c3e956]">
+                  <div className="text-sm pt-8">
+                    <Badge variant="outline" className="bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-700 px-3 py-1.5 font-medium">
                       {hackathons.find(h => h.id === selectedHackathon)?.status}
                     </Badge>
                   </div>
@@ -138,114 +145,115 @@ export default function FormsManagement() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <Tabs defaultValue="judges" className="w-full">
-              <TabsList className="grid w-full grid-cols-5 mb-6">
-                <TabsTrigger value="judges">
-                  <Award className="w-4 h-4 ml-2" />
-                  فورم المحكمين
-                </TabsTrigger>
-                <TabsTrigger value="experts">
-                  <Users className="w-4 h-4 ml-2" />
-                  فورم الخبراء
-                </TabsTrigger>
-                <TabsTrigger value="supervision">
-                  <UserCheck className="w-4 h-4 ml-2" />
-                  فورم الإشراف
-                </TabsTrigger>
-                <TabsTrigger value="feedback">
-                  <MessageSquare className="w-4 h-4 ml-2" />
-                  فورم التقييم
-                </TabsTrigger>
-                <TabsTrigger value="registration">
-                  <Users className="w-4 h-4 ml-2" />
-                  فورم التسجيل
-                </TabsTrigger>
-              </TabsList>
+            <Tabs defaultValue="judges" className="flex gap-6 items-start">
+              {/* Content */}
+              <div className="flex-1 min-w-0">
 
               {/* Judge Forms Tab */}
               <TabsContent value="judges">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {/* Judge Application Form */}
-                  <Card className="hover:shadow-xl transition-shadow border-2 border-orange-200">
-                    <CardHeader className="bg-gradient-to-r from-orange-50 to-yellow-50">
-                      <div className="flex items-center justify-between">
-                        <Award className="w-8 h-8 text-orange-600" />
-                        <Badge className="bg-orange-600 text-white">محكمين</Badge>
-                      </div>
-                      <CardTitle className="text-xl text-orange-900 mt-4">
-                        فورم طلب الانضمام كمحكم
-                      </CardTitle>
-                      <CardDescription>
-                        فورم ديناميكي لاستقبال طلبات المحكمين - أضف الحقول التي تريدها
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-6 space-y-4">
-                      <div className="flex flex-col gap-2">
-                        <Link href={`/admin/judge-form-builder/${selectedHackathon}`}>
-                          <Button className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600">
-                            <Settings className="w-4 h-4 ml-2" />
-                            بناء الفورم
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                  >
+                    <Card className="hover:shadow-2xl transition-all duration-300 border-2 border-blue-200 dark:border-blue-800 bg-white dark:bg-slate-800 rounded-xl overflow-hidden group hover:border-blue-400 dark:hover:border-blue-600">
+                      <CardHeader className="bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-blue-900/20 p-6 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-200/20 dark:bg-blue-500/10 rounded-full -mr-16 -mt-16"></div>
+                        <div className="flex items-center justify-between relative z-10">
+                          <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-lg group-hover:scale-110 transition-transform">
+                            <Award className="w-6 h-6 text-white" />
+                          </div>
+                          <Badge className="bg-blue-600 dark:bg-blue-500 text-white px-3 py-1 font-semibold shadow-md">محكمين</Badge>
+                        </div>
+                        <CardTitle className="text-xl text-blue-900 dark:text-blue-100 mt-6 font-bold relative z-10">
+                          فورم طلب الانضمام كمحكم
+                        </CardTitle>
+                        <CardDescription className="dark:text-slate-300 text-sm leading-relaxed relative z-10">
+                          فورم ديناميكي لاستقبال طلبات المحكمين - أضف الحقول التي تريدها
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="p-6 space-y-3">
+                        <div className="flex flex-col gap-2.5">
+                          <Link href={`/admin/judge-form-builder/${selectedHackathon}`}>
+                            <Button className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 dark:from-blue-600 dark:to-indigo-600 shadow-md hover:shadow-lg transition-all h-10 font-medium">
+                              <Settings className="w-4 h-4 ml-2" />
+                              بناء الفورم
+                            </Button>
+                          </Link>
+                          
+                          <Button
+                            variant="outline"
+                            className="w-full border-blue-500 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-all h-10 font-medium"
+                            onClick={() => window.open(`/judge/apply/${selectedHackathon}`, '_blank')}
+                          >
+                            <ExternalLink className="w-4 h-4 ml-2" />
+                            معاينة الفورم
                           </Button>
-                        </Link>
-                        
-                        <Button
-                          variant="outline"
-                          className="w-full border-orange-500 text-orange-600 hover:bg-orange-50"
-                          onClick={() => window.open(`/judge/apply/${selectedHackathon}`, '_blank')}
-                        >
-                          <ExternalLink className="w-4 h-4 ml-2" />
-                          معاينة الفورم
-                        </Button>
 
-                        <Button
-                          variant="outline"
-                          className="w-full"
-                          onClick={() => copyLink(`${window.location.origin}/judge/apply/${selectedHackathon}`, 'فورم المحكمين')}
-                        >
-                          <Copy className="w-4 h-4 ml-2" />
-                          نسخ الرابط
-                        </Button>
-
-                        <Link href="/admin/judges">
-                          <Button variant="outline" className="w-full border-orange-300">
-                            <Users className="w-4 h-4 ml-2" />
-                            إدارة الطلبات
+                          <Button
+                            variant="outline"
+                            className="w-full dark:border-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all h-10 font-medium"
+                            onClick={() => copyLink(`${window.location.origin}/judge/apply/${selectedHackathon}`, 'فورم المحكمين')}
+                          >
+                            <Copy className="w-4 h-4 ml-2" />
+                            نسخ الرابط
                           </Button>
-                        </Link>
-                      </div>
-                    </CardContent>
-                  </Card>
+
+                          <Link href="/admin/judges">
+                            <Button variant="outline" className="w-full border-blue-300 dark:border-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all h-10 font-medium">
+                              <Users className="w-4 h-4 ml-2" />
+                              إدارة الطلبات
+                            </Button>
+                          </Link>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
 
                   {/* Judge Invitation Form */}
-                  <Card className="hover:shadow-xl transition-shadow border-2 border-blue-200">
-                    <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
-                      <div className="flex items-center justify-between">
-                        <Mail className="w-8 h-8 text-blue-600" />
-                        <Badge className="bg-blue-600 text-white">دعوات</Badge>
-                      </div>
-                      <CardTitle className="text-xl text-blue-900 mt-4">
-                        نظام دعوات المحكمين
-                      </CardTitle>
-                      <CardDescription>
-                        إرسال دعوات مخصصة للمحكمين عبر البريد الإلكتروني
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-6 space-y-4">
-                      <div className="flex flex-col gap-2">
-                        <Link href="/admin/judges">
-                          <Button className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600">
-                            <Mail className="w-4 h-4 ml-2" />
-                            إدارة الدعوات
-                          </Button>
-                        </Link>
-
-                        <div className="bg-blue-50 p-3 rounded-lg text-sm text-blue-800">
-                          <p className="font-medium mb-1">📧 نظام الدعوات</p>
-                          <p className="text-xs">يمكنك إرسال دعوات مخصصة للمحكمين مع روابط تسجيل فريدة</p>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    <Card className="hover:shadow-2xl transition-all duration-300 border-2 border-blue-200 dark:border-blue-800 bg-white dark:bg-slate-800 rounded-xl overflow-hidden group hover:border-blue-400 dark:hover:border-blue-600">
+                      <CardHeader className="bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-blue-900/20 p-6 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-200/20 dark:bg-blue-500/10 rounded-full -mr-16 -mt-16"></div>
+                        <div className="flex items-center justify-between relative z-10">
+                          <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-lg group-hover:scale-110 transition-transform">
+                            <Mail className="w-6 h-6 text-white" />
+                          </div>
+                          <Badge className="bg-blue-600 dark:bg-blue-500 text-white px-3 py-1 font-semibold shadow-md">دعوات</Badge>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                        <CardTitle className="text-xl text-blue-900 dark:text-blue-100 mt-6 font-bold relative z-10">
+                          نظام دعوات المحكمين
+                        </CardTitle>
+                        <CardDescription className="dark:text-slate-300 text-sm leading-relaxed relative z-10">
+                          إرسال دعوات مخصصة للمحكمين عبر البريد الإلكتروني
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="p-6 space-y-3">
+                        <div className="flex flex-col gap-2.5">
+                          <Link href="/admin/judges">
+                            <Button className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 dark:from-blue-600 dark:to-indigo-600 shadow-md hover:shadow-lg transition-all h-10 font-medium">
+                              <Mail className="w-4 h-4 ml-2" />
+                              إدارة الدعوات
+                            </Button>
+                          </Link>
+
+                          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-100 dark:border-blue-800">
+                            <p className="font-semibold mb-2 text-blue-800 dark:text-blue-200 flex items-center gap-2">
+                              <Mail className="w-4 h-4" />
+                              نظام الدعوات
+                            </p>
+                            <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed">يمكنك إرسال دعوات مخصصة للمحكمين مع روابط تسجيل فريدة</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
                 </div>
               </TabsContent>
 
@@ -253,96 +261,120 @@ export default function FormsManagement() {
               <TabsContent value="experts">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {/* Expert Application Form */}
-                  <Card className="hover:shadow-xl transition-shadow border-2 border-cyan-200">
-                    <CardHeader className="bg-gradient-to-r from-cyan-50 to-blue-50">
-                      <div className="flex items-center justify-between">
-                        <Users className="w-8 h-8 text-cyan-600" />
-                        <Badge className="bg-cyan-600 text-white">خبراء</Badge>
-                      </div>
-                      <CardTitle className="text-xl text-cyan-900 mt-4">
-                        فورم طلب الانضمام كخبير
-                      </CardTitle>
-                      <CardDescription>
-                        فورم ديناميكي لاستقبال طلبات الخبراء - أضف الحقول والصور التي تريدها
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-6 space-y-4">
-                      <div className="flex flex-col gap-2">
-                        <Link href={`/admin/expert-form-builder/${selectedHackathon}`}>
-                          <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
-                            <Settings className="w-4 h-4 ml-2" />
-                            بناء الفورم
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                  >
+                    <Card className="hover:shadow-2xl transition-all duration-300 border-2 border-blue-200 dark:border-blue-800 bg-white dark:bg-slate-800 rounded-xl overflow-hidden group hover:border-blue-400 dark:hover:border-blue-600">
+                      <CardHeader className="bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-blue-900/20 p-6 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-200/20 dark:bg-blue-500/10 rounded-full -mr-16 -mt-16"></div>
+                        <div className="flex items-center justify-between relative z-10">
+                          <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-lg group-hover:scale-110 transition-transform">
+                            <Users className="w-6 h-6 text-white" />
+                          </div>
+                          <Badge className="bg-blue-600 dark:bg-blue-500 text-white px-3 py-1 font-semibold shadow-md">خبراء</Badge>
+                        </div>
+                        <CardTitle className="text-xl text-blue-900 dark:text-blue-100 mt-6 font-bold relative z-10">
+                          فورم طلب الانضمام كخبير
+                        </CardTitle>
+                        <CardDescription className="dark:text-slate-300 text-sm leading-relaxed relative z-10">
+                          فورم ديناميكي لاستقبال طلبات الخبراء - أضف الحقول والصور التي تريدها
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="p-6 space-y-3">
+                        <div className="flex flex-col gap-2.5">
+                          <Link href={`/admin/expert-form-builder/${selectedHackathon}`}>
+                            <Button className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 dark:from-blue-600 dark:to-indigo-600 shadow-md hover:shadow-lg transition-all h-10 font-medium">
+                              <Settings className="w-4 h-4 ml-2" />
+                              بناء الفورم
+                            </Button>
+                          </Link>
+                          
+                          <Button
+                            variant="outline"
+                            className="w-full border-blue-500 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-all h-10 font-medium"
+                            onClick={() => window.open(`/expert/apply/${selectedHackathon}`, '_blank')}
+                          >
+                            <ExternalLink className="w-4 h-4 ml-2" />
+                            معاينة الفورم
                           </Button>
-                        </Link>
+
+                          <Button
+                            variant="outline"
+                            className="w-full dark:border-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all h-10 font-medium"
+                            onClick={() => copyLink(`${window.location.origin}/expert/apply/${selectedHackathon}`, 'فورم الخبراء')}
+                          >
+                            <Copy className="w-4 h-4 ml-2" />
+                            نسخ الرابط
+                          </Button>
+
+                          <Link href="/admin/experts">
+                            <Button variant="outline" className="w-full border-blue-300 dark:border-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all h-10 font-medium">
+                              <Users className="w-4 h-4 ml-2" />
+                              إدارة الطلبات
+                            </Button>
+                          </Link>
+                        </div>
                         
-                        <Button
-                          variant="outline"
-                          className="w-full border-cyan-500 text-cyan-600 hover:bg-cyan-50"
-                          onClick={() => window.open(`/expert/apply/${selectedHackathon}`, '_blank')}
-                        >
-                          <ExternalLink className="w-4 h-4 ml-2" />
-                          معاينة الفورم
-                        </Button>
-
-                        <Button
-                          variant="outline"
-                          className="w-full"
-                          onClick={() => copyLink(`${window.location.origin}/expert/apply/${selectedHackathon}`, 'فورم الخبراء')}
-                        >
-                          <Copy className="w-4 h-4 ml-2" />
-                          نسخ الرابط
-                        </Button>
-
-                        <Link href="/admin/experts">
-                          <Button variant="outline" className="w-full border-cyan-300">
-                            <Users className="w-4 h-4 ml-2" />
-                            إدارة الطلبات
-                          </Button>
-                        </Link>
-                      </div>
-                      
-                      <div className="bg-cyan-50 p-3 rounded-lg text-sm text-cyan-800 mt-4">
-                        <p className="font-medium mb-1">✨ مميزات الفورم</p>
-                        <ul className="text-xs space-y-1">
-                          <li>• رفع صورة الخبير على Cloudinary</li>
-                          <li>• حقول ديناميكية قابلة للتخصيص</li>
-                          <li>• دعم المرفقات والملفات</li>
-                          <li>• معلومات احترافية للخبير</li>
-                        </ul>
-                      </div>
-                    </CardContent>
-                  </Card>
+                        <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-100 dark:border-blue-800 mt-4">
+                          <p className="font-semibold mb-2 text-blue-800 dark:text-blue-200 flex items-center gap-2">
+                            <Award className="w-4 h-4" />
+                            مميزات الفورم
+                          </p>
+                          <ul className="text-xs space-y-1.5 text-blue-700 dark:text-blue-300">
+                            <li className="flex items-center gap-1.5">• رفع صورة الخبير على Cloudinary</li>
+                            <li className="flex items-center gap-1.5">• حقول ديناميكية قابلة للتخصيص</li>
+                            <li className="flex items-center gap-1.5">• دعم المرفقات والملفات</li>
+                            <li className="flex items-center gap-1.5">• معلومات احترافية للخبير</li>
+                          </ul>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
 
                   {/* Expert Invitation Form */}
-                  <Card className="hover:shadow-xl transition-shadow border-2 border-teal-200">
-                    <CardHeader className="bg-gradient-to-r from-teal-50 to-cyan-50">
-                      <div className="flex items-center justify-between">
-                        <Mail className="w-8 h-8 text-teal-600" />
-                        <Badge className="bg-teal-600 text-white">دعوات</Badge>
-                      </div>
-                      <CardTitle className="text-xl text-teal-900 mt-4">
-                        نظام دعوات الخبراء
-                      </CardTitle>
-                      <CardDescription>
-                        إرسال دعوات مخصصة للخبراء عبر البريد الإلكتروني
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-6 space-y-4">
-                      <div className="flex flex-col gap-2">
-                        <Link href="/admin/experts">
-                          <Button className="w-full bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600">
-                            <Mail className="w-4 h-4 ml-2" />
-                            إدارة الدعوات
-                          </Button>
-                        </Link>
-
-                        <div className="bg-teal-50 p-3 rounded-lg text-sm text-teal-800">
-                          <p className="font-medium mb-1">📧 نظام الدعوات</p>
-                          <p className="text-xs">يمكنك إرسال دعوات مخصصة للخبراء مع روابط تسجيل فريدة</p>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    <Card className="hover:shadow-2xl transition-all duration-300 border-2 border-blue-200 dark:border-blue-800 bg-white dark:bg-slate-800 rounded-xl overflow-hidden group hover:border-blue-400 dark:hover:border-blue-600">
+                      <CardHeader className="bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-blue-900/20 p-6 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-200/20 dark:bg-blue-500/10 rounded-full -mr-16 -mt-16"></div>
+                        <div className="flex items-center justify-between relative z-10">
+                          <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-lg group-hover:scale-110 transition-transform">
+                            <Mail className="w-6 h-6 text-white" />
+                          </div>
+                          <Badge className="bg-blue-600 dark:bg-blue-500 text-white px-3 py-1 font-semibold shadow-md">دعوات</Badge>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                        <CardTitle className="text-xl text-blue-900 dark:text-blue-100 mt-6 font-bold relative z-10">
+                          نظام دعوات الخبراء
+                        </CardTitle>
+                        <CardDescription className="dark:text-slate-300 text-sm leading-relaxed relative z-10">
+                          إرسال دعوات مخصصة للخبراء عبر البريد الإلكتروني
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="p-6 space-y-3">
+                        <div className="flex flex-col gap-2.5">
+                          <Link href="/admin/experts">
+                            <Button className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 dark:from-blue-600 dark:to-indigo-600 shadow-md hover:shadow-lg transition-all h-10 font-medium">
+                              <Mail className="w-4 h-4 ml-2" />
+                              إدارة الدعوات
+                            </Button>
+                          </Link>
+
+                          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-100 dark:border-blue-800">
+                            <p className="font-semibold mb-2 text-blue-800 dark:text-blue-200 flex items-center gap-2">
+                              <Mail className="w-4 h-4" />
+                              نظام الدعوات
+                            </p>
+                            <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed">يمكنك إرسال دعوات مخصصة للخبراء مع روابط تسجيل فريدة</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
                 </div>
               </TabsContent>
 
@@ -350,64 +382,76 @@ export default function FormsManagement() {
               <TabsContent value="supervision">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {/* Supervision Application Form */}
-                  <Card className="hover:shadow-xl transition-shadow border-2 border-purple-200">
-                    <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50">
-                      <div className="flex items-center justify-between">
-                        <UserCheck className="w-8 h-8 text-purple-600" />
-                        <Badge className="bg-purple-600 text-white">إشراف</Badge>
-                      </div>
-                      <CardTitle className="text-xl text-purple-900 mt-4">
-                        فورم طلب الانضمام للإشراف
-                      </CardTitle>
-                      <CardDescription>
-                        فورم ديناميكي لاستقبال طلبات الإشراف - أضف الحقول والصور التي تريدها
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-6 space-y-4">
-                      <div className="flex flex-col gap-2">
-                        <Link href={`/admin/supervision-form-builder/${selectedHackathon}`}>
-                          <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
-                            <Settings className="w-4 h-4 ml-2" />
-                            بناء الفورم
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                  >
+                    <Card className="hover:shadow-2xl transition-all duration-300 border-2 border-blue-200 dark:border-blue-800 bg-white dark:bg-slate-800 rounded-xl overflow-hidden group hover:border-blue-400 dark:hover:border-blue-600">
+                      <CardHeader className="bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-blue-900/20 p-6 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-200/20 dark:bg-blue-500/10 rounded-full -mr-16 -mt-16"></div>
+                        <div className="flex items-center justify-between relative z-10">
+                          <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-lg group-hover:scale-110 transition-transform">
+                            <UserCheck className="w-6 h-6 text-white" />
+                          </div>
+                          <Badge className="bg-blue-600 dark:bg-blue-500 text-white px-3 py-1 font-semibold shadow-md">إشراف</Badge>
+                        </div>
+                        <CardTitle className="text-xl text-blue-900 dark:text-blue-100 mt-6 font-bold relative z-10">
+                          فورم طلب الانضمام للإشراف
+                        </CardTitle>
+                        <CardDescription className="dark:text-slate-300 text-sm leading-relaxed relative z-10">
+                          فورم ديناميكي لاستقبال طلبات الإشراف - أضف الحقول والصور التي تريدها
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="p-6 space-y-3">
+                        <div className="flex flex-col gap-2.5">
+                          <Link href={`/admin/supervision-form-builder/${selectedHackathon}`}>
+                            <Button className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 dark:from-blue-600 dark:to-indigo-600 shadow-md hover:shadow-lg transition-all h-10 font-medium">
+                              <Settings className="w-4 h-4 ml-2" />
+                              بناء الفورم
+                            </Button>
+                          </Link>
+                          
+                          <Button
+                            variant="outline"
+                            className="w-full border-blue-500 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-all h-10 font-medium"
+                            onClick={() => window.open(`/supervision/${selectedHackathon}`, '_blank')}
+                          >
+                            <ExternalLink className="w-4 h-4 ml-2" />
+                            معاينة الفورم
                           </Button>
-                        </Link>
+
+                          <Button
+                            variant="outline"
+                            className="w-full dark:border-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all h-10 font-medium"
+                            onClick={() => copyLink(`${window.location.origin}/supervision/${selectedHackathon}`, 'فورم الإشراف')}
+                          >
+                            <Copy className="w-4 h-4 ml-2" />
+                            نسخ الرابط
+                          </Button>
+
+                          <Link href={`/admin/supervision-submissions/${selectedHackathon}`}>
+                            <Button variant="outline" className="w-full border-blue-300 dark:border-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all h-10 font-medium">
+                              <Users className="w-4 h-4 ml-2" />
+                              إدارة الطلبات
+                            </Button>
+                          </Link>
+                        </div>
                         
-                        <Button
-                          variant="outline"
-                          className="w-full border-purple-500 text-purple-600 hover:bg-purple-50"
-                          onClick={() => window.open(`/supervision/${selectedHackathon}`, '_blank')}
-                        >
-                          <ExternalLink className="w-4 h-4 ml-2" />
-                          معاينة الفورم
-                        </Button>
-
-                        <Button
-                          variant="outline"
-                          className="w-full"
-                          onClick={() => copyLink(`${window.location.origin}/supervision/${selectedHackathon}`, 'فورم الإشراف')}
-                        >
-                          <Copy className="w-4 h-4 ml-2" />
-                          نسخ الرابط
-                        </Button>
-
-                        <Link href={`/admin/supervision-submissions/${selectedHackathon}`}>
-                          <Button variant="outline" className="w-full border-purple-300">
-                            <Users className="w-4 h-4 ml-2" />
-                            إدارة الطلبات
-                          </Button>
-                        </Link>
-                      </div>
-                      
-                      <div className="bg-purple-50 p-3 rounded-lg text-sm text-purple-800 mt-4">
-                        <p className="font-medium mb-1">✨ مميزات الفورم</p>
-                        <ul className="text-xs space-y-1">
-                          <li>• رفع صور الغلاف على Cloudinary</li>
-                          <li>• حقول ديناميكية قابلة للتخصيص</li>
-                          <li>• دعم المرفقات والملفات</li>
-                        </ul>
-                      </div>
-                    </CardContent>
-                  </Card>
+                        <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-100 dark:border-blue-800 mt-4">
+                          <p className="font-semibold mb-2 text-blue-800 dark:text-blue-200 flex items-center gap-2">
+                            <Award className="w-4 h-4" />
+                            مميزات الفورم
+                          </p>
+                          <ul className="text-xs space-y-1.5 text-blue-700 dark:text-blue-300">
+                            <li className="flex items-center gap-1.5">• رفع صور الغلاف على Cloudinary</li>
+                            <li className="flex items-center gap-1.5">• حقول ديناميكية قابلة للتخصيص</li>
+                            <li className="flex items-center gap-1.5">• دعم المرفقات والملفات</li>
+                          </ul>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
                 </div>
               </TabsContent>
 
@@ -417,55 +461,64 @@ export default function FormsManagement() {
               <TabsContent value="feedback">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {/* Hackathon Feedback Form */}
-                  <Card className="hover:shadow-xl transition-shadow border-2 border-green-200">
-                    <CardHeader className="bg-gradient-to-r from-green-50 to-teal-50">
-                      <div className="flex items-center justify-between">
-                        <MessageSquare className="w-8 h-8 text-green-600" />
-                        <Badge className="bg-green-600 text-white">تقييم</Badge>
-                      </div>
-                      <CardTitle className="text-xl text-green-900 mt-4">
-                        فورم تقييم الهاكاثون
-                      </CardTitle>
-                      <CardDescription>
-                        فورم ديناميكي لجمع آراء وتقييمات المشاركين - أضف الحقول التي تريدها
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-6 space-y-4">
-                      <div className="flex flex-col gap-2">
-                        <Link href={`/admin/feedback-form-builder/${selectedHackathon}`}>
-                          <Button className="w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600">
-                            <Settings className="w-4 h-4 ml-2" />
-                            بناء الفورم
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                  >
+                    <Card className="hover:shadow-2xl transition-all duration-300 border-2 border-blue-200 dark:border-blue-800 bg-white dark:bg-slate-800 rounded-xl overflow-hidden group hover:border-blue-400 dark:hover:border-blue-600">
+                      <CardHeader className="bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-blue-900/20 p-6 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-200/20 dark:bg-blue-500/10 rounded-full -mr-16 -mt-16"></div>
+                        <div className="flex items-center justify-between relative z-10">
+                          <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-lg group-hover:scale-110 transition-transform">
+                            <MessageSquare className="w-6 h-6 text-white" />
+                          </div>
+                          <Badge className="bg-blue-600 dark:bg-blue-500 text-white px-3 py-1 font-semibold shadow-md">تقييم</Badge>
+                        </div>
+                        <CardTitle className="text-xl text-blue-900 dark:text-blue-100 mt-6 font-bold relative z-10">
+                          فورم تقييم الهاكاثون
+                        </CardTitle>
+                        <CardDescription className="dark:text-slate-300 text-sm leading-relaxed relative z-10">
+                          فورم ديناميكي لجمع آراء وتقييمات المشاركين - أضف الحقول التي تريدها
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="p-6 space-y-3">
+                        <div className="flex flex-col gap-2.5">
+                          <Link href={`/admin/feedback-form-builder/${selectedHackathon}`}>
+                            <Button className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 dark:from-blue-600 dark:to-indigo-600 shadow-md hover:shadow-lg transition-all h-10 font-medium">
+                              <Settings className="w-4 h-4 ml-2" />
+                              بناء الفورم
+                            </Button>
+                          </Link>
+
+                          <Button
+                            variant="outline"
+                            className="w-full border-blue-500 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-all h-10 font-medium"
+                            onClick={() => window.open(`/feedback/${selectedHackathon}`, '_blank')}
+                          >
+                            <ExternalLink className="w-4 h-4 ml-2" />
+                            معاينة الفورم
                           </Button>
-                        </Link>
 
-                        <Button
-                          variant="outline"
-                          className="w-full border-green-500 text-green-600 hover:bg-green-50"
-                          onClick={() => window.open(`/feedback/${selectedHackathon}`, '_blank')}
-                        >
-                          <ExternalLink className="w-4 h-4 ml-2" />
-                          معاينة الفورم
-                        </Button>
-
-                        <Button
-                          variant="outline"
-                          className="w-full"
-                          onClick={() => copyLink(`${window.location.origin}/feedback/${selectedHackathon}`, 'فورم التقييم')}
-                        >
-                          <Copy className="w-4 h-4 ml-2" />
-                          نسخ الرابط
-                        </Button>
-
-                        <Link href={`/admin/hackathons/${selectedHackathon}/feedback-results`}>
-                          <Button variant="outline" className="w-full border-green-300">
-                            <BarChart3 className="w-4 h-4 ml-2" />
-                            عرض النتائج
+                          <Button
+                            variant="outline"
+                            className="w-full dark:border-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all h-10 font-medium"
+                            onClick={() => copyLink(`${window.location.origin}/feedback/${selectedHackathon}`, 'فورم التقييم')}
+                          >
+                            <Copy className="w-4 h-4 ml-2" />
+                            نسخ الرابط
                           </Button>
-                        </Link>
-                      </div>
-                    </CardContent>
-                  </Card>
+
+                          <Link href={`/admin/hackathons/${selectedHackathon}/feedback-results`}>
+                            <Button variant="outline" className="w-full border-blue-300 dark:border-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all h-10 font-medium">
+                              <BarChart3 className="w-4 h-4 ml-2" />
+                              عرض النتائج
+                            </Button>
+                          </Link>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
                 </div>
               </TabsContent>
 
@@ -473,87 +526,141 @@ export default function FormsManagement() {
               <TabsContent value="registration">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {/* Registration Form */}
-                  <Card className="hover:shadow-xl transition-shadow border-2 border-[#01645e]/30">
-                    <CardHeader className="bg-gradient-to-r from-[#01645e]/10 to-[#3ab666]/10">
-                      <div className="flex items-center justify-between">
-                        <Users className="w-8 h-8 text-[#01645e]" />
-                        <Badge className="bg-[#01645e] text-white">تسجيل</Badge>
-                      </div>
-                      <CardTitle className="text-xl text-[#01645e] mt-4">
-                        فورم تسجيل المشاركين
-                      </CardTitle>
-                      <CardDescription>
-                        فورم التسجيل الديناميكي للمشاركين في الهاكاثون
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-6 space-y-4">
-                      <div className="flex flex-col gap-2">
-                        <Link href={`/admin/hackathons/${selectedHackathon}/registration-form`}>
-                          <Button className="w-full bg-gradient-to-r from-[#01645e] to-[#3ab666] hover:from-[#01645e]/90 hover:to-[#3ab666]/90">
-                            <Settings className="w-4 h-4 ml-2" />
-                            إعداد الفورم
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                  >
+                    <Card className="hover:shadow-2xl transition-all duration-300 border-2 border-blue-200 dark:border-blue-800 bg-white dark:bg-slate-800 rounded-xl overflow-hidden group hover:border-blue-400 dark:hover:border-blue-600">
+                      <CardHeader className="bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-blue-900/20 p-6 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-200/20 dark:bg-blue-500/10 rounded-full -mr-16 -mt-16"></div>
+                        <div className="flex items-center justify-between relative z-10">
+                          <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-lg group-hover:scale-110 transition-transform">
+                            <Users className="w-6 h-6 text-white" />
+                          </div>
+                          <Badge className="bg-blue-600 dark:bg-blue-500 text-white px-3 py-1 font-semibold shadow-md">تسجيل</Badge>
+                        </div>
+                        <CardTitle className="text-xl text-blue-900 dark:text-blue-100 mt-6 font-bold relative z-10">
+                          فورم تسجيل المشاركين
+                        </CardTitle>
+                        <CardDescription className="dark:text-slate-300 text-sm leading-relaxed relative z-10">
+                          فورم التسجيل الديناميكي للمشاركين في الهاكاثون
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="p-6 space-y-3">
+                        <div className="flex flex-col gap-2.5">
+                          <Link href={`/admin/hackathons/${selectedHackathon}/registration-form`}>
+                            <Button className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 dark:from-blue-600 dark:to-indigo-600 shadow-md hover:shadow-lg transition-all h-10 font-medium">
+                              <Settings className="w-4 h-4 ml-2" />
+                              إعداد الفورم
+                            </Button>
+                          </Link>
+
+                          <Link href={`/admin/hackathons/${selectedHackathon}/registration-form-schedule`}>
+                            <Button variant="outline" className="w-full border-blue-500 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-all h-10 font-medium">
+                              <Clock className="w-4 h-4 ml-2" />
+                              جدولة المواعيد
+                            </Button>
+                          </Link>
+
+                          <Link href={`/admin/hackathons/${selectedHackathon}/register-form-design`}>
+                            <Button variant="outline" className="w-full border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all h-10 font-medium">
+                              <Palette className="w-4 h-4 ml-2" />
+                              تصميم الفورم
+                            </Button>
+                          </Link>
+
+                          <Button
+                            variant="outline"
+                            className="w-full dark:border-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all h-10 font-medium"
+                            onClick={() => window.open(`/hackathons/${selectedHackathon}/register-form`, '_blank')}
+                          >
+                            <ExternalLink className="w-4 h-4 ml-2" />
+                            معاينة الفورم
                           </Button>
-                        </Link>
 
-                        <Link href={`/admin/hackathons/${selectedHackathon}/registration-form-schedule`}>
-                          <Button variant="outline" className="w-full border-purple-500 text-purple-600 hover:bg-purple-50">
-                            <Clock className="w-4 h-4 ml-2" />
-                            جدولة المواعيد
+                          <Button
+                            variant="outline"
+                            className="w-full dark:border-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all h-10 font-medium"
+                            onClick={() => copyLink(`${window.location.origin}/hackathons/${selectedHackathon}/register-form`, 'فورم التسجيل')}
+                          >
+                            <Copy className="w-4 h-4 ml-2" />
+                            نسخ الرابط
                           </Button>
-                        </Link>
 
-                        <Link href={`/admin/hackathons/${selectedHackathon}/register-form-design`}>
-                          <Button variant="outline" className="w-full border-[#01645e] text-[#01645e]">
-                            <Palette className="w-4 h-4 ml-2" />
-                            تصميم الفورم
-                          </Button>
-                        </Link>
-
-                        <Button
-                          variant="outline"
-                          className="w-full"
-                          onClick={() => window.open(`/hackathons/${selectedHackathon}/register-form`, '_blank')}
-                        >
-                          <ExternalLink className="w-4 h-4 ml-2" />
-                          معاينة الفورم
-                        </Button>
-
-                        <Button
-                          variant="outline"
-                          className="w-full"
-                          onClick={() => copyLink(`${window.location.origin}/hackathons/${selectedHackathon}/register-form`, 'فورم التسجيل')}
-                        >
-                          <Copy className="w-4 h-4 ml-2" />
-                          نسخ الرابط
-                        </Button>
-
-                        <Link href={`/admin/hackathons/${selectedHackathon}/form-submissions`}>
-                          <Button variant="outline" className="w-full border-[#3ab666] text-[#3ab666]">
-                            <FileText className="w-4 h-4 ml-2" />
-                            النماذج المرسلة
-                          </Button>
-                        </Link>
-                      </div>
-                    </CardContent>
-                  </Card>
+                          <Link href={`/admin/hackathons/${selectedHackathon}/form-submissions`}>
+                            <Button variant="outline" className="w-full border-blue-300 dark:border-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all h-10 font-medium">
+                              <FileText className="w-4 h-4 ml-2" />
+                              النماذج المرسلة
+                            </Button>
+                          </Link>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
                 </div>
               </TabsContent>
+              </div>
+
+              {/* Sidebar - Right Side */}
+              <div className="w-64 shrink-0 sticky top-6">
+                <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-lg p-4">
+                  <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-3 px-2">الفورمات</h3>
+                  <TabsList className="flex flex-col w-full h-auto bg-transparent p-0 gap-1.5">
+                    <TabsTrigger 
+                      value="judges"
+                      className="w-full justify-start data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all duration-200 hover:bg-slate-100 dark:hover:bg-slate-700 data-[state=active]:hover:from-blue-600 data-[state=active]:hover:to-indigo-700 rounded-lg py-3 px-3 dark:text-slate-200 font-medium"
+                    >
+                      <Award className="w-4 h-4 ml-2" />
+                      فورم المحكمين
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="experts"
+                      className="w-full justify-start data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all duration-200 hover:bg-slate-100 dark:hover:bg-slate-700 data-[state=active]:hover:from-blue-600 data-[state=active]:hover:to-indigo-700 rounded-lg py-3 px-3 dark:text-slate-200 font-medium"
+                    >
+                      <Users className="w-4 h-4 ml-2" />
+                      فورم الخبراء
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="supervision"
+                      className="w-full justify-start data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all duration-200 hover:bg-slate-100 dark:hover:bg-slate-700 data-[state=active]:hover:from-blue-600 data-[state=active]:hover:to-indigo-700 rounded-lg py-3 px-3 dark:text-slate-200 font-medium"
+                    >
+                      <UserCheck className="w-4 h-4 ml-2" />
+                      فورم الإشراف
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="feedback"
+                      className="w-full justify-start data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all duration-200 hover:bg-slate-100 dark:hover:bg-slate-700 data-[state=active]:hover:from-blue-600 data-[state=active]:hover:to-indigo-700 rounded-lg py-3 px-3 dark:text-slate-200 font-medium"
+                    >
+                      <MessageSquare className="w-4 h-4 ml-2" />
+                      فورم التقييم
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="registration"
+                      className="w-full justify-start data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all duration-200 hover:bg-slate-100 dark:hover:bg-slate-700 data-[state=active]:hover:from-blue-600 data-[state=active]:hover:to-indigo-700 rounded-lg py-3 px-3 dark:text-slate-200 font-medium"
+                    >
+                      <Users className="w-4 h-4 ml-2" />
+                      فورم التسجيل
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+              </div>
             </Tabs>
           </motion.div>
         )}
 
         {/* Empty State */}
         {!selectedHackathon && hackathons.length === 0 && (
-          <Card className="text-center p-12">
-            <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-600 mb-2">
+          <Card className="text-center p-12 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700">
+            <FileText className="w-16 h-16 text-gray-400 dark:text-slate-500 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-600 dark:text-slate-300 mb-2">
               لا توجد هاكاثونات
             </h3>
-            <p className="text-gray-500 mb-6">
+            <p className="text-gray-500 dark:text-slate-400 mb-6">
               قم بإنشاء هاكاثون أولاً لإدارة الفورمات
             </p>
             <Link href="/admin/hackathons">
-              <Button className="bg-gradient-to-r from-[#01645e] to-[#3ab666]">
+              <Button className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 dark:from-blue-600 dark:to-indigo-600">
                 <Plus className="w-4 h-4 ml-2" />
                 إنشاء هاكاثون
               </Button>

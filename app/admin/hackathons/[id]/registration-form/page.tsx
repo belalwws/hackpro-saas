@@ -130,9 +130,9 @@ export default function HackathonRegistrationFormPage() {
       sendConfirmationEmail: true
     },
     colors: {
-      primary: '#01645e',
-      secondary: '#3ab666',
-      accent: '#f59e0b',
+      primary: '#155DFC',
+      secondary: '#4F46E5',
+      accent: '#8B5CF6',
       buttonText: '#ffffff'
     }
   })
@@ -436,43 +436,51 @@ export default function HackathonRegistrationFormPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/50 via-indigo-50/30 to-blue-100/50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <div className="flex items-center gap-4 mb-4">
-            <Link href={`/admin/hackathons/${hackathonId}`}>
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                العودة
-              </Button>
-            </Link>
-            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-              <FormInput className="w-8 h-8 text-[#01645e]" />
-              نموذج التسجيل الديناميكي
-            </h1>
+          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-slate-200 dark:border-slate-700 p-6 mb-6">
+            <div className="flex items-center gap-4 mb-4">
+              <Link href={`/admin/hackathons/${hackathonId}`}>
+                <Button variant="outline" size="sm" className="hover:bg-slate-50 dark:hover:bg-slate-700">
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  العودة
+                </Button>
+              </Link>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-lg">
+                  <FormInput className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                    نموذج التسجيل الديناميكي
+                  </h1>
+                  {hackathon && (
+                    <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">
+                      إنشاء وتخصيص نموذج التسجيل لـ {hackathon.title}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
-          {hackathon && (
-            <p className="text-gray-600">
-              إنشاء وتخصيص نموذج التسجيل لـ {hackathon.title}
-            </p>
-          )}
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Form Builder */}
           <div className="lg:col-span-2 space-y-6">
             {/* Form Settings */}
-            <Card>
-              <CardHeader>
-                <CardTitle>إعدادات النموذج</CardTitle>
-                <CardDescription>الإعدادات الأساسية للنموذج</CardDescription>
+            <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-md">
+              <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-b border-slate-200 dark:border-slate-700">
+                <CardTitle className="text-blue-600 dark:text-blue-400">إعدادات النموذج</CardTitle>
+                <CardDescription className="dark:text-slate-300">الإعدادات الأساسية للنموذج</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 pt-6">
                 <div>
                   <Label htmlFor="title">عنوان النموذج</Label>
                   <Input
@@ -522,7 +530,7 @@ export default function HackathonRegistrationFormPage() {
                         </Button>
                       </div>
                     ) : (
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#01645e] transition-colors">
+                      <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-8 text-center hover:border-blue-500 dark:hover:border-blue-400 transition-colors bg-slate-50 dark:bg-slate-900/50">
                         <input
                           type="file"
                           id="coverImage"
@@ -535,11 +543,11 @@ export default function HackathonRegistrationFormPage() {
                           htmlFor="coverImage"
                           className="cursor-pointer flex flex-col items-center gap-3"
                         >
-                          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                          <div className="w-16 h-16 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center">
                             {uploadingCover ? (
-                              <div className="w-6 h-6 border-2 border-[#01645e] border-t-transparent rounded-full animate-spin" />
+                              <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                             ) : (
-                              <Upload className="w-8 h-8 text-gray-400" />
+                              <Upload className="w-8 h-8 text-slate-400 dark:text-slate-500" />
                             )}
                           </div>
                           <div>
@@ -570,17 +578,19 @@ export default function HackathonRegistrationFormPage() {
             </Card>
 
             {/* Colors Customization */}
-            <Card>
-              <CardHeader>
+            <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-md">
+              <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-b border-slate-200 dark:border-slate-700">
                 <div className="flex items-center gap-2">
-                  <Palette className="w-5 h-5 text-[#01645e]" />
+                  <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg">
+                    <Palette className="w-5 h-5 text-white" />
+                  </div>
                   <div>
-                    <CardTitle>تخصيص الألوان</CardTitle>
-                    <CardDescription>تخصيص ألوان الفورم حسب هوية الهاكاثون</CardDescription>
+                    <CardTitle className="text-blue-600 dark:text-blue-400">تخصيص الألوان</CardTitle>
+                    <CardDescription className="dark:text-slate-300">تخصيص ألوان الفورم حسب هوية الهاكاثون</CardDescription>
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <Label htmlFor="primaryColor" className="flex items-center gap-2 mb-2">
@@ -712,31 +722,31 @@ export default function HackathonRegistrationFormPage() {
                 </div>
 
                 {/* Color Preview */}
-                <div className="mt-6 p-6 border-2 border-dashed rounded-lg bg-gray-50">
-                  <p className="text-sm font-medium text-gray-700 mb-4">معاينة الألوان:</p>
+                <div className="mt-6 p-6 border-2 border-dashed rounded-lg bg-slate-50 dark:bg-slate-900/50 border-slate-300 dark:border-slate-700">
+                  <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-4">معاينة الألوان:</p>
                   <div className="flex flex-wrap gap-3">
                     <Button 
                       style={{ 
-                        backgroundColor: form.colors?.primary || '#01645e',
+                        backgroundColor: form.colors?.primary || '#155DFC',
                         color: form.colors?.buttonText || '#ffffff'
                       }}
-                      className="shadow-md"
+                      className="shadow-md hover:shadow-lg transition-all"
                     >
                       زر بالألوان الجديدة
                     </Button>
                     <div 
-                      className="px-4 py-2 rounded-md font-medium"
+                      className="px-4 py-2 rounded-md font-medium shadow-md"
                       style={{ 
-                        backgroundColor: form.colors?.secondary || '#3ab666',
+                        backgroundColor: form.colors?.secondary || '#4F46E5',
                         color: form.colors?.buttonText || '#ffffff'
                       }}
                     >
                       اللون الثانوي
                     </div>
                     <div 
-                      className="px-4 py-2 rounded-md font-medium"
+                      className="px-4 py-2 rounded-md font-medium shadow-md"
                       style={{ 
-                        backgroundColor: form.colors?.accent || '#f59e0b',
+                        backgroundColor: form.colors?.accent || '#8B5CF6',
                         color: form.colors?.buttonText || '#ffffff'
                       }}
                     >
@@ -748,31 +758,38 @@ export default function HackathonRegistrationFormPage() {
             </Card>
 
             {/* Form Fields */}
-            <Card>
-              <CardHeader>
+            <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-md">
+              <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-b border-slate-200 dark:border-slate-700">
                 <div className="flex justify-between items-center">
                   <div>
-                    <CardTitle>حقول النموذج</CardTitle>
-                    <CardDescription>إضافة وتخصيص حقول النموذج</CardDescription>
+                    <CardTitle className="text-blue-600 dark:text-blue-400">حقول النموذج</CardTitle>
+                    <CardDescription className="dark:text-slate-300">إضافة وتخصيص حقول النموذج</CardDescription>
                   </div>
-                  <Button onClick={addField} className="bg-[#3ab666] hover:bg-[#3ab666]/90">
+                  <Button onClick={addField} className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 dark:from-blue-600 dark:to-indigo-600 shadow-md">
                     <Plus className="w-4 h-4 mr-2" />
                     إضافة حقل
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-6">
                 <div className="space-y-6">
                   {form.fields.map((field, index) => {
                     const FieldIcon = getFieldIcon(field.type)
 
                     return (
-                      <div key={field.id} className="p-4 border rounded-lg bg-white">
+                      <motion.div 
+                        key={field.id} 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-5 border-2 border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 hover:border-blue-300 dark:hover:border-blue-600 transition-all shadow-sm hover:shadow-md"
+                      >
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-2">
-                            <GripVertical className="w-5 h-5 text-gray-400" />
-                            <FieldIcon className="w-5 h-5 text-[#01645e]" />
-                            <span className="font-medium">حقل {index + 1}</span>
+                            <GripVertical className="w-5 h-5 text-slate-400 dark:text-slate-500" />
+                            <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg">
+                              <FieldIcon className="w-4 h-4 text-white" />
+                            </div>
+                            <span className="font-semibold text-slate-700 dark:text-slate-300">حقل {index + 1}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Button
@@ -854,7 +871,7 @@ export default function HackathonRegistrationFormPage() {
                         </div>
 
                         {/* Conditional Logic */}
-                        <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
                           <div className="flex items-center space-x-2 mb-3">
                             <Switch
                               checked={field.conditional?.enabled || false}
@@ -866,7 +883,7 @@ export default function HackathonRegistrationFormPage() {
                                 }
                               })}
                             />
-                            <Label className="mr-2 font-medium text-blue-900">
+                            <Label className="mr-2 font-medium text-blue-900 dark:text-blue-200">
                               حقل شرطي (يظهر عند شرط معين)
                             </Label>
                           </div>
@@ -874,7 +891,7 @@ export default function HackathonRegistrationFormPage() {
                           {field.conditional?.enabled && (
                             <div className="space-y-3 mt-3">
                               <div>
-                                <Label className="text-sm text-blue-800">يظهر عندما:</Label>
+                                <Label className="text-sm text-blue-800 dark:text-blue-300">يظهر عندما:</Label>
                                 <Select
                                   value={field.conditional?.showWhen || ''}
                                   onValueChange={(value) => updateField(field.id, {
@@ -904,7 +921,7 @@ export default function HackathonRegistrationFormPage() {
 
                               {field.conditional?.showWhen && (
                                 <div>
-                                  <Label className="text-sm text-blue-800">يساوي:</Label>
+                                  <Label className="text-sm text-blue-800 dark:text-blue-300">يساوي:</Label>
                                   <Select
                                     value={field.conditional?.showWhenValue || ''}
                                     onValueChange={(value) => updateField(field.id, {
@@ -930,7 +947,7 @@ export default function HackathonRegistrationFormPage() {
                                 </div>
                               )}
 
-                              <p className="text-xs text-blue-700 mt-2">
+                              <p className="text-xs text-blue-700 dark:text-blue-300 mt-2">
                                 💡 هذا الحقل سيظهر فقط عندما يختار المستخدم "{field.conditional?.showWhenValue}" في حقل "{form.fields.find(f => f.id === field.conditional?.showWhen)?.label}"
                               </p>
                             </div>
@@ -973,7 +990,7 @@ export default function HackathonRegistrationFormPage() {
                             </div>
                           </div>
                         )}
-                      </div>
+                      </motion.div>
                     )
                   })}
                 </div>
@@ -1041,13 +1058,13 @@ export default function HackathonRegistrationFormPage() {
             </Card>
 
             {/* Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle>الإجراءات</CardTitle>
+            <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-md">
+              <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-b border-slate-200 dark:border-slate-700">
+                <CardTitle className="text-blue-600 dark:text-blue-400">الإجراءات</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-3 pt-6">
                 <Link href={`/hackathons/${hackathonId}/register-form`} target="_blank">
-                  <Button variant="outline" className="w-full">
+                  <Button variant="outline" className="w-full border-blue-500 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-all">
                     <Eye className="w-4 h-4 mr-2" />
                     معاينة النموذج
                   </Button>
@@ -1055,24 +1072,35 @@ export default function HackathonRegistrationFormPage() {
 
                 <Button
                   onClick={saveForm}
-                  className="w-full bg-[#01645e] hover:bg-[#01645e]/90"
+                  className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 dark:from-blue-600 dark:to-indigo-600 shadow-md hover:shadow-lg transition-all"
                   disabled={loading}
                 >
                   <Save className="w-4 h-4 mr-2" />
-                  حفظ النموذج
+                  {loading ? 'جاري الحفظ...' : 'حفظ النموذج'}
                 </Button>
               </CardContent>
             </Card>
 
             {/* Statistics */}
-            <Card>
-              <CardHeader>
-                <CardTitle>إحصائيات</CardTitle>
+            <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-md">
+              <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-b border-slate-200 dark:border-slate-700">
+                <CardTitle className="text-blue-600 dark:text-blue-400">إحصائيات</CardTitle>
               </CardHeader>
-              <CardContent className="text-sm text-gray-600 space-y-2">
-                <p>• عدد الحقول: {form.fields.length}</p>
-                <p>• الحقول المطلوبة: {form.fields.filter(f => f.required).length}</p>
-                <p>• الحالة: {form.isActive ? 'مفعل' : 'معطل'}</p>
+              <CardContent className="text-sm text-slate-600 dark:text-slate-400 space-y-2 pt-6">
+                <p className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                  عدد الحقول: <span className="font-semibold text-blue-600 dark:text-blue-400">{form.fields.length}</span>
+                </p>
+                <p className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
+                  الحقول المطلوبة: <span className="font-semibold text-indigo-600 dark:text-indigo-400">{form.fields.filter(f => f.required).length}</span>
+                </p>
+                <p className="flex items-center gap-2">
+                  <span className={`w-2 h-2 rounded-full ${form.isActive ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                  الحالة: <span className={`font-semibold ${form.isActive ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                    {form.isActive ? 'مفعل' : 'معطل'}
+                  </span>
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -1080,17 +1108,19 @@ export default function HackathonRegistrationFormPage() {
 
         {/* API Documentation Section */}
         <div className="mt-12">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-2xl">
-                <Code className="w-6 h-6 text-[#01645e]" />
+          <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-md">
+            <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-b border-slate-200 dark:border-slate-700">
+              <CardTitle className="flex items-center gap-2 text-2xl text-blue-600 dark:text-blue-400">
+                <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg">
+                  <Code className="w-6 h-6 text-white" />
+                </div>
                 External API Documentation
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="dark:text-slate-300">
                 استخدم هذه الـ APIs لربط موقعك الخارجي بهذا الهاكاثون
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-6">
               <Tabs defaultValue="register" className="w-full">
                 <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="register">تسجيل مشارك</TabsTrigger>

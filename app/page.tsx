@@ -1038,13 +1038,17 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 lg:py-32 px-4 relative overflow-hidden bg-slate-50 dark:bg-[#0B1120]">
+      <section className="py-24 lg:py-32 px-4 relative overflow-hidden bg-white dark:bg-[#0B1120]">
+        {/* Background Elements */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px] dark:bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)]"></div>
+        <div className="absolute right-0 top-0 w-1/2 h-1/2 bg-green-500/5 rounded-full blur-[120px] pointer-events-none" />
+        
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-20"
+            className={cn("text-center mb-16 lg:mb-20", isRTL && "text-right")}
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-sm font-medium mb-6 border border-green-100 dark:border-green-800">
               <Heart className="w-4 h-4" />
@@ -1052,56 +1056,66 @@ export default function LandingPage() {
             </div>
 
             <h2 className={cn(
-              "text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white mb-6",
+              "text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white mb-6 tracking-tight",
               isRTL && "text-arabic"
             )}>
               {isRTL ? 'قصص نجاح حقيقية' : 'Real Success Stories'}
             </h2>
             <p className={cn(
-              "text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto",
+              "text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed",
               isRTL && "text-arabic"
             )}>
               {isRTL ? 'انضم إلى آلاف المنظمات التي تثق بنا' : 'Join thousands of organizations that trust us'}
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {currentTestimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -8 }}
                 className="group"
               >
-                <div className="h-full bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-slate-100 dark:border-slate-800 relative">
-                  <div className="absolute top-8 right-8 text-6xl text-slate-100 dark:text-slate-800 font-serif opacity-50">"</div>
+                <div className={cn(
+                  "h-full bg-slate-50 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 dark:border-slate-800 relative overflow-hidden",
+                  isRTL && "text-right"
+                )}>
+                  {/* Decorative Quote */}
+                  <div className="absolute top-6 right-6 text-7xl text-slate-100 dark:text-slate-800 font-serif opacity-30 select-none">
+                    "
+                  </div>
 
-                  <div className="flex gap-1 mb-6">
+                  {/* Rating Stars */}
+                  <div className={cn("flex gap-1 mb-6 relative z-10", isRTL && "justify-end")}>
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                      <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400 dark:fill-yellow-500 dark:text-yellow-500" />
                     ))}
                   </div>
 
+                  {/* Content */}
                   <p className={cn(
-                    "text-lg text-slate-600 dark:text-slate-300 mb-8 leading-relaxed relative z-10",
+                    "text-base lg:text-lg text-slate-700 dark:text-slate-300 mb-8 leading-relaxed relative z-10 min-h-[120px]",
                     isRTL && "text-arabic"
                   )}>
                     {testimonial.content}
                   </p>
 
-                  <div className="flex items-center gap-4 pt-6 border-t border-slate-100 dark:border-slate-800">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-xl text-white shadow-lg">
+                  {/* Author Info */}
+                  <div className={cn(
+                    "flex items-center gap-4 pt-6 border-t border-slate-200 dark:border-slate-800 relative z-10",
+                    isRTL && "flex-row-reverse"
+                  )}>
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-2xl text-white shadow-lg shrink-0">
                       {testimonial.avatar}
                     </div>
-                    <div>
-                      <h4 className="font-bold text-slate-900 dark:text-white">
+                    <div className={cn("flex-1", isRTL && "text-right")}>
+                      <h4 className="font-bold text-slate-900 dark:text-white text-lg">
                         {testimonial.name}
                       </h4>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">
-                        {testimonial.role}
-                      </p>
                     </div>
                   </div>
                 </div>
@@ -1113,9 +1127,9 @@ export default function LandingPage() {
 
       {/* CTA Section */}
       <section className="py-24 lg:py-32 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-slate-900 dark:bg-[#0B1120]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/40 via-slate-900 to-slate-900" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:bg-slate-900 dark:bg-[#0B1120]">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-500/20 via-transparent to-transparent dark:from-blue-900/40 dark:via-slate-900 dark:to-slate-900" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px] dark:bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)]" />
         </div>
 
         <div className="max-w-4xl mx-auto relative z-10 text-center">
@@ -1125,18 +1139,18 @@ export default function LandingPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-600 rounded-3xl mb-8 shadow-2xl shadow-blue-500/30 rotate-3">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-600 dark:bg-blue-600 rounded-3xl mb-8 shadow-2xl shadow-blue-500/30 rotate-3">
               <Rocket className="w-10 h-10 text-white" />
             </div>
 
             <h2 className={cn(
-              "text-4xl sm:text-5xl lg:text-7xl font-black text-white mb-8 tracking-tight",
+              "text-4xl sm:text-5xl lg:text-7xl font-black text-slate-900 dark:text-white mb-8 tracking-tight",
               isRTL && "text-arabic"
             )}>
               {isRTL ? 'جاهز لإطلاق هاكاثونك؟' : 'Ready to Launch?'}
             </h2>
             <p className={cn(
-              "text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed",
+              "text-xl text-slate-600 dark:text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed",
               isRTL && "text-arabic"
             )}>
               {isRTL ? 'انضم إلى آلاف المنظمات التي تثق بـ HackPro لإدارة فعالياتها التقنية' : 'Join thousands of organizations that trust HackPro for their tech events'}
@@ -1146,7 +1160,7 @@ export default function LandingPage() {
               <Button
                 size="lg"
                 onClick={handleGetStarted}
-                className="w-full sm:w-auto h-16 px-10 rounded-full bg-white text-slate-900 hover:bg-slate-100 text-lg font-bold shadow-2xl hover:scale-105 transition-all duration-300"
+                className="w-full sm:w-auto h-16 px-10 rounded-full bg-blue-600 dark:bg-white text-white dark:text-slate-900 hover:bg-blue-700 dark:hover:bg-slate-100 text-lg font-bold shadow-2xl hover:scale-105 transition-all duration-300"
               >
                 <Rocket className={cn("w-5 h-5", isRTL ? "ml-2" : "mr-2")} />
                 {isRTL ? 'ابدأ مجاناً' : 'Start Free'}
@@ -1156,24 +1170,24 @@ export default function LandingPage() {
                 size="lg"
                 variant="outline"
                 onClick={() => router.push('/contact')}
-                className="w-full sm:w-auto h-16 px-10 rounded-full border-2 border-slate-700 text-white hover:bg-slate-800 text-lg font-bold hover:scale-105 transition-all duration-300"
+                className="w-full sm:w-auto h-16 px-10 rounded-full border-2 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 text-lg font-bold hover:scale-105 transition-all duration-300"
               >
                 <Mail className={cn("w-5 h-5", isRTL ? "ml-2" : "mr-2")} />
                 {isRTL ? 'تواصل معنا' : 'Contact Us'}
               </Button>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-8 mt-12 text-slate-400 text-sm font-medium">
+            <div className="flex flex-wrap justify-center gap-8 mt-12 text-slate-600 dark:text-slate-400 text-sm font-medium">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-green-500" />
+                <CheckCircle2 className="w-5 h-5 text-green-500 dark:text-green-400" />
                 <span>{isRTL ? 'بدون بطاقة ائتمان' : 'No credit card required'}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-yellow-500" />
+                <Zap className="w-5 h-5 text-yellow-500 dark:text-yellow-400" />
                 <span>{isRTL ? 'إعداد فوري' : 'Instant setup'}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Heart className="w-5 h-5 text-red-500" />
+                <Heart className="w-5 h-5 text-red-500 dark:text-red-400" />
                 <span>{isRTL ? 'دعم مجاني' : 'Free support'}</span>
               </div>
             </div>

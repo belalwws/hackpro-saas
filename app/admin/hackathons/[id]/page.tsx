@@ -17,6 +17,7 @@ import ParticipantsImport from '@/components/admin/ParticipantsImport'
 import { AlertModal, ConfirmModal } from '@/components/ui/modal'
 import { useModal } from '@/hooks/use-modal'
 import { ExcelExporter } from '@/lib/excel-export'
+import { AdminSidebar } from '@/components/admin/admin-sidebar'
 
 interface Participant {
   id: string
@@ -92,6 +93,7 @@ export default function HackathonManagementPage() {
   const [sendingEmails, setSendingEmails] = useState(false)
   const [certificateTemplate, setCertificateTemplate] = useState<string | null>(null)
   const [uploadingCertificate, setUploadingCertificate] = useState(false)
+  const [activeTab, setActiveTab] = useState<'participants' | 'teams' | 'evaluation' | 'settings'>('participants')
   const { showSuccess, showError, showWarning, showConfirm, ModalComponents } = useModal()
 
   useEffect(() => {
@@ -834,12 +836,12 @@ export default function HackathonManagementPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#c3e956]/10 to-[#3ab666]/10 p-6">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50/50 to-blue-100/50 p-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
-              <div className="w-16 h-16 border-4 border-[#01645e]/20 border-t-[#01645e] rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-[#01645e] font-semibold">جاري تحميل بيانات الهاكاثون...</p>
+              <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-blue-600 font-semibold">جاري تحميل بيانات الهاكاثون...</p>
             </div>
           </div>
         </div>
@@ -849,10 +851,10 @@ export default function HackathonManagementPage() {
 
   if (!hackathon) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#c3e956]/10 to-[#3ab666]/10 p-6">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50/50 to-blue-100/50 p-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center py-20">
-            <h1 className="text-2xl font-bold text-[#01645e] mb-4">الهاكاثون غير موجود</h1>
+            <h1 className="text-2xl font-bold text-blue-600 mb-4">الهاكاثون غير موجود</h1>
             <Link href="/admin/hackathons">
               <Button>العودة إلى قائمة الهاكاثونات</Button>
             </Link>
@@ -863,55 +865,57 @@ export default function HackathonManagementPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#c3e956]/10 to-[#3ab666]/10 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/50 to-blue-100/50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-4 mb-8"
+          className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 mb-8"
         >
-          <Link href="/admin/hackathons">
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="w-4 h-4 ml-2" />
-              العودة
-            </Button>
-          </Link>
-          <div className="flex-1">
-            <h1 className="text-4xl font-bold text-[#01645e]">{hackathon.title}</h1>
-            <p className="text-[#8b7632] text-lg">{hackathon.description}</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href={`/admin/hackathons/${hackathon.id}/register-form-design`}>
-              <Button variant="outline" size="sm" className="border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white">
-                <FormInput className="w-4 h-4 ml-2" />
-                تصميم الفورم
+          <div className="flex items-center gap-4">
+            <Link href="/admin/hackathons">
+              <Button variant="outline" size="sm" className="hover:bg-slate-50">
+                <ArrowLeft className="w-4 h-4 ml-2" />
+                العودة
               </Button>
             </Link>
-            <Link href={`/admin/hackathons/${hackathon.id}/landing-page`}>
-              <Button variant="outline" size="sm" className="border-purple-500 text-purple-600 hover:bg-purple-500 hover:text-white">
-                <Palette className="w-4 h-4 ml-2" />
-                Landing Page
-              </Button>
-            </Link>
-            <Badge className={`${
-              hackathon.status === 'open' ? 'bg-green-500' :
-              hackathon.status === 'closed' ? 'bg-red-500' :
-              hackathon.status === 'completed' ? 'bg-blue-500' : 'bg-gray-500'
-            } text-white`}>
-              {hackathon.status === 'open' ? 'مفتوح' :
-               hackathon.status === 'closed' ? 'مغلق' :
-               hackathon.status === 'completed' ? 'مكتمل' : 'مسودة'}
-            </Badge>
+            <div className="flex-1">
+              <h1 className="text-3xl font-bold text-blue-600 mb-1">{hackathon.title}</h1>
+              <p className="text-slate-600">{hackathon.description}</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Link href={`/admin/hackathons/${hackathon.id}/register-form-design`}>
+                <Button variant="outline" size="sm" className="border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white transition-colors">
+                  <FormInput className="w-4 h-4 ml-2" />
+                  تصميم الفورم
+                </Button>
+              </Link>
+              <Link href={`/admin/hackathons/${hackathon.id}/landing-page`}>
+                <Button variant="outline" size="sm" className="border-purple-500 text-purple-600 hover:bg-purple-500 hover:text-white transition-colors">
+                  <Palette className="w-4 h-4 ml-2" />
+                  Landing Page
+                </Button>
+              </Link>
+              <Badge className={`${
+                hackathon.status === 'open' ? 'bg-blue-600' :
+                hackathon.status === 'closed' ? 'bg-red-500' :
+                hackathon.status === 'completed' ? 'bg-blue-500' : 'bg-gray-500'
+              } text-white px-3 py-1`}>
+                {hackathon.status === 'open' ? 'مفتوح' :
+                 hackathon.status === 'closed' ? 'مغلق' :
+                 hackathon.status === 'completed' ? 'مكتمل' : 'مسودة'}
+              </Badge>
+            </div>
           </div>
         </motion.div>
 
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           {[
-            { title: 'إجمالي المتقدمين', value: stats.totalParticipants, icon: Users, color: 'from-[#01645e] to-[#3ab666]' },
-            { title: 'في انتظار المراجعة', value: stats.pendingParticipants, icon: Eye, color: 'from-[#8b7632] to-[#c3e956]' },
-            { title: 'مقبول', value: stats.approvedParticipants, icon: UserCheck, color: 'from-[#3ab666] to-[#c3e956]' },
+            { title: 'إجمالي المتقدمين', value: stats.totalParticipants, icon: Users, color: 'from-blue-600 to-blue-500' },
+            { title: 'في انتظار المراجعة', value: stats.pendingParticipants, icon: Eye, color: 'from-yellow-500 to-yellow-400' },
+            { title: 'مقبول', value: stats.approvedParticipants, icon: UserCheck, color: 'from-blue-600 to-blue-500' },
             { title: 'مرفوض', value: stats.rejectedParticipants, icon: UserX, color: 'from-red-500 to-red-600' }
           ].map((stat, index) => (
             <motion.div
@@ -920,14 +924,14 @@ export default function HackathonManagementPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className="relative overflow-hidden">
+              <Card className="relative overflow-hidden shadow-sm hover:shadow-md transition-shadow border-slate-200">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-[#8b7632] mb-1">{stat.title}</p>
-                      <p className="text-3xl font-bold text-[#01645e]">{stat.value}</p>
+                      <p className="text-sm font-medium text-slate-600 mb-1">{stat.title}</p>
+                      <p className="text-3xl font-bold text-blue-600">{stat.value}</p>
                     </div>
-                    <div className={`p-3 rounded-full bg-gradient-to-r ${stat.color}`}>
+                    <div className={`p-3 rounded-full bg-gradient-to-r ${stat.color} shadow-sm`}>
                       <stat.icon className="w-6 h-6 text-white" />
                     </div>
                   </div>
@@ -937,21 +941,17 @@ export default function HackathonManagementPage() {
           ))}
         </div>
 
-        {/* Management Tabs */}
+        {/* Management Tabs with Sidebar */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Tabs defaultValue="participants" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="participants">المتقدمين</TabsTrigger>
-              <TabsTrigger value="teams">الفرق</TabsTrigger>
-              <TabsTrigger value="evaluation">التقييم</TabsTrigger>
-              <TabsTrigger value="settings">الإعدادات</TabsTrigger>
-            </TabsList>
+          <Tabs defaultValue="participants" className="flex gap-6 items-start">
+            {/* Content */}
+            <div className="flex-1 min-w-0">
 
-            <TabsContent value="participants" className="space-y-6">
+              <TabsContent value="participants" className="space-y-6">
               {/* Participants Import */}
               <ParticipantsImport
                 hackathonId={hackathon.id}
@@ -964,7 +964,7 @@ export default function HackathonManagementPage() {
                 <CardHeader>
                   <div className="flex justify-between items-center">
                     <div>
-                      <CardTitle className="text-2xl text-[#01645e]">إدارة المتقدمين</CardTitle>
+                      <CardTitle className="text-2xl text-blue-600">إدارة المتقدمين</CardTitle>
                       <CardDescription>مراجعة وقبول أو رفض المتقدمين مع إمكانية التصفية</CardDescription>
                     </div>
                   </div>
@@ -1039,15 +1039,15 @@ export default function HackathonManagementPage() {
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="text-lg font-semibold text-[#01645e] mb-1">إجراءات جماعية</h3>
-                          <p className="text-sm text-[#8b7632]">
+                          <h3 className="text-lg font-semibold text-blue-600 mb-1">إجراءات جماعية</h3>
+                          <p className="text-sm text-slate-600">
                             {filteredParticipants.filter(p => p.status === 'pending').length} مشارك في الانتظار من النتائج المفلترة
                           </p>
                         </div>
                         <div className="flex gap-2">
                           <Button
                             onClick={() => bulkUpdateStatus('approved')}
-                            className="bg-green-600 hover:bg-green-700 text-white"
+                            className="bg-blue-600 hover:bg-blue-700 text-white"
                           >
                             <UserCheck className="w-4 h-4 ml-1" />
                             قبول الكل ({filteredParticipants.filter(p => p.status === 'pending').length})
@@ -1068,9 +1068,9 @@ export default function HackathonManagementPage() {
                   {/* Participants List */}
                   {filteredParticipants.length === 0 ? (
                     <div className="text-center py-12">
-                      <Users className="w-16 h-16 text-[#8b7632] mx-auto mb-4 opacity-50" />
-                      <h3 className="text-xl font-semibold text-[#01645e] mb-2">لا توجد نتائج</h3>
-                      <p className="text-[#8b7632]">لا توجد متقدمين يطابقون المرشحات المحددة</p>
+                      <Users className="w-16 h-16 text-slate-400 mx-auto mb-4 opacity-50" />
+                      <h3 className="text-xl font-semibold text-blue-600 mb-2">لا توجد نتائج</h3>
+                      <p className="text-slate-600">لا توجد متقدمين يطابقون المرشحات المحددة</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -1079,9 +1079,9 @@ export default function HackathonManagementPage() {
                           <div className="flex justify-between items-start">
                             <div className="flex-1">
                               <div className="flex items-center gap-3 mb-2">
-                                <h3 className="text-lg font-bold text-[#01645e]">{participant.user.name}</h3>
+                                <h3 className="text-lg font-bold text-blue-600">{participant.user.name}</h3>
                                 <Badge className={`${
-                                  participant.status === 'approved' ? 'bg-green-500' :
+                                  participant.status === 'approved' ? 'bg-blue-600' :
                                   participant.status === 'rejected' ? 'bg-red-500' : 'bg-yellow-500'
                                 } text-white`}>
                                   {participant.status === 'approved' ? 'مقبول' :
@@ -1091,19 +1091,19 @@ export default function HackathonManagementPage() {
                               
                               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm mb-3">
                                 <div>
-                                  <span className="font-semibold text-[#01645e]">البريد الإلكتروني:</span>
+                                  <span className="font-semibold text-blue-600">البريد الإلكتروني:</span>
                                   <br />
                                   {participant.user.email}
                                 </div>
                                 <div className="flex items-center gap-1">
-                                  <MapPin className="w-4 h-4 text-[#3ab666]" />
-                                  <span className="font-semibold text-[#01645e]">المدينة:</span>
+                                  <MapPin className="w-4 h-4 text-blue-600" />
+                                  <span className="font-semibold text-blue-600">المدينة:</span>
                                   <br />
                                   {participant.user.city}
                                 </div>
                                 <div className="flex items-center gap-1">
-                                  <Flag className="w-4 h-4 text-[#3ab666]" />
-                                  <span className="font-semibold text-[#01645e]">الجنسية:</span>
+                                  <Flag className="w-4 h-4 text-blue-600" />
+                                  <span className="font-semibold text-blue-600">الجنسية:</span>
                                   <br />
                                   {participant.user.nationality}
                                 </div>
@@ -1118,13 +1118,13 @@ export default function HackathonManagementPage() {
                                 <div className="bg-gray-50 p-3 rounded-lg mb-3">
                                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                                     <div>
-                                      <span className="font-semibold text-[#01645e]">اسم الفريق:</span>
+                                      <span className="font-semibold text-blue-600">اسم الفريق:</span>
                                       <br />
                                       {participant.teamName}
                                     </div>
                                     {participant.projectTitle && (
                                       <div>
-                                        <span className="font-semibold text-[#01645e]">عنوان المشروع:</span>
+                                        <span className="font-semibold text-blue-600">عنوان المشروع:</span>
                                         <br />
                                         {participant.projectTitle}
                                       </div>
@@ -1132,7 +1132,7 @@ export default function HackathonManagementPage() {
                                   </div>
                                   {participant.projectDescription && (
                                     <div className="mt-2">
-                                      <span className="font-semibold text-[#01645e]">وصف المشروع:</span>
+                                      <span className="font-semibold text-blue-600">وصف المشروع:</span>
                                       <br />
                                       <p className="text-sm text-gray-600 mt-1">{participant.projectDescription}</p>
                                     </div>
@@ -1146,7 +1146,7 @@ export default function HackathonManagementPage() {
                                 <>
                                   <Button
                                     size="sm"
-                                    className="bg-green-500 hover:bg-green-600 text-white"
+                                    className="bg-blue-600 hover:bg-blue-700 text-white"
                                     onClick={() => updateParticipantStatus(participant.id, 'approved')}
                                   >
                                     <UserCheck className="w-4 h-4 ml-1" />
@@ -1195,20 +1195,20 @@ export default function HackathonManagementPage() {
               </Card>
             </TabsContent>
 
-            <TabsContent value="teams">
+              <TabsContent value="teams">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-2xl text-[#01645e]">إدارة الفرق</CardTitle>
+                  <CardTitle className="text-2xl text-blue-600">إدارة الفرق</CardTitle>
                   <CardDescription>تكوين الفرق تلقائياً وإدارة الأعضاء</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
                     {/* Team Formation Controls */}
-                    <div className="bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-lg p-6">
+                    <div className="bg-gradient-to-r from-blue-50 to-blue-50 border border-blue-200 rounded-lg p-6">
                       <div className="flex items-center justify-between mb-4">
                         <div>
-                          <h3 className="text-lg font-semibold text-[#01645e] mb-1">تكوين الفرق التلقائي</h3>
-                          <p className="text-sm text-[#8b7632] mb-2">
+                          <h3 className="text-lg font-semibold text-blue-600 mb-1">تكوين الفرق التلقائي</h3>
+                          <p className="text-sm text-slate-600 mb-2">
                             سيتم تجميع المشاركين المقبولين في فرق متنوعة حسب القواعد المحددة
                           </p>
                           <p className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded inline-block">
@@ -1218,7 +1218,7 @@ export default function HackathonManagementPage() {
                             onClick={() => router.push(`/admin/hackathons/${params.id}/team-formation-settings`)}
                             variant="outline"
                             size="sm"
-                            className="mr-2 border-[#01645e] text-[#01645e] hover:bg-[#01645e] hover:text-white"
+                            className="mr-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
                           >
                             <Settings className="w-4 h-4 ml-1" />
                             إعدادات التكوين
@@ -1230,7 +1230,7 @@ export default function HackathonManagementPage() {
                               <Button
                                 onClick={exportTeamsToExcel}
                                 variant="outline"
-                                className="border-[#3ab666] text-[#3ab666] hover:bg-[#3ab666] hover:text-white"
+                                className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
                               >
                                 <Download className="w-4 h-4 ml-1" />
                                 تصدير Excel ({teams?.length || 0})
@@ -1247,7 +1247,7 @@ export default function HackathonManagementPage() {
                           )}
                           <Button
                             onClick={previewTeamFormation}
-                            className="bg-gradient-to-r from-[#01645e] to-[#3ab666] text-white"
+                            className="bg-gradient-to-r from-blue-600 to-blue-500 text-white"
                             disabled={!hackathon || stats.approvedWithoutTeam === 0}
                           >
                             <Users className="w-4 h-4 ml-1" />
@@ -1265,8 +1265,8 @@ export default function HackathonManagementPage() {
                       )}
 
                       {stats.approvedWithoutTeam === 0 && stats.approvedParticipants > 0 && (
-                        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                          <p className="text-green-800 text-sm">
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                          <p className="text-blue-800 text-sm">
                             ✅ جميع المشاركين المقبولين ({stats.approvedParticipants}) تم تعيينهم لفرق بالفعل.
                           </p>
                         </div>
@@ -1289,20 +1289,20 @@ export default function HackathonManagementPage() {
               </Card>
             </TabsContent>
 
-            <TabsContent value="evaluation">
+              <TabsContent value="evaluation">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-2xl text-[#01645e]">نظام التقييم</CardTitle>
+                  <CardTitle className="text-2xl text-blue-600">نظام التقييم</CardTitle>
                   <CardDescription>إدارة معايير التقييم والنتائج</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
                     {/* Evaluation Control */}
                     <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-6">
-                      <h3 className="text-lg font-semibold text-[#01645e] mb-4">إدارة التقييم</h3>
+                      <h3 className="text-lg font-semibold text-blue-600 mb-4">إدارة التقييم</h3>
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-[#8b7632] mb-2">
+                          <p className="text-sm text-slate-600 mb-2">
                             {hackathon?.evaluationOpen ?
                               '🟢 التقييم مفتوح - المحكمون يمكنهم تقييم الفرق الآن' :
                               '🔴 التقييم مغلق - المحكمون لا يمكنهم الوصول للتقييم'
@@ -1316,7 +1316,7 @@ export default function HackathonManagementPage() {
                           onClick={() => toggleEvaluation()}
                           className={`${hackathon?.evaluationOpen ?
                             'bg-red-500 hover:bg-red-600' :
-                            'bg-green-500 hover:bg-green-600'
+                            'bg-blue-600 hover:bg-blue-700'
                           } text-white`}
                         >
                           {hackathon?.evaluationOpen ? 'إغلاق التقييم' : 'فتح التقييم'}
@@ -1377,7 +1377,7 @@ export default function HackathonManagementPage() {
                     </div>
 
                     {/* Add New Criterion */}
-                    <div className="bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-lg p-6">
+                    <div className="bg-gradient-to-r from-blue-50 to-blue-50 border border-blue-200 rounded-lg p-6">
                       <h3 className="text-lg font-semibold text-[#01645e] mb-4">إضافة معيار تقييم جديد</h3>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                         <div>
@@ -1410,7 +1410,7 @@ export default function HackathonManagementPage() {
                           />
                         </div>
                       </div>
-                      <Button onClick={addEvaluationCriterion} className="bg-gradient-to-r from-[#01645e] to-[#3ab666]">
+                      <Button onClick={addEvaluationCriterion} className="bg-gradient-to-r from-[#01645e] to-[#155DFC]">
                         <Trophy className="w-4 h-4 ml-2" />
                         إضافة المعيار
                       </Button>
@@ -1434,7 +1434,7 @@ export default function HackathonManagementPage() {
                               <div className="flex justify-between items-start mb-2">
                                 <h4 className="font-semibold text-[#01645e]">{criterion.name}</h4>
                                 <div className="flex items-center gap-2">
-                                  <Badge className="bg-[#3ab666] text-white">
+                                  <Badge className="bg-[#155DFC] text-white">
                                     {criterion.maxScore} نقطة
                                   </Badge>
                                   <Button
@@ -1456,8 +1456,8 @@ export default function HackathonManagementPage() {
                     </div>
 
                     {evaluationCriteria.length > 0 && (
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                        <p className="text-green-800 text-sm">
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <p className="text-blue-800 text-sm">
                           ✅ تم إعداد {evaluationCriteria.length} معيار تقييم.
                           إجمالي الدرجات: {evaluationCriteria.reduce((sum, c) => sum + c.maxScore, 0)} نقطة
                         </p>
@@ -1468,7 +1468,7 @@ export default function HackathonManagementPage() {
               </Card>
             </TabsContent>
 
-            <TabsContent value="settings">
+              <TabsContent value="settings">
               <Card>
                 <CardHeader>
                   <CardTitle className="text-2xl text-[#01645e]">إعدادات الهاكاثون</CardTitle>
@@ -1519,7 +1519,7 @@ export default function HackathonManagementPage() {
                       </Button>
                       <Button
                         onClick={() => sendNotification('approved')}
-                        className="bg-green-600 hover:bg-green-700 text-white"
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
                       >
                         إشعار المشاركين المقبولين
                       </Button>
@@ -1569,7 +1569,7 @@ export default function HackathonManagementPage() {
                           </p>
                         </div>
 
-                        <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                           <h4 className="font-semibold text-[#01645e] mb-2">المشاركة الفردية</h4>
                           <div className="flex items-center gap-3">
                             <Select
@@ -1585,7 +1585,7 @@ export default function HackathonManagementPage() {
                               </SelectContent>
                             </Select>
                           </div>
-                          <p className="text-xs text-green-600 mt-2">
+                          <p className="text-xs text-blue-600 mt-2">
                             السماح للمشاركين بالتسجيل بدون فريق
                           </p>
                         </div>
@@ -1641,13 +1641,13 @@ export default function HackathonManagementPage() {
                             {hackathon.isPinned ? 'إلغاء التثبيت' : 'تثبيت في الرئيسية'}
                           </Button>
                           <Link href={`/admin/hackathons/${hackathon.id}/notify`}>
-                            <Button variant="outline" className="border-[#3ab666] text-[#3ab666] hover:bg-[#3ab666] hover:text-white">
+                            <Button variant="outline" className="border-[#155DFC] text-[#155DFC] hover:bg-[#155DFC] hover:text-white">
                               <Mail className="w-4 h-4 ml-2" />
                               إرسال إشعارات
                             </Button>
                           </Link>
                           <Link href={`/admin/hackathons/${hackathon.id}/edit`}>
-                            <Button className="bg-gradient-to-r from-[#01645e] to-[#3ab666]">
+                            <Button className="bg-gradient-to-r from-[#01645e] to-[#155DFC]">
                               تعديل الهاكاثون
                             </Button>
                           </Link>
@@ -1664,7 +1664,7 @@ export default function HackathonManagementPage() {
                               </Button>
                             </Link>
                             <Link href={`/admin/hackathons/${hackathon.id}/form-submissions`}>
-                              <Button variant="outline" className="border-[#3ab666] text-[#3ab666] hover:bg-[#3ab666] hover:text-white">
+                              <Button variant="outline" className="border-[#155DFC] text-[#155DFC] hover:bg-[#155DFC] hover:text-white">
                                 <FileText className="w-4 h-4 ml-2" />
                                 النماذج المرسلة
                               </Button>
@@ -1695,13 +1695,13 @@ export default function HackathonManagementPage() {
                           <h5 className="font-medium text-[#01645e] mb-2 text-sm">الاتصالات والقوالب</h5>
                           <div className="flex flex-wrap gap-2">
                             <Link href={`/admin/hackathons/${hackathon.id}/email-templates`}>
-                              <Button variant="outline" className="border-[#c3e956] text-[#8b7632] hover:bg-[#c3e956] hover:text-[#01645e]">
+                              <Button variant="outline" className="border-[#155DFC] text-[#8b7632] hover:bg-[#155DFC] hover:text-[#01645e]">
                                 <Mail className="w-4 h-4 ml-2" />
                                 إدارة الإيميلات
                               </Button>
                             </Link>
                             <Link href={`/admin/hackathons/${hackathon.id}/file-tracking`}>
-                              <Button variant="outline" className="border-[#3ab666] text-[#3ab666] hover:bg-[#3ab666] hover:text-white">
+                              <Button variant="outline" className="border-[#155DFC] text-[#155DFC] hover:bg-[#155DFC] hover:text-white">
                                 <FileText className="w-4 h-4 ml-2" />
                                 تتبع الملفات
                               </Button>
@@ -1755,7 +1755,7 @@ export default function HackathonManagementPage() {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <Button variant="outline" className="border-green-500 text-green-600 hover:bg-green-500 hover:text-white">
+                              <Button variant="outline" className="border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white">
                                 <ExternalLink className="w-4 h-4 ml-2" />
                                 معاينة فورم المشرفين
                               </Button>
@@ -1814,7 +1814,7 @@ export default function HackathonManagementPage() {
                                 className="w-32 h-20 object-cover rounded-lg border"
                               />
                               <div className="flex-1">
-                                <p className="text-sm text-green-600 font-medium">✅ تم رفع قالب مخصص</p>
+                                <p className="text-sm text-blue-600 font-medium">✅ تم رفع قالب مخصص</p>
                                 <p className="text-xs text-gray-500">سيتم استخدام هذا القالب لجميع شهادات هذا الهاكاثون</p>
                               </div>
                               <Button
@@ -1889,9 +1889,44 @@ export default function HackathonManagementPage() {
                 </CardContent>
               </Card>
             </TabsContent>
+            </div>
+
+            {/* Sidebar - Right Side */}
+            <div className="w-64 shrink-0 sticky top-6">
+              <TabsList className="flex flex-col w-full h-auto bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-2 shadow-md gap-1">
+                <TabsTrigger 
+                  value="participants" 
+                  className="w-full justify-start data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all duration-200 hover:bg-slate-100 data-[state=active]:hover:bg-blue-700 rounded-md py-2.5"
+                >
+                  <Users className="w-4 h-4 ml-2" />
+                  المتقدمين
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="teams"
+                  className="w-full justify-start data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all duration-200 hover:bg-slate-100 data-[state=active]:hover:bg-blue-700 rounded-md py-2.5"
+                >
+                  <Users className="w-4 h-4 ml-2" />
+                  الفرق
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="evaluation"
+                  className="w-full justify-start data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all duration-200 hover:bg-slate-100 data-[state=active]:hover:bg-blue-700 rounded-md py-2.5"
+                >
+                  <Trophy className="w-4 h-4 ml-2" />
+                  التقييم
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="settings"
+                  className="w-full justify-start data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all duration-200 hover:bg-slate-100 data-[state=active]:hover:bg-blue-700 rounded-md py-2.5"
+                >
+                  <Settings className="w-4 h-4 ml-2" />
+                  الإعدادات
+                </TabsTrigger>
+              </TabsList>
+            </div>
           </Tabs>
         </motion.div>
-      </div>
+        </div>
 
       {/* Team Preview Modal */}
       {showTeamPreview && (
@@ -1923,11 +1958,11 @@ export default function HackathonManagementPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="border rounded-lg p-4 bg-gradient-to-br from-blue-50 to-green-50"
+                    className="border rounded-lg p-4 bg-gradient-to-br from-blue-50 to-blue-50"
                   >
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="font-bold text-[#01645e] text-lg">{team.name}</h3>
-                      <Badge className="bg-[#3ab666] text-white">
+                      <Badge className="bg-[#155DFC] text-white">
                         {team.members.length} أعضاء
                       </Badge>
                     </div>
@@ -1969,7 +2004,7 @@ export default function HackathonManagementPage() {
                   <Button
                     onClick={createTeamsAutomatically}
                     disabled={creatingTeams}
-                    className="bg-gradient-to-r from-[#01645e] to-[#3ab666] text-white"
+                    className="bg-gradient-to-r from-[#01645e] to-[#155DFC] text-white"
                   >
                     {creatingTeams ? (
                       <>
